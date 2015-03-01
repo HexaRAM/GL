@@ -16,7 +16,10 @@ analyseur: $(OBJ)
 $(BUILD_DIR)/%.o: src/%.cpp
 	$(COMP) $(CFLAGS) -c -o $@ $<
 
-.PHONY: clean
+.PHONY: clean test
+
+tests:
+	@echo "Execution des tests"
 
 clean:
 	rm -rf $(BUILD_DIR)/*.o $(EXEC)
