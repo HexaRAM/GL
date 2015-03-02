@@ -7,11 +7,12 @@ HEADER= $(wildcard src/*.h src/*/*.h src/*/*/*.h)
 BUILD_DIR=object
 OBJ= $(addprefix $(BUILD_DIR)/,$(notdir $(SRC:.cpp=.o)))
 
+# /!\ Pas de gestion des dépendances aux headers
 
 all: $(EXEC)
+	@echo "/!\ Si vous avez modifié uniquement les headers (.h), effectuez un : make -B"
 
 analyseur: $(OBJ)
-	echo $(SRC)
 	$(COMP) $(LDFLAGS) -o $@ $^
 
 $(BUILD_DIR)/%.o: src/%.cpp

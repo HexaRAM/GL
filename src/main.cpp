@@ -35,6 +35,13 @@ void execute_program(string filename, bool aff, bool ana, bool simpli)
     cout << "# Lancement du programme en mode " << modeStr << endl;
 }
 
+/**
+ * @TODO
+ *    - mettre le parseur des arguments passés en console dans une classe dédiée
+ *    - normaliser les sorties
+ *    - faire un fichier config.h avec l'ensemble des constantes du projet
+ */
+
 int main(int argc, char ** argv)
 {   
     //OPTIONS//
