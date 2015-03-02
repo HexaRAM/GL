@@ -11,12 +11,19 @@ OBJ= $(addprefix $(BUILD_DIR)/,$(notdir $(SRC:.cpp=.o)))
 all: $(EXEC)
 
 analyseur: $(OBJ)
+	echo $(SRC)
 	$(COMP) $(LDFLAGS) -o $@ $^
 
 $(BUILD_DIR)/%.o: src/%.cpp
 	$(COMP) $(CFLAGS) -c -o $@ $<
 
-.PHONY: clean test
+$(BUILD_DIR)/%.o: src/*/%.cpp
+	$(COMP) $(CFLAGS) -c -o $@ $<
+
+$(BUILD_DIR)/%.o: src/*/*/%.cpp
+	$(COMP) $(CFLAGS) -c -o $@ $<
+
+PHONY: clean test
 
 tests:
 	@echo "Execution des tests"
