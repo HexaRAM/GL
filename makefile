@@ -2,8 +2,8 @@ COMP=g++
 CFLAGS=-W -Wall -ansi -pedantic
 LDFLAGS=
 EXEC=analyseur
-SRC= $(wildcard src/*/*/*.cpp)
-HEADER= $(wildcard src/*/*/*.h)
+SRC= $(wildcard src/*.cpp src/*/*.cpp src/*/*/*.cpp)
+HEADER= $(wildcard src/*.h src/*/*.h src/*/*/*.h)
 BUILD_DIR=object
 OBJ= $(addprefix $(BUILD_DIR)/,$(notdir $(SRC:.cpp=.o)))
 
