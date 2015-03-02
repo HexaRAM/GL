@@ -17,10 +17,10 @@ analyseur: $(OBJ)
 $(BUILD_DIR)/%.o: src/%.cpp
 	$(COMP) $(CFLAGS) -c -o $@ $<
 
-$(BUILD_DIR)/%.o: src/*/%.cpp
+$(BUILD_DIR)/%.o: src/*/%.cpp src/*/%.h
 	$(COMP) $(CFLAGS) -c -o $@ $<
 
-$(BUILD_DIR)/%.o: src/*/*/%.cpp
+$(BUILD_DIR)/%.o: src/*/*/%.cpp src/*/*/%.h
 	$(COMP) $(CFLAGS) -c -o $@ $<
 
 PHONY: clean test
