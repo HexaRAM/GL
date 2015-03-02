@@ -1,3 +1,1 @@
-class Expr: public Symbole{
-	
-}
+#include "expr.h"
