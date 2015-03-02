@@ -11,7 +11,7 @@ Projet de Grammaire &amp; Langage
 - Tapez `./analyseur` pour lancer le programme
 
 #### Test
-- Tapez `make tests` pour executer l'ensemble des tests du projet
+- Tapez `make test` pour executer l'ensemble des tests du projet
 
 #### Destruction
 - Tapez `make clean` pour détruire l'executable et l'ensemble des fichiers objets du projet

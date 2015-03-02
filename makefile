@@ -25,8 +25,9 @@ $(BUILD_DIR)/%.o: src/*/*/%.cpp src/*/*/%.h
 
 PHONY: clean test
 
-tests:
+test:
 	@echo "Execution des tests"
+	@./test.sh
 
 clean:
 	rm -rf $(BUILD_DIR)/*.o $(EXEC)
