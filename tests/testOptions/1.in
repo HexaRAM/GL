@@ -1,1 +1,1 @@
-./analyseur 1.lt -e
+./analyseur tests/testOptions/1.lt -e
