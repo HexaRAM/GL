@@ -3,6 +3,9 @@ Projet de Grammaire &amp; Langage
 
 ## Compilation
 
+#### Installation des dépendances
+- Tapez `sudo aptitude update` puis `sudo aptitude install libboost-all-dev` pour installer la librairie `Boost` nécessaire à la compilation
+
 #### Construction
 - Tapez `make` pour construire l'executable. Celui-ci se trouvera à la racine du projet sous le nom : `analyseur`
 - Tapez `./analyseur` pour lancer le programme

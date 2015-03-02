@@ -1,9 +1,9 @@
 COMP=g++
-CFLAGS=-W -Wall -ansi -pedantic
-LDFLAGS=
+CFLAGS=-W -Wall -ansi -pedantic -lboost_regex
+LDFLAGS=-lboost_regex
 EXEC=analyseur
-SRC= $(wildcard src/*.cpp)
-HEADER= $(wildcard src/*.h)
+SRC= $(wildcard src/*.cpp src/*/*.cpp src/*/*/*.cpp)
+HEADER= $(wildcard src/*.h src/*/*.h src/*/*/*.h)
 BUILD_DIR=object
 OBJ= $(addprefix $(BUILD_DIR)/,$(notdir $(SRC:.cpp=.o)))
 
@@ -11,12 +11,19 @@ OBJ= $(addprefix $(BUILD_DIR)/,$(notdir $(SRC:.cpp=.o)))
 all: $(EXEC)
 
 analyseur: $(OBJ)
+	echo $(SRC)
 	$(COMP) $(LDFLAGS) -o $@ $^
 
 $(BUILD_DIR)/%.o: src/%.cpp
 	$(COMP) $(CFLAGS) -c -o $@ $<
 
-.PHONY: clean test
+$(BUILD_DIR)/%.o: src/*/%.cpp src/*/%.h
+	$(COMP) $(CFLAGS) -c -o $@ $<
+
+$(BUILD_DIR)/%.o: src/*/*/%.cpp src/*/*/%.h
+	$(COMP) $(CFLAGS) -c -o $@ $<
+
+PHONY: clean test
 
 tests:
 	@echo "Execution des tests"
