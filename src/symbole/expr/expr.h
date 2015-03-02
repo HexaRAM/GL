@@ -2,11 +2,15 @@
 #define EXPR_H
 
 #include "../symbole.h"
+#include <map>
+#include <string>
 
-class Expr: public Symbole { 
-	public:
-		Expr():Symbole(EXPR) {}
-		virtual ~Expr() {}
-		virtual double eval(const map<string, double> &valeurs) = 0;
-};
+using namespace std;
+	class Expr: public Symbole { 
+		public:
+			Expr():Symbole(0) {}
+			virtual ~Expr() {}
+			virtual double eval(const map<string, double> &valeurs) = 0;
+	};
+	
 #endif
