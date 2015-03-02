@@ -1,5 +1,6 @@
 # Outil de test
 Petit outil permettant de lancer automatiquement une série de tests.
+>Vous devez vous trouver à la **racine du projet**
 
 ## Ajouter un test
 Le programme parcourt le dossier `tests` et cherche des repertoires. Un repertoire correspond à un test.
