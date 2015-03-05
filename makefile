@@ -1,5 +1,6 @@
 COMP=g++
-CFLAGS=-W -Wall -ansi -pedantic -lboost_regex
+CFLAGS=-W -Wall -ansi -pedantic -lboost_regex -std=c++11
+#CFLAGS=
 LDFLAGS=-lboost_regex
 EXEC=analyseur
 SRC= $(wildcard src/*.cpp src/*/*.cpp src/*/*/*.cpp)

@@ -17,5 +17,22 @@ int main(int argc, char ** argv)
     console.displayMode();
     Automate* automate = console.createAutomate();
 
+    if (automate == NULL)
+    {
+        cout << "# La création de l'automate n'a pas été rendu possible." << endl;
+        exit(1);
+    }
+
+    automate->addVariable("a");
+    automate->addVariable("b");
+    automate->addConstante("c", 69);
+    automate->instanciateVariable("a", 100);
+    automate->instanciateVariable("e", 200);
+    automate->addVariable("c");
+    automate->addConstante("b", 78);
+
+    cout << "\tEtat de la mémoire : " << endl;
+    automate->displayMemory();
+
     delete automate;
 }
