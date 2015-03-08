@@ -1,7 +1,7 @@
-COMP=g++
+COMP=g++ 
 CFLAGS=-W -Wall -ansi -pedantic -lboost_regex -std=c++11
 #CFLAGS=
-LDFLAGS=-lboost_regex
+LDFLAGS=-lboost_regex 
 EXEC=analyseur
 SRC= $(wildcard src/*.cpp src/*/*.cpp src/*/*/*.cpp)
 HEADER= $(wildcard src/*.h src/*/*.h src/*/*/*.h)
@@ -14,7 +14,7 @@ all: $(EXEC)
 	@echo "/!\ Si vous avez modifié uniquement les headers (.h), effectuez un : make -B"
 
 analyseur: $(OBJ)
-	$(COMP) $(LDFLAGS) -o $@ $^
+	$(COMP) -o $@ $^ $(LDFLAGS) 
 
 $(BUILD_DIR)/%.o: src/%.cpp
 	$(COMP) $(CFLAGS) -c -o $@ $<
