@@ -3,6 +3,7 @@
 #include <boost/regex.hpp>
 #include "commandLineReader.h"
 #include "automate/automate.h"
+#include "config.h"
 using namespace std;
 
 /**
@@ -33,6 +34,8 @@ int main(int argc, char ** argv)
 
     cout << "\tEtat de la mémoire : " << endl;
     automate->displayMemory();
+
+
 
     delete automate;
 }

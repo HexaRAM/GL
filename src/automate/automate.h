@@ -2,9 +2,11 @@
 #define AUTOMATE_H
 
 #include "../config.h"
+#include "../symbole/symbole.h"
 #include <string>
 #include <map>
 #include <set>
+class Etat;
 using namespace std;
 
 struct variable_s {
@@ -41,6 +43,8 @@ class Automate
         bool addConstante(const string& name, int value);
         bool instanciateVariable(const string& name, int value);
         void displayMemory();
+        void decalage(Symbole* s, Etat* e);
+        //void reduction(Symbole s, Etat* e);
 
     private:
         bool affichage;

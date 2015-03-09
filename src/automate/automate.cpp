@@ -141,6 +141,14 @@ void Automate::execute(OPTIONS option)
     }
 }
 
+void Automate::decalage(Symbole* s, Etat* e){
+    // TODO
+}
+
+// void Automate::reduction(Symbole symboleGauche, int nbSymbolesDroite){
+//     // TODO
+// }
+
 
 /**
  * Private & Debug methods
@@ -193,3 +201,4 @@ void Automate::executeExecution()
 
     // TODO
 }
+
