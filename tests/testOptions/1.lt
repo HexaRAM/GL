@@ -1,3 +1,9 @@
 var x;
+var y;
 const a = 3;
+const b = 12;
+const c = 2+4*5+c, d=3, e=5;
 ecrire a;
+ecrire b/a;
+
+

@@ -96,7 +96,7 @@ Automate* CommandLineReader::createAutomate()
         while (!fichier.fail())
         {
             string tmp;
-            fichier >> tmp;
+            getline(fichier, tmp);
             code += tmp;
         }
         //(istreambuf_iterator<char>(fichier), istreambuf_iterator<char>());

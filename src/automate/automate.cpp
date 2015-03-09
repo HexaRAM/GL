@@ -1,5 +1,6 @@
 #include "automate.h"
 #include <iostream>
+#include <boost/regex.hpp>
 using namespace std;
 
 
@@ -11,6 +12,8 @@ Automate::Automate()
     this->optimisation = false;
     this->execution = false;
     this->code = "";
+    this->buffer = "";
+    this->lexer = Lexer();
 }
 
 Automate::Automate(bool affichage, bool analyse, bool optimisation, bool execution, string code)
@@ -20,6 +23,8 @@ Automate::Automate(bool affichage, bool analyse, bool optimisation, bool executi
     this->optimisation = optimisation;
     this->execution = execution;
     this->code = code;
+    this->buffer = code;
+    this->lexer = Lexer();
 }
 
 /**
@@ -27,8 +32,6 @@ Automate::Automate(bool affichage, bool analyse, bool optimisation, bool executi
  */
 bool Automate::addVariable(const string& name)
 {
-    variable_s var = {0, false};
-
     if (this->idents.find(name) != this->idents.end())
     {
         // var already exists
@@ -38,7 +41,7 @@ bool Automate::addVariable(const string& name)
     else
     {
         // var doesn't exist
-        this->variables[name] = var;
+        this->variables[name] = {0, false};
         this->idents.insert(name);
         cout.flush();
         return true;
@@ -47,8 +50,6 @@ bool Automate::addVariable(const string& name)
 
 bool Automate::addConstante(const string& name, int value)
 {
-    constante_s constante = {value};
-
     if (this->idents.find(name) != this->idents.end())
     {
         // const already exists
@@ -57,7 +58,7 @@ bool Automate::addConstante(const string& name, int value)
     }
 
     // const doesn't exist
-    this->constantes[name] = constante;
+    this->constantes[name] = {value};
     this->idents.insert(name);
     return true;
 }
@@ -161,6 +162,8 @@ void Automate::executeAffichage()
         cout << "# Warning : l'affichage n'a pas été demandé par l'utilisateur." << endl;
     }
 
+    cout << code << endl;
+
     // TODO
 }
 
@@ -192,4 +195,115 @@ void Automate::executeExecution()
     }
 
     // TODO
+}
+
+string Automate::getNext()
+{
+    return this->lexer.getNext(this->buffer);
+}
+
+void Automate::displayBuffer()
+{
+    cout << this->buffer << endl;
+}
+
+// LEXER
+// char** Lexer::regex = {"", "", "", ""};
+
+Lexer::Lexer()
+{
+
+}
+
+Lexer::~Lexer()
+{
+
+}
+
+string Lexer::regex[] = {"^const$", "^var$", "^lire$", "^ecrire$", ";", "\\(", "\\)", ":=", "=", "\\+", "\\-", "\\*", "\\/", "\\,", "^\\d$","(?!(^var$|^const$|^ecrire$|^lire$))^[a-zA-Z][a-zA-Z0-9]*$"};
+
+string Lexer::getNext(string& buff)
+{
+    if (buff.empty())
+    {
+        return ""; // DOLLAR / EOF
+    }
+
+    stringstream flux(buff);
+    string buffer = "";
+    bool stop = false;
+    int id = -1;
+
+    while (!flux.fail())
+    {
+        char charactere = (char)flux.peek();
+        bool matched = false;
+        cout << "BUFFER : " << buffer << endl;
+
+        switch (charactere)
+        {
+            // caractères d'arrêt
+            case ';':
+            case ' ':
+            case '+':
+            case '-':
+            case '/':
+            case '*':
+            case ',':
+            case '=':
+                stop = true;
+            break;
+
+            default:
+                buffer += charactere;
+            break;
+        }
+
+        /**
+         * TODO : changer ça parce que c'est vraiment pas propre !!!!
+         */
+
+        if (stop)
+        {
+            bool got = false;
+
+            if (charactere == ' ')
+            {
+                flux.get();
+                got = true;
+            }
+
+            if (!got && buffer.empty())
+            {
+                buffer += charactere;
+                flux.get();
+            }
+
+            break;
+        }
+        
+        flux.get(); // eat charactere
+
+        for (unsigned int i = 0; i < NB_REGEX; ++i)
+        {
+            boost::regex re(Lexer::regex[i].c_str());
+            boost::cmatch matches;
+            bool match = boost::regex_match(buffer.c_str(), matches, re);
+            if (match)
+            {
+                id = i;
+                matched = true;
+                break;
+            }
+        }
+
+        if (!matched)
+        {
+            break;
+        }
+    }
+
+    // renvoyer le symbole qui match en fonction du buffer
+    getline(flux, buff);
+    return buffer;
 }

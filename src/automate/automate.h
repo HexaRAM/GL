@@ -2,10 +2,13 @@
 #define AUTOMATE_H
 
 #include "../config.h"
+#include "../symbole/symbole.h"
 #include <string>
 #include <map>
 #include <set>
 using namespace std;
+
+#define NB_REGEX 16
 
 struct variable_s {
     int value;
@@ -28,6 +31,17 @@ typedef map<const string, constante_s> map_const;
 //     vector<Symbole> symboles;
 // };
 
+class Lexer
+{
+    public:
+        Lexer();
+        ~Lexer();
+        //Symbole getNext(const string& code); // en attendant les classes Symboles
+        string getNext(string& buff);
+        static string regex[];
+    private:
+};
+
 
 class Automate
 {
@@ -35,12 +49,13 @@ class Automate
         Automate();
         Automate(bool aff, bool ana, bool opti, bool exec, string code);
         virtual ~Automate() {}
-        void lecture();
+        void displayBuffer();
         void execute(OPTIONS option = ALL);
         bool addVariable(const string& name);
         bool addConstante(const string& name, int value);
         bool instanciateVariable(const string& name, int value);
         void displayMemory();
+        string getNext();
 
     private:
         bool affichage;
@@ -52,6 +67,8 @@ class Automate
         set<string> idents;
         // map<int, instruction_s> instructions;
         string code;
+        Lexer lexer;
+        string buffer;
 
         void executeAll();
         void executeAffichage();
@@ -60,4 +77,5 @@ class Automate
         void executeExecution();
 
 };
+
 #endif
