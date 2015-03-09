@@ -3,19 +3,20 @@
 #include "../config.h"
 
 
-Etat0::Etat0(string pName) : Etat(pName){}
-Etat0::~Etat0(){}
+Etat2::Etat2(string pName) : Etat(pName){}
+Etat2::~Etat2(){}
 
-bool Etat0::transition(Automate & automate, Symbole * s ){
+bool Etat2::transition(Automate & automate, Symbole * s ){
 	int idSym = *s ; 
 	switch (idSym) {
-		case P :
-			automate.decalage(s, new Etat1);
+		case LI :
+			automate.decalage(s, new Etat3);
 			break;
-		case LD :
-			automate.decalage(s, new Etat2);
+		case D :
+			automate.decalage(s, new Etat4);
 			break;
 		case ct :
+			automate.decalage(s, new Etat5);
 		case va :
 		case dollar :
 			/** TODO **/
