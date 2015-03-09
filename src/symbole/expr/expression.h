@@ -1,15 +1,16 @@
-#if !defined ( EXPR_H )
-#define EXPR_H
+#ifndef EXPRESSION_H
+#define EXPRESSION_H
 
 #include "../symbole.h"
 #include <map>
 #include <string>
 
 using namespace std;
-	class Expr: public Symbole { 
+
+	class Expression: public Symbole { 
 		public:
-			Expr():Symbole(0) {}
-			virtual ~Expr() {}
+			Expression():Symbole(0) {}
+			virtual ~Expression() {}
 			virtual double eval(const map<string, double> &valeurs) = 0;
 	};
 	
