@@ -9,6 +9,7 @@
 using namespace std;
 
 #define NB_REGEX 16
+#define MAX_NO_PATTERN_SEQUENCE 10
 
 struct variable_s {
     int value;

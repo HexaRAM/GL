@@ -220,75 +220,86 @@ Lexer::~Lexer()
 
 }
 
-string Lexer::regex[] = {"^const$", "^var$", "^lire$", "^ecrire$", ";", "\\(", "\\)", ":=", "=", "\\+", "\\-", "\\*", "\\/", "\\,", "^\\d$","(?!(^var$|^const$|^ecrire$|^lire$))^[a-zA-Z][a-zA-Z0-9]*$"};
+string Lexer::regex[] = {"^const$", "^var$", "^lire$", "^ecrire$", ";", "\\(", "\\)", ":=", "=", "\\+", "\\-", "\\*", "\\/", "\\,", "^\\d*$","(?!(^var$|^const$|^ecrire$|^lire$))^[a-zA-Z][a-zA-Z0-9]*$"};
 
 string Lexer::getNext(string& buff)
 {
     if (buff.empty())
     {
-        return ""; // DOLLAR / EOF
+        return "$"; // symbole DOLLAR / EOF
     }
 
     stringstream flux(buff);
     string buffer = "";
-    bool stop = false;
     int id = -1;
+    bool match_flag = false;
+    bool error = false;
+    bool last_was_no_pattern = false;
+    int no_pattern_sequence = 0;
 
     while (!flux.fail())
     {
-        char charactere = (char)flux.peek();
-        bool matched = false;
-        cout << "BUFFER : " << buffer << endl;
+        char character = (char)flux.peek(); // prochain caractère
+        bool stoping_char = false;
+        //cout << "BUFFER : " << buffer << " (next character : " << character << ") / no pattern sequence : " << no_pattern_sequence << " !" << endl; // état du buffer
 
-        switch (charactere)
+        // TODO : gérer le :=
+
+        // caractère arrêt ?
+        switch (character)
         {
-            // caractères d'arrêt
-            case ';':
             case ' ':
+            case ';':
             case '+':
             case '-':
             case '/':
             case '*':
             case ',':
-            case '=':
-                stop = true;
+            case '(':
+            case ')':
+                stoping_char = true;
             break;
 
             default:
-                buffer += charactere;
+
             break;
         }
 
-        /**
-         * TODO : changer ça parce que c'est vraiment pas propre !!!!
-         */
-
-        if (stop)
+        if (stoping_char)
         {
-            bool got = false;
-
-            if (charactere == ' ')
+            // * si tout seul dans le buffer [buffer vide] (buffer == caractère arrêt)
+            if (buffer.empty())
             {
                 flux.get();
-                got = true;
+                // -> si espace
+                if (character == ' ')
+                {
+                    continue;
+                }
+                // -> sinon
+                buffer = character;
+                break; // return buffer;
             }
 
-            if (!got && buffer.empty())
+            // * sinon
+            // -> si espace
+            if (character == ' ')
             {
-                buffer += charactere;
                 flux.get();
             }
-
-            break;
+            // -> sinon
+            break; // return buffer;
         }
-        
-        flux.get(); // eat charactere
 
+        // - si pas caractère arrêt
+        string new_buff = buffer + character;
+
+        bool matched = false;
         for (unsigned int i = 0; i < NB_REGEX; ++i)
         {
             boost::regex re(Lexer::regex[i].c_str());
             boost::cmatch matches;
-            bool match = boost::regex_match(buffer.c_str(), matches, re);
+            bool match = boost::regex_match(new_buff.c_str(), matches, re);
             if (match)
             {
                 id = i;
@@ -297,13 +308,70 @@ string Lexer::getNext(string& buff)
             }
         }
 
-        if (!matched)
+        //cout << "NEW BUFF : " << new_buff << " / matched ? " << ((matched) ? "yes" : "no") << endl;
+        if (matched)
         {
-            break;
+            flux.get();
+            match_flag = true;
+            buffer = new_buff;
+            last_was_no_pattern = false;
+            continue;
         }
+        else
+        {
+            if (match_flag)
+            {
+                break; // return buffer;
+            }
+
+            // Aucun pattern trouvé, on continue pour voir si un pattern va apparaître
+            if (last_was_no_pattern)
+            {
+                no_pattern_sequence++;
+            }
+            else
+            {
+                last_was_no_pattern = true;
+                no_pattern_sequence = 1;
+            }
+
+            if (no_pattern_sequence >= MAX_NO_PATTERN_SEQUENCE)
+            {
+                error = true;
+                break;
+            }
+
+            buffer = new_buff;
+            flux.get();
+        }
+    } // fin du while
+
+    // mise à jour du buffer dans l'automate
+    getline(flux, buff);
+
+    if (error)
+    {
+        return "Erreur - aucun pattern trouvé dans les " << MAX_NO_PATTERN_SEQUENCE << " derniers caractères.";
     }
 
-    // renvoyer le symbole qui match en fonction du buffer
-    getline(flux, buff);
     return buffer;
+
+        /**
+         * /!\ Implémentation légèrement différente de l'algo décrit ci-dessous avec l'intégration du ":=" qui a nécessité d'ajouter un compteur "no_pattern_sequence" pour tolérer le fait qu'on ne rencontre aucun pattern par moment (e.g quand on reçoit ":")
+         * TODO :
+         *      - si caractère arrêt
+         *          * si tout seul dans le buffer [buffer vide] (buffer == caractère arrêt)
+         *              -> si pas espace => flux.get() && retourner le symbole
+         *              -> si espace => flux.get() et continuer
+         *          * si pas tout seul dans le buffer (c'est le symbole d'encore après, [opti : on pourrait le save])
+         *              -> si carac_arret == espace => flux.get() et retour du buffer
+         *              -> si carac_arret == pas espace => retour du buffer
+         *      - si pas caractère arrêt => ajouter caractère au buffer [new_buff]
+         *          * tester new_buff sur chaque regex
+         *              -> si match => flux.get() mettre un flag à match et continue
+         *              -> si non match
+                            ** si flag à match => retourner buffer (/!\ pas new_buff)
+         *                  ** si flag à non match => retourner erreur (aucun pattern trouvé)
+         *
+         */
 }
