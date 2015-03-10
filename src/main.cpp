@@ -36,24 +36,47 @@ int main(int argc, char ** argv)
     // test Lexer
 
 
-    cout << "--------------------" << endl;
-    cout << "a : affichage code" << endl;
-    cout << "b : display buffer" << endl;
-    cout << "s : stop program" << endl;
-    cout << "--------------------" << endl;
-
     string press;
-    while (press != "s")
+    while (true)
     {
-        cin >> press;
+        cout << endl;
+        cout << "--------------------" << endl;
+        cout << "------- MENU -------" << endl;
+        cout << "--------------------" << endl;
+        cout << "a : affichage code" << endl;
+        cout << "b : display buffer" << endl;
+        cout << "s : stop program" << endl;
+        cout << "n : display all next " << endl;
+        cout << "--------------------" << endl;
+        cout << " > ";
+        getline(cin, press);
+        cout << endl;
 
-        if (press == "a")
+        if (press == "s")
+        {
+            break;
+        }
+        else if (press == "a")
         {
             automate->execute(AFFICHAGE);
         }
         else if (press == "b")
         {
             automate->displayBuffer();
+        }
+        else if (press == "n")
+        {
+            string next = automate->getNext();
+            while (next != "$" && next != "Erreur - aucun pattern trouvé")
+            {
+                cout << "# Prochain symbole : " << next << endl;
+                next = automate->getNext();
+
+                if (next == "$")
+                {
+                    cout << "# Prochain symbole : " << next << endl << "\tFin de la lecture" << endl;
+                }
+            }
         }
         else
         {
