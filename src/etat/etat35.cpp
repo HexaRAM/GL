@@ -2,6 +2,7 @@
 #include "etat41.h"
 //#include "etat30.h"
 //#include "etat31.h"
+//#include "etat29.h"
 #include "../config.h"
 
 
@@ -16,10 +17,13 @@ bool Etat35::transition(Automate & automate, Symbole * s ){
 			automate.decalage(s, new Etat41);
 			break;
 		case add :
-			//automate.decalage(s, new Etat30)
+			//automate.decalage(s, new Etat30);
 			break;
 		case moins :
-			//automate.decalage(s, new Etat31)
+			//automate.decalage(s, new Etat31);
+			break;
+		case OA :
+			//automate.decalage(s, new Etat29);
 			break;
 		default : break;
 	}
