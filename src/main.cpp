@@ -3,6 +3,7 @@
 #include "config.h"
 #include "commandLineReader.h"
 #include "automate/automate.h"
+#include "config.h"
 using namespace std;
 
 /**
@@ -92,6 +93,8 @@ int main(int argc, char ** argv)
     //         cout << "# Prochain symbole : " << next << endl;
     //     }
     // }
+
+
 
     delete automate;
 }

@@ -193,6 +193,13 @@ void Automate::execute(OPTIONS option)
         break;
     }
 }
+void Automate::decalage(Symbole* s, Etat* e){
+    // TODO
+}
+
+// void Automate::reduction(Symbole symboleGauche, int nbSymbolesDroite){
+//     // TODO
+// }
 
 void Automate::executeSyntaxicalAnalyse()
 {
@@ -210,7 +217,6 @@ void Automate::executeSyntaxicalAnalyse()
         keepGoing = false; // TODO : remove this line
     }
 }
-
 void Automate::executeAll()
 {
     executeAffichage();
@@ -260,7 +266,6 @@ void Automate::executeExecution()
 
     // TODO
 }
-
 string Automate::getNext()
 {
     return this->lexer.getNext(this->buffer);

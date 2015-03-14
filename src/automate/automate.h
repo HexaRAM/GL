@@ -7,6 +7,7 @@
 #include <map>
 #include <deque>
 #include <set>
+class Etat;
 using namespace std;
 
 class Etat;
@@ -59,6 +60,8 @@ class Automate
         bool addConstante(const string& name, int value);
         bool instanciateVariable(const string& name, int value);
         void displayMemory();
+        void decalage(Symbole* s, Etat* e);
+        //void reduction(Symbole s, Etat* e);
         string getNext(); // Todo : switch to getNextStringSymbole();
         // Symbole* getNext();
 
