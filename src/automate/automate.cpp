@@ -3,6 +3,15 @@
 #include <boost/regex.hpp>
 using namespace std;
 
+/**
+ * TODO : retirer tous les commentaires sur les lignes utilisant les états une fois que les classes états seront implémentées
+ */
+
+ //     _              _                                 _          
+ //    / \     _   _  | |_    ___    _ __ ___     __ _  | |_    ___ 
+ //   / _ \   | | | | | __|  / _ \  | '_ ` _ \   / _` | | __|  / _ \
+ //  / ___ \  | |_| | | |_  | (_) | | | | | | | | (_| | | |_  |  __/
+ // /_/   \_\  \__,_|  \__|  \___/  |_| |_| |_|  \__,_|  \__|  \___|
 
 Automate::Automate()
 {
@@ -14,6 +23,8 @@ Automate::Automate()
     this->code = "";
     this->buffer = "";
     this->lexer = Lexer();
+    //this->current_state = new Etat0;
+    this->current_state = NULL;
 }
 
 Automate::Automate(bool affichage, bool analyse, bool optimisation, bool execution, string code)
@@ -25,6 +36,16 @@ Automate::Automate(bool affichage, bool analyse, bool optimisation, bool executi
     this->code = code;
     this->buffer = code;
     this->lexer = Lexer();
+    //this->current_state = new Etat0;
+    this->current_state = NULL;
+}
+
+Automate::~Automate()
+{
+    //delete current_state;
+
+    // si les piles symboles ou states ne sont pas vides
+    // les vider à coup de delete pour ne pas causer de memory leaks
 }
 
 /**
@@ -114,10 +135,41 @@ void Automate::displayMemory()
 
 void Automate::execute(OPTIONS option)
 {
+
+    // analyse syntaxique
+    executeSyntaxicalAnalyse();
+
     switch (option)
     {
         case ALL:
             executeAll();
+        break;
+
+        case CHECKED:
+            if (this->optimisation)
+            {
+                // optimisation
+                // modifier directement les instructions
+                executeOptimisation();
+            }
+
+            if (this->analyse)
+            {
+                // analyse statique
+                executeAnalyse();
+            }
+
+            if (this->affichage)
+            {
+                // affiche le programme (optimisé si -o)
+                executeAffichage();
+            }
+
+            if (this->execution)
+            {
+                // execute le programme
+                executeExecution();
+            }
         break;
 
         case AFFICHAGE:
@@ -142,11 +194,23 @@ void Automate::execute(OPTIONS option)
     }
 }
 
+void Automate::executeSyntaxicalAnalyse()
+{
+    // analyse syntaxique : analyseur ascendant
 
-/**
- * Private & Debug methods
- * Maybe (surely) it's impossible to launch all of them separately
- */
+    bool keepGoing = true;
+
+    // push state 0
+    // states.push_front(current_state);
+
+    while (keepGoing)
+    {
+        // Symbole* nextSymbole = getNext();
+        // keepGoing = init->transition(*this, nextSymbole);
+        keepGoing = false; // TODO : remove this line
+    }
+}
+
 void Automate::executeAll()
 {
     executeAffichage();
@@ -207,8 +271,14 @@ void Automate::displayBuffer()
     cout << this->buffer << endl;
 }
 
-// LEXER
-// char** Lexer::regex = {"", "", "", ""};
+
+
+
+//  _                                 
+// | |       ___  __  __   ___   _ __ 
+// | |      / _ \ \ \/ /  / _ \ | '__|
+// | |___  |  __/  >  <  |  __/ | |   
+// |_____|  \___| /_/\_\  \___| |_|   
 
 Lexer::Lexer()
 {
@@ -231,7 +301,6 @@ string Lexer::getNext(string& buff)
 
     stringstream flux(buff);
     string buffer = "";
-    int id = -1;
     bool match_flag = false;
     bool error = false;
     bool last_was_no_pattern = false;
@@ -294,6 +363,7 @@ string Lexer::getNext(string& buff)
         // - si pas caractère arrêt
         string new_buff = buffer + character;
 
+        // test des regex
         bool matched = false;
         for (unsigned int i = 0; i < NB_REGEX; ++i)
         {
@@ -302,7 +372,6 @@ string Lexer::getNext(string& buff)
             bool match = boost::regex_match(new_buff.c_str(), matches, re);
             if (match)
             {
-                id = i;
                 matched = true;
                 break;
             }
@@ -351,7 +420,7 @@ string Lexer::getNext(string& buff)
 
     if (error)
     {
-        return "Erreur - aucun pattern trouvé dans les " << MAX_NO_PATTERN_SEQUENCE << " derniers caractères.";
+        return "Erreur - aucun pattern trouvé dans les " + std::to_string(MAX_NO_PATTERN_SEQUENCE) + " derniers caractères.";
     }
 
     return buffer;
