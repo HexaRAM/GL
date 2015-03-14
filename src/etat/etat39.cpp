@@ -1,7 +1,7 @@
 #include "etat39.h"
-//#include "etat33.h"
-//#include "etat34.h"
-//#include "etat32.h"
+#include "etat33.h"
+#include "etat34.h"
+#include "etat32.h"
 #include "etat1.h"
 #include "../config.h"
 
@@ -22,13 +22,13 @@ bool Etat39::transition(Automate & automate, Symbole * s ){
 		case moins :
 			//TODO : r15
 		case fois :
-			//automate.decalage(s, new Etat33);
+			automate.decalage(s, new Etat33);
 		case divise :
-			//automate.decalage(s, new Etat34);
+			automate.decalage(s, new Etat34);
 		case pv :
 			//TODO : r15
 		case OM :
-			//automate.decalage(s, new Etat32);
+			automate.decalage(s, new Etat32);
 			break;
 		default : break;
 	}
