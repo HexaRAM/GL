@@ -5,8 +5,11 @@
 #include "../symbole/symbole.h"
 #include <string>
 #include <map>
+#include <deque>
 #include <set>
 using namespace std;
+
+class Etat;
 
 #define NB_REGEX 16
 #define MAX_NO_PATTERN_SEQUENCE 10
@@ -49,24 +52,34 @@ class Automate
     public:
         Automate();
         Automate(bool aff, bool ana, bool opti, bool exec, string code);
-        virtual ~Automate() {}
+        ~Automate();
         void displayBuffer();
-        void execute(OPTIONS option = ALL);
+        void execute(OPTIONS option = CHECKED);
         bool addVariable(const string& name);
         bool addConstante(const string& name, int value);
         bool instanciateVariable(const string& name, int value);
         void displayMemory();
-        string getNext();
+        string getNext(); // Todo : switch to getNextStringSymbole();
+        // Symbole* getNext();
 
     private:
+        // options
         bool affichage;
         bool analyse;
         bool optimisation;
         bool execution;
+
+        // structure de données
+        Etat* current_state;
         map_var variables;
         map_const constantes;
         set<string> idents;
+        deque<Symbole*> symboles;
+        deque<Etat*> states;
+
         // map<int, instruction_s> instructions;
+
+        // Lexer
         string code;
         Lexer lexer;
         string buffer;
@@ -76,6 +89,7 @@ class Automate
         void executeAnalyse();
         void executeOptimisation();
         void executeExecution();
+        void executeSyntaxicalAnalyse();
 
 };
 
