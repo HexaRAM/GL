@@ -30,7 +30,7 @@ enum ID_SYMBOLE{
 	w = 109,
 	po = 110,
 	pf = 111,
-	plus = 112,
+	add = 112,
 	moins = 113,
 	fois = 114,
 	divise = 115,
