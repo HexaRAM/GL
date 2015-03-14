@@ -1,5 +1,6 @@
 #include "etat0.h"
 #include "etat1.h"
+#include "etat2.h"
 #include "../config.h"
 
 
