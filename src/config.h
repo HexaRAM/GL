@@ -1,8 +1,10 @@
 #ifndef H_CONFIG
 #define H_CONFIG
 
+#define DEBUG // comment to remove debug mode
+
 enum OPTIONS {
-    ALL, AFFICHAGE, ANALYSE, OPTIMISATION, EXECUTION
+    ALL, CHECKED, AFFICHAGE, ANALYSE, OPTIMISATION, EXECUTION
 };
 
 enum ID_SYMBOLE{

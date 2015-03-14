@@ -5,9 +5,15 @@
 #include "../symbole/symbole.h"
 #include <string>
 #include <map>
+#include <deque>
 #include <set>
 class Etat;
 using namespace std;
+
+class Etat;
+
+#define NB_REGEX 16
+#define MAX_NO_PATTERN_SEQUENCE 10
 
 struct variable_s {
     int value;
@@ -30,38 +36,64 @@ typedef map<const string, constante_s> map_const;
 //     vector<Symbole> symboles;
 // };
 
+class Lexer
+{
+    public:
+        Lexer();
+        ~Lexer();
+        //Symbole getNext(const string& code); // en attendant les classes Symboles
+        string getNext(string& buff);
+        static string regex[];
+    private:
+};
+
 
 class Automate
 {
     public:
         Automate();
         Automate(bool aff, bool ana, bool opti, bool exec, string code);
-        virtual ~Automate() {}
-        void lecture();
-        void execute(OPTIONS option = ALL);
+        ~Automate();
+        void displayBuffer();
+        void execute(OPTIONS option = CHECKED);
         bool addVariable(const string& name);
         bool addConstante(const string& name, int value);
         bool instanciateVariable(const string& name, int value);
         void displayMemory();
         void decalage(Symbole* s, Etat* e);
         //void reduction(Symbole s, Etat* e);
+        string getNext(); // Todo : switch to getNextStringSymbole();
+        // Symbole* getNext();
 
     private:
+        // options
         bool affichage;
         bool analyse;
         bool optimisation;
         bool execution;
+
+        // structure de données
+        Etat* current_state;
         map_var variables;
         map_const constantes;
         set<string> idents;
+        deque<Symbole*> symboles;
+        deque<Etat*> states;
+
         // map<int, instruction_s> instructions;
+
+        // Lexer
         string code;
+        Lexer lexer;
+        string buffer;
 
         void executeAll();
         void executeAffichage();
         void executeAnalyse();
         void executeOptimisation();
         void executeExecution();
+        void executeSyntaxicalAnalyse();
 
 };
+
 #endif
