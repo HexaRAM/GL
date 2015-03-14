@@ -1,5 +1,8 @@
 #include "etat32.h"
 #include "etat40.h"
+//#include "etat22.h"
+//#include "etat23.h"
+//#include "etat24.h"
 #include "../config.h"
 
 
@@ -11,13 +14,13 @@ bool Etat32::transition(Automate & automate, Symbole * s ){
 	int idSym = *s ; 
 	switch (idSym) {
 		case id :
-			//TODO: R22
+			//automate.decalage(s, new Etat22);
 			break;
 		case num :
-			//TODO: R23
+			//automate.decalage(s, new Etat23);
 			break;
 		case po :
-			//TODO: R24
+			//automate.decalage(s, new Etat24)
 			break;
 		case F :
 			automate.decalage(s, new Etat40);
