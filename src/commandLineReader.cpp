@@ -1,15 +1,9 @@
 #include "commandLineReader.h"
+#include "config.h"
 #include <iostream>
 #include <iterator>
 #include <fstream>
 #include <boost/regex.hpp>
-
-/**
- * @TODO
- *     - remove options attributes
- *     - add options attributes to Automate class
- *     - build Automate here or in factory class !
- */
 
 /**
  * Constructeur
@@ -27,7 +21,11 @@ CommandLineReader::CommandLineReader(int argc, char** argv)
 
     // parse
     if(argc < 2)
-        cout << "# Sans arguments" << endl;
+    {
+        #ifdef DEBUG
+            cout << "# Sans arguments" << endl;
+        #endif
+    }
     else
     {
         if (syntaxe_filename(argv[1]))
@@ -63,7 +61,9 @@ CommandLineReader::CommandLineReader(int argc, char** argv)
                 }
                 else
                 {
-                    cout << "# Option incorrecte : " << argv[i] << endl;
+                    #ifdef DEBUG
+                        cout << "# Option incorrecte : " << argv[i] << endl;
+                    #endif
                 }
             }
 
@@ -71,7 +71,9 @@ CommandLineReader::CommandLineReader(int argc, char** argv)
         }
         else
         {
-            cout << "# Nom fichier incorrecte : " << argv[1] << endl;
+            #ifdef DEBUG
+                cout << "# Nom fichier incorrecte : " << argv[1] << endl;
+            #endif
         }
     }
 }
@@ -96,7 +98,7 @@ Automate* CommandLineReader::createAutomate()
         while (!fichier.fail())
         {
             string tmp;
-            fichier >> tmp;
+            getline(fichier, tmp);
             code += tmp;
         }
         //(istreambuf_iterator<char>(fichier), istreambuf_iterator<char>());
@@ -133,7 +135,9 @@ bool CommandLineReader::hasOptionUp(OPTIONS option)
         break;
 
         default:
-            cout << "# Error : option inconnue demandée." << endl;
+            #ifdef DEBUG
+                cout << "# Error : option inconnue demandée." << endl;
+            #endif
             return false;
         break;
     }
@@ -151,7 +155,9 @@ void CommandLineReader::displayMode()
     {
         modeStr = "normal.";
     }
-    cout << "# Programme lancé en mode " << modeStr << endl;
+    #ifdef DEBUG
+        cout << "# Programme lancé en mode " << modeStr << endl;
+    #endif
 }
 
 /**
