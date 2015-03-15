@@ -12,17 +12,22 @@ bool Etat2::transition(Automate & automate, Symbole * s ){
 	int idSym = *s ; 
 	switch (idSym) {
 		case LI :
-			//automate.decalage(s, new Etat3);
+			automate.decalage(s, new Etat3);
 			break;
 		case D :
-			//automate.decalage(s, new Etat4);
+			automate.decalage(s, new Etat4);
 			break;
 		case ct :
-			//automate.decalage(s, new Etat5);
+			automate.decalage(s, new Etat5);
+			break;
 		case va :
+			automate.decalage(s, new Etat6);
+			break;
+		case id : 
+		case r :
+		case w :
 		case dollar :
-			/** TODO **/
-			//automate.reduction();
+			//Reduction r11 : Li -> .
 			break;
 		default : break;
 	}
