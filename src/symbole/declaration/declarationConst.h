@@ -2,14 +2,14 @@
 #define DECLARATIONCONST_H
 
 #include "declaration.h"
-#include "Num.h"
-#include "Identificateur.h"
+#include "num.h"
+#include "identificateur.h"
 
 	class DeclarationConst : public Declaration {
 	protected:
 		map<Identificateur,Num> map_const;
 	public:
-		DeclarationConst() {}
+		DeclarationConst(): Declaration() {}
 		virtual ~DeclarationConst() {}
 	};
 #endif

@@ -10,7 +10,7 @@
 			Expression expr;
 			Variable var;
 		public:
-			Affectation(){}
+			Affectation():Instruction(107) {}
 			virtual ~Affectation() {}
 			void print();
 	};

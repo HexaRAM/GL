@@ -4,7 +4,7 @@
 #include "symbole.h"
 #include "instruction.h"
 
-#include <deque.h>
+#include <deque>
 
 using namespace std;
 
@@ -12,7 +12,7 @@ using namespace std;
 		protected:
 			deque<Instruction> liste_instruction;
 		public:
-			BlocInstruction(){}
+			BlocInstruction(): Symbole(5) {}
 			virtual ~BlocInstruction() {}
 			void print();
 	};

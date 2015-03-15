@@ -6,7 +6,7 @@
 	class Declaration : public Symbole {
 	
 	public:
-		Declaration() {}
+		Declaration(): Symbole(2) {}
 		virtual ~Declaration() {}
 	};
 #endif

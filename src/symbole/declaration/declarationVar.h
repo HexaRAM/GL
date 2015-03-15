@@ -2,13 +2,15 @@
 #define DECLARATIONVAR_H
 
 #include "declaration.h"
-#include "Identificateur.h"
+#include "identificateur.h"
+
+#include <deque>
 
 	class DeclarationVar : public Declaration {
 	protected:
-		deque<Identificateur> liste_identif;
+		//deque<Identificateur> liste_identif;
 	public:
-		DeclarationVar() {}
+		DeclarationVar(): Declaration() {}
 		virtual ~DeclarationVar() {}
 	};
 #endif

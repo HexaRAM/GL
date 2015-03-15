@@ -5,7 +5,7 @@
 
 	class Identificateur : public Symbole {
 		public:
-			Identificateur(){}
+			Identificateur(): Symbole(104) {}
 			virtual ~Identificateur() {}
 	};
 #endif

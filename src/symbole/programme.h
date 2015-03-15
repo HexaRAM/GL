@@ -10,7 +10,7 @@
 		BlocDeclaration bloc_declaration;
 		BlocInstruction bloc_instruction;
 	public:
-		Programme(){}
+		Programme(): Symbole(0) {}
 		virtual ~Programme() {}
 		void print();
 	};

@@ -9,9 +9,9 @@ using namespace std;
 
 	class Expression: public Symbole { 
 		public:
-			Expression():Symbole(0) {}
+			Expression():Symbole(7) {}
 			virtual ~Expression() {}
-			virtual double eval(const map<string, double> &valeurs) = 0;
+			double eval(const map<string, double> &valeurs);
 	};
 	
 #endif

@@ -4,7 +4,7 @@
 #include "../symbole.h"
 #include "declaration.h"
 
-#include <deque.h>
+#include <deque>
 
 using namespace std;
 
@@ -12,7 +12,7 @@ using namespace std;
 	protected:
 		deque<Declaration> liste_declaration;
 	public:
-		BlocDeclaration() {}
+		BlocDeclaration(): Symbole(1) {}
 		virtual ~BlocDeclaration() {}
 		void print();
 	};

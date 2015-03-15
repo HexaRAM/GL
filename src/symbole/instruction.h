@@ -6,7 +6,8 @@
 	class Instruction : public Symbole {
 	
 	public:
-		Instruction() {}
+		Instruction(): Symbole(6) {}
+		Instruction(int id): Symbole(id) {}
 		virtual ~Instruction() {}
 	};
 #endif
