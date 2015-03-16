@@ -1,10 +1,11 @@
 #include "../config.h"
+#include "etat16.h"
 
-Etat28::Etat28(string pName) : Etat(pName){}
-Etat28::Etat28(){}
-Etat28::~Etat28(){}
+Etat16::Etat16(string pName) : Etat(pName){}
+Etat16::Etat16(){}
+Etat16::~Etat16(){}
 
-bool Etat28::transition(Automate & automate, Symbole * s ){
+bool Etat16::transition(Automate & automate, Symbole * s ){
 	int idSym = *s ; 
 	switch (idSym) {
 		case id :
