@@ -1,4 +1,10 @@
 #include "etat10.h"
+#include "etat19.h"
+#include "etat20.h"
+#include "etat21.h"
+#include "etat22.h"
+#include "etat23.h"
+#include "etat24.h"
 #include "../config.h"
 
 Etat10::Etat10(string pName) : Etat(pName){}
