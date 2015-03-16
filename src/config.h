@@ -18,24 +18,25 @@ enum ID_SYMBOLE{
 	E= 7,
 	T = 8,
 	F = 9,
-	OA = 10,
-	OM = 11,
-	pv = 100,
-	ct = 101,
-	va = 102,
-	v = 103,
-	id = 104,
-	eg = 105,
-	num = 106,
-	af = 107,
-	r = 108,
-	w = 109,
-	po = 110,
-	pf = 111,
-	add = 112,
-	moins = 113,
-	fois = 114,
-	divise = 115,
-	dollar = 116
+	OA = 10,			//symbole operation addition
+	OM = 11,			//symbole operation multiplication
+	
+	pv = 100,			//symbole ;
+	ct = 101,			//symbole const
+	va = 102,			//symbole var
+	v = 103,			//symbole ,
+	id = 104,			//symbole identificateur
+	eg = 105,			//symbole =
+	num = 106,			//symbole numerique
+	af = 107,			//symbole :=
+	r = 108,			//symbole lire
+	w = 109,			//symbole ecrire
+	po = 110,			//symbole (
+	pf = 111,			//symbole )
+	add = 112,			//symbole +
+	moins = 113,		//symbole -
+	fois = 114,			//symbole *
+	divise = 115,		//symbole /
+	dollar = 116		//symbole $
 };
 #endif
