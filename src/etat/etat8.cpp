@@ -10,7 +10,7 @@ bool Etat8::transition(Automate & automate, Symbole * s ){
 	int idSym = *s ; 
 	switch (idSym) {
 		case af :
-			//automate.decalage(s, new Etat 17);
+			automate.decalage(s, new Etat17);
 			break;
 		default : break;
 	}
