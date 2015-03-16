@@ -5,9 +5,10 @@
 
 	class OpParenthese : public Expression {
 		protected:
-			Expression expr;
+			Expression* expr;
 		public:
-			OpParenthese(){}
+			OpParenthese(): Expression() {}
+			OpParenthese(Expression* expression);
 			virtual ~OpParenthese() {}
 	};
 #endif

@@ -3,9 +3,10 @@
 
 #include "exprBin.h"
 
-	class ExprmMoins : public ExprBin {
+	class ExprMoins : public ExprBin {
 		public:
-			ExprmMoins(){}
-			virtual ~ExprmMoins() {}
+			ExprMoins(): ExprBin() {}
+			ExprMoins(Expression* gauche, Expression* droite): ExprBin(gauche, droite) {}
+			virtual ~ExprMoins() {}
 	};
 #endif

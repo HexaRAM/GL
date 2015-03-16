@@ -10,6 +10,7 @@ using namespace std;
 	class Expression: public Symbole { 
 		public:
 			Expression():Symbole(7) {}
+			Expression(int ident):Symbole(ident) {}
 			virtual ~Expression() {}
 			double eval(const map<string, double> &valeurs);
 	};

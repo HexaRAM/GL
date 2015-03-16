@@ -5,7 +5,8 @@
 
 	class ExprMult : public ExprBin {
 		public:
-			ExprMult(){}
+			ExprMult(): ExprBin() {}
+			ExprMult(Expression* gauche, Expression* droite): ExprBin(gauche, droite) {}
 			virtual ~ExprMult() {}
 	};
 #endif

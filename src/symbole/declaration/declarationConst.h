@@ -7,9 +7,10 @@
 
 	class DeclarationConst : public Declaration {
 	protected:
-		map<Identificateur,Num> map_const;
+		map<Identificateur*,Num*> map_const;
 	public:
 		DeclarationConst(): Declaration() {}
+		void addConst(Identificateur* ident, Num* num);
 		virtual ~DeclarationConst() {}
 	};
 #endif

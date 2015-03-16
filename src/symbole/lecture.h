@@ -2,13 +2,14 @@
 #define LECTURE_H
 
 #include "instruction.h"
-#include "expr/variable.h"
+#include "declaration/identificateur.h"
 
-	class  Lecture : public Instruction{
+	class  Lecture : public Instruction {
 		protected:
-			Variable var;
+			Identificateur* id;
 		public:
-			Lecture(){}
+			Lecture(): Instruction(){}
+			Lecture(Identificateur* ident);
 			virtual ~Lecture() {}
 			void print();
 	};

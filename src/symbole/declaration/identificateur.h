@@ -1,11 +1,11 @@
 #ifndef IDENTIFICATEUR_H 
 #define IDENTIFICATEUR_H
 
-#include "../symbole.h"
+#include "../expr/expression.h"
 
-	class Identificateur : public Symbole {
+	class Identificateur : public Expression {
 		public:
-			Identificateur(): Symbole(104) {}
+			Identificateur(): Expression(104) {}
 			virtual ~Identificateur() {}
 	};
 #endif

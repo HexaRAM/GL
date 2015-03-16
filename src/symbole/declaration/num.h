@@ -5,7 +5,7 @@
 
 	class Num : public Expression {
 		public:
-			Num(){}
+			Num(): Expression(106) {}
 			virtual ~Num() {}
 	};
 #endif

@@ -5,10 +5,11 @@
 
 	class ExprBin : public Expression {
 		protected:
-			Expression expr_droite;
-			Expression expr_gauche;
+			Expression * expr_gauche;
+			Expression * expr_droite;
 		public:
-			ExprBin(){}
+			ExprBin(): Expression() {}
+			ExprBin(Expression* gauche, Expression* droite);
 			virtual ~ExprBin() {}
 	};
 #endif

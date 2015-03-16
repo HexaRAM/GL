@@ -5,7 +5,8 @@
 
 	class ExprDiv : public ExprBin {
 		public:
-			ExprDiv(){}
+			ExprDiv(): ExprBin() {}
+			ExprDiv(Expression* gauche, Expression* droite): ExprBin(gauche, droite) {}
 			virtual ~ExprDiv() {}
 	};
 #endif
