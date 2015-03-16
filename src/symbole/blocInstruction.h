@@ -10,9 +10,10 @@ using namespace std;
 
 	class BlocInstruction : public Symbole {
 		protected:
-			deque<Instruction> liste_instruction;
+			deque<Instruction*> liste_instruction;
 		public:
 			BlocInstruction(): Symbole(5) {}
+			void addInstruction(Instruction* inst);
 			virtual ~BlocInstruction() {}
 			void print();
 	};

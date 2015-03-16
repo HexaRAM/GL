@@ -10,9 +10,10 @@ using namespace std;
 
 	class BlocDeclaration : public Symbole {
 	protected:
-		deque<Declaration> liste_declaration;
+		deque<Declaration*> liste_declaration;
 	public:
 		BlocDeclaration(): Symbole(1) {}
+		void addDeclaration(Declaration* d);
 		virtual ~BlocDeclaration() {}
 		void print();
 	};
