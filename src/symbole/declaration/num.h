@@ -8,7 +8,7 @@
 			int valeur;
 		public:
 			Num(): Expression(106) {}
-			Num(int val): valeur(val) {}
+			Num(int val);
 			virtual ~Num() {}
 	};
 #endif
