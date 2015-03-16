@@ -10,7 +10,7 @@ bool Etat7::transition(Automate & automate, Symbole * s ){
 	int idSym = *s ; 
 	switch (idSym) {
 		case pv :
-			automate.decalage(s, new Etat 16);
+			automate.decalage(s, new Etat16);
 			break;
 		default : break;
 	}
