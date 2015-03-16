@@ -18,7 +18,7 @@ bool Etat29::transition(Automate & automate, Symbole * s ){
 			automate.decalage(s, new Etat22);
 			break;
 		case num :
-			automate.decalage(s, new Etat23):
+			automate.decalage(s, new Etat23);
 			break;
 		case po :
 			automate.decalage(s, new Etat24);

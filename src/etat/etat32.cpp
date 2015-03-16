@@ -20,7 +20,7 @@ bool Etat32::transition(Automate & automate, Symbole * s ){
 			automate.decalage(s, new Etat23);
 			break;
 		case po :
-			automate.decalage(s, new Etat24)
+			automate.decalage(s, new Etat24);
 			break;
 		case F :
 			automate.decalage(s, new Etat40);
