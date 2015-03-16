@@ -1,5 +1,5 @@
 COMP=g++
-CFLAGS=-W -Wall -ansi -pedantic -lboost_regex -std=c++11 -fdiagnostics-color=auto
+CFLAGS=-W -Wall -ansi -pedantic -lboost_regex -std=c++11 
 #CFLAGS=
 LDFLAGS=-lboost_regex 
 EXEC=analyseur
