@@ -1,4 +1,5 @@
 #include "etat7.h"
+#include "etat16.h"
 #include "../config.h"
 
 Etat7::Etat7(string pName) : Etat(pName){}
