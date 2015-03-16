@@ -7,9 +7,11 @@
 Etat0::Etat0(string pName) : Etat(pName){}
 Etat0::~Etat0(){}
 
-bool Etat0::transition(Automate & automate, Symbole * s ){
+bool Etat0::transition(Automate & automate, Symbole * s )
+{
 	int idSym = *s ; 
-	switch (idSym) {
+	switch (idSym) 
+	{
 		case P :
 			automate.decalage(s, new Etat1);
 			break;
@@ -19,9 +21,15 @@ bool Etat0::transition(Automate & automate, Symbole * s ){
 		case ct :
 		case va :
 		case dollar :
-			/** TODO **/
-			//automate.reduction();
+		{
+			//R3
+			//Symbole* s= new Bloc_declaration();
+			int nbSymboles = 1;
+			Etat* newState = new Etat2();
+			//automate.reduction(nbSymboles,);
+		}
 			break;
+
 		default : break;
 	}
 	return false;

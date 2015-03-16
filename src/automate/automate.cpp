@@ -193,13 +193,38 @@ void Automate::execute(OPTIONS option)
         break;
     }
 }
-void Automate::decalage(Symbole* s, Etat* e){
-    // TODO
+void Automate::updateState(Etat* e)
+{
+    states.push_front(e);
+    current_state = e;
 }
 
-// void Automate::reduction(Symbole symboleGauche, int nbSymbolesDroite){
-//     // TODO
-// }
+void Automate::decalage(Symbole* s, Etat* e)
+{
+    symboles.push_front(s);
+    updateState(e);
+    getNext();
+}
+
+ void Automate::reduction(int nbSymboles, Symbole* newSymbole, Etat* newState)
+ {
+    // dépile de 2*B
+    for(int i = 0; i< nbSymboles; ++i)
+    {
+        Symbole * s = symboles.front();
+        Etat * e = states.front();
+        symboles.pop_front();
+        delete s;
+        states.pop_front();
+        delete e;
+    }
+    //empiler nouveau symbole
+    symboles.push_front(newSymbole);
+
+    //empiler nouvel etat
+    updateState(newState);
+   
+}
 
 void Automate::executeSyntaxicalAnalyse()
 {

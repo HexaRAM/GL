@@ -61,9 +61,10 @@ class Automate
         bool instanciateVariable(const string& name, int value);
         void displayMemory();
         void decalage(Symbole* s, Etat* e);
-        //void reduction(Symbole s, Etat* e);
+        void reduction(int nbSymboles, Symbole* s, Etat* newState);
         string getNext(); // Todo : switch to getNextStringSymbole();
         // Symbole* getNext();
+        void updateState(Etat* e);
 
     private:
         // options
