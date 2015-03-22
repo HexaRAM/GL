@@ -220,7 +220,7 @@ void Automate::reduction(int nbSymboles, Symbole* newSymbole)
         delete e;
         //appeler la fct de tansition du new etat
     }
-    states.front()->transition(newSymbole);
+    states.front()->transition(*this, newSymbole);
 }
 
 void Automate::executeSyntaxicalAnalyse()
@@ -321,6 +321,7 @@ string Lexer::regex[] = {"^const$", "^var$", "^lire$", "^ecrire$", ";", "\\(", "
 
 Symbole* Lexer::getNext(string& buff)
 {
+    /*
     if (buff.empty())
     {
         return "$"; // symbole DOLLAR / EOF
@@ -544,7 +545,7 @@ Symbole* Lexer::getNext(string& buff)
     }
 	
     return buffer;
-
+*/
         /**
          * /!\ Implémentation légèrement différente de l'algo décrit ci-dessous avec l'intégration du ":=" qui a nécessité d'ajouter un compteur "no_pattern_sequence" pour tolérer le fait qu'on ne rencontre aucun pattern par moment (e.g quand on reçoit ":")
          * TODO :
@@ -563,4 +564,5 @@ Symbole* Lexer::getNext(string& buff)
          *                  ** si flag à non match => retourner erreur (aucun pattern trouvé)
          *
          */
+     return new Symbole(ID_SYMBOLE::po);    
 }

@@ -5,10 +5,11 @@
 #include <map>
 using namespace std;
 
-#include "../automate/automate.h"
+//#include "../automate/automate.h"
 #include "../symbole/symbole.h"
 #include "../config.h"
 
+class Automate;
 
 	class Etat {
 		public: 	
@@ -17,7 +18,6 @@ using namespace std;
 			virtual ~Etat();
 			void print() const;
 			virtual bool transition(Automate & automate, Symbole * s ) = 0;
-			virtual bool getNextState(Symbole * s)=0;
 		protected: 
 			string name;
 	};
