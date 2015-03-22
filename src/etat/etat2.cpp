@@ -6,6 +6,7 @@
 #include "etat5.h"
 #include "etat6.h"
 #include "../config.h"
+#include "../symbole/expr/blocInstruction.h"
 
 
 Etat2::Etat2(string pName) : Etat(pName){}
@@ -31,8 +32,13 @@ bool Etat2::transition(Automate & automate, Symbole * s ){
 		case r :
 		case w :
 		case dollar :
+		{
 			//Reduction r11 : Li -> .
+			int nbSymboles = 1;
+			Symbole* s= new BlocInstruction();
+			automate.reduction(nbSymboles,s);
 			break;
+		}
 		default : break;
 	}
 	return false;
