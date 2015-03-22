@@ -1,4 +1,5 @@
 #include "../config.h"
+#include "../symbole/declaration/blocDeclaration.h"
 #include "etat16.h"
 
 Etat16::Etat16(string pName) : Etat(pName){}
@@ -12,9 +13,13 @@ bool Etat16::transition(Automate & automate, Symbole * s ){
 		case r :
 		case w : 
 		case dollar :
-			// TODO r10
+		{
+			// TODO r10 LI → LI I pv
+			int nbSymboles = 3;
+			Symbole* s= new BlocDeclaration();		
+			automate.reduction(nbSymboles,s);
 			break;
-		
+		}
 		default : break;
 	}
 	return false;
