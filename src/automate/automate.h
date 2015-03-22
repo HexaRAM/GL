@@ -41,8 +41,7 @@ class Lexer
     public:
         Lexer();
         ~Lexer();
-        //Symbole getNext(const string& code); // en attendant les classes Symboles
-        string getNext(string& buff);
+        Symbole* getNext(string& buff);
         static string regex[];
     private:
 };
@@ -62,9 +61,10 @@ class Automate
         void displayMemory();
         void decalage(Symbole* s, Etat* e);
         void reduction(int nbSymboles, Symbole* s);
-        string getNext(); // Todo : switch to getNextStringSymbole();
-        // Symbole* getNext();
+        string getNext(); 
         void updateState(Etat* e);
+        Symbole* getNext();
+
 
     private:
         // options

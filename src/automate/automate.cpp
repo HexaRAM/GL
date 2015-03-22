@@ -288,7 +288,7 @@ void Automate::executeExecution()
 
     // TODO
 }
-string Automate::getNext()
+Symbole* Automate::getNext()
 {
     return this->lexer.getNext(this->buffer);
 }
@@ -319,7 +319,7 @@ Lexer::~Lexer()
 
 string Lexer::regex[] = {"^const$", "^var$", "^lire$", "^ecrire$", ";", "\\(", "\\)", ":=", "=", "\\+", "\\-", "\\*", "\\/", "\\,", "^\\d*$","(?!(^var$|^const$|^ecrire$|^lire$))^[a-zA-Z][a-zA-Z0-9]*$"};
 
-string Lexer::getNext(string& buff)
+Symbole* Lexer::getNext(string& buff)
 {
     if (buff.empty())
     {
@@ -332,6 +332,7 @@ string Lexer::getNext(string& buff)
     bool error = false;
     bool last_was_no_pattern = false;
     int no_pattern_sequence = 0;
+    int id = -1;
 
     while (!flux.fail())
     {
@@ -399,6 +400,7 @@ string Lexer::getNext(string& buff)
             bool match = boost::regex_match(new_buff.c_str(), matches, re);
             if (match)
             {
+		id = i;
                 matched = true;
                 break;
             }
@@ -447,9 +449,100 @@ string Lexer::getNext(string& buff)
 
     if (error)
     {
-        return "Erreur - aucun pattern trouvé dans les " + std::to_string(MAX_NO_PATTERN_SEQUENCE) + " derniers caractères.";
+        //return "Erreur - aucun pattern trouvé dans les " + std::to_string(MAX_NO_PATTERN_SEQUENCE) + " derniers caractères.";
+	return NULL;
     }
-
+    switch(id)
+    {
+	case -1:
+		switch (buffer)
+        	{
+		    case ";":
+			return new Symbole(ID_SYMBOLE::pv);
+		    break;
+		    case "+":
+			return new Symbole(ID_SYMBOLE::add);
+		    break;
+		    case "-":
+			return new Symbole(ID_SYMBOLE::moins);
+		    break;
+		    case "/":
+			return new Symbole(ID_SYMBOLE::divise);
+		    break;
+		    case "*":
+			return new Symbole(ID_SYMBOLE::fois);
+		    break;
+		    case ",":
+			return new Symbole(ID_SYMBOLE::v);
+		    break;
+		    case "(":
+			return new Symbole(ID_SYMBOLE::po);
+		    break;
+		    case ")":
+			return new Symbole(ID_SYMBOLE::pf);
+		    break;
+		    default:
+		    break;
+		}
+	break;
+	case 0:
+	    return new Symbole(ID_SYMBOLE::ct);
+	break;
+	case 1:
+	    return new Symbole(ID_SYMBOLE::va);
+	break;
+	case 2:
+	    return new Symbole(ID_SYMBOLE::r);
+	break;
+	case 3:
+	    return new Symbole(ID_SYMBOLE::w);
+	break;
+	case 4:
+	    return new Symbole(ID_SYMBOLE::pv);
+	break;
+	case 5:
+	    return new Symbole(ID_SYMBOLE::po);
+	break;
+	case 6:
+	    return new Symbole(ID_SYMBOLE::pf);
+	break;
+	case 7:
+	    return new Symbole(ID_SYMBOLE::af);
+	break;
+	case 8:
+	    return new Symbole(ID_SYMBOLE::eg);
+	break;
+	case 9:
+	    return new Symbole(ID_SYMBOLE::add);
+	break;
+	case 10:
+	    return new Symbole(ID_SYMBOLE::moins);
+	break;
+	case 11:
+	    return new Symbole(ID_SYMBOLE::fois);
+	break;
+	case 12:
+	    return new Symbole(ID_SYMBOLE::divise);
+	break;
+	case 13:
+	    return new Symbole(ID_SYMBOLE::v);
+	break;
+	case 14:
+	{
+		// convertir buffer -> int
+		int num;
+		istringstream iss(buffer);
+		iss >> num;
+		return new Num(num);
+	}
+	break;
+	case 15:
+	    return new Identificateur(buffer);
+	break;
+	default :
+	break;
+    }
+	
     return buffer;
 
         /**
