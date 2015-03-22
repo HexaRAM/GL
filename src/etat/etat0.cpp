@@ -35,8 +35,7 @@ bool Etat0::transition(Automate & automate, Symbole * s )
 			//R3
 			int nbSymboles = 1;
 			Symbole* s= new BlocDeclaration();		
-			Etat* newState = new Etat2();
-			automate.reduction(nbSymboles, s, newState);
+			automate.reduction(nbSymboles,s);
 		}
 			break;
 

@@ -203,11 +203,12 @@ void Automate::decalage(Symbole* s, Etat* e)
 {
     symboles.push_front(s);
     updateState(e);
-    getNext();
+    Symbole* next = getNext();
+    e->transition(*this, next);
 }
 
- void Automate::reduction(int nbSymboles, Symbole* newSymbole, Etat* newState)
- {
+void Automate::reduction(int nbSymboles, Symbole* newSymbole)
+{
     // dépile de 2*B
     for(int i = 0; i< nbSymboles; ++i)
     {
@@ -217,13 +218,9 @@ void Automate::decalage(Symbole* s, Etat* e)
         delete s;
         states.pop_front();
         delete e;
+        //appeler la fct de tansition du new etat
     }
-    //empiler nouveau symbole
-    symboles.push_front(newSymbole);
-
-    //empiler nouvel etat
-    updateState(newState);
-   
+    states.front()->transition(newSymbole);
 }
 
 void Automate::executeSyntaxicalAnalyse()
