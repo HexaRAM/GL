@@ -5,10 +5,6 @@
 #include <boost/regex.hpp>
 using namespace std;
 
-/**
- * TODO : retirer tous les commentaires sur les lignes utilisant les états une fois que les classes états seront implémentées
- */
-
  //     _              _                                 _          
  //    / \     _   _  | |_    ___    _ __ ___     __ _  | |_    ___ 
  //   / _ \   | | | | | __|  / _ \  | '_ ` _ \   / _` | | __|  / _ \
@@ -227,6 +223,9 @@ void Automate::executeAll()
     executeExecution();
 }
 
+/**
+ * A faire après l'analyse sémantique
+ */
 void Automate::executeAffichage()
 {
     if (!this->affichage)
@@ -237,8 +236,12 @@ void Automate::executeAffichage()
     cout << code << endl;
 
     // TODO
+    // Affichage des map de constantes et de variables (sous forme de code) --> var x; var y; const n = 3; const m = 12;
 }
 
+/**
+ * Analyse sémantique
+ */
 void Automate::executeAnalyse()
 {
     if (!this->analyse)
@@ -246,9 +249,34 @@ void Automate::executeAnalyse()
         cout << "# Warning : l'analyse n'a pas été demandé par l'utilisateur." << endl;
     }
 
-    // TODO
+    /**
+     * TODO : ajouter un Programme* program dans les attributs qui contient l'ensemble du programme analysé par l'automate ascendant
+     * Avec `program`, faire l'analyse sémantique !
+     *      -> Faire toutes les déclarations (utiliser les méthodes déjà codées)
+     *      -> Faire toutes les instructions :
+     *              ** read : s'assurer que la variable a bien été déclarée
+     *              ** write : s'assurer que l'expression a bien été déclarée (& instanciée dans le cas d'une variable)
+     *              ** opération = : s'assurer que le membre de gauche est bien une variable DECLAREE / s'assurer que tous les membres de droites sont soit des constantes, soit des variables déclarées et instanciées !!
+     */
 }
 
+/**
+ * A faire après l'analyse sémantique
+ */
+void Automate::executeExecution()
+{
+    if (!this->execution)
+    {
+        cout << "# Warning : l'exécution n'a pas été demandé par l'utilisateur." << endl;
+    }
+
+    // TODO
+    // Jouer chaque instruction une par une et mettre à jour la map des variables lors d'opération (=)
+}
+
+/**
+ * Optionnel : à faire après analyse syntaxique / sémantique / exécution / affichage
+ */
 void Automate::executeOptimisation()
 {
     if (!this->optimisation)
@@ -259,15 +287,6 @@ void Automate::executeOptimisation()
     // TODO
 }
 
-void Automate::executeExecution()
-{
-    if (!this->execution)
-    {
-        cout << "# Warning : l'exécution n'a pas été demandé par l'utilisateur." << endl;
-    }
-
-    // TODO
-}
 Symbole* Automate::getNext()
 {
     return this->lexer.getNext(this->buffer);
