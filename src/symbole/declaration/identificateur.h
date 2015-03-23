@@ -13,5 +13,6 @@ using namespace std;
 			Identificateur(): Expression(104) {}
 			Identificateur(string str); 
 			virtual ~Identificateur() {}
+			friend ostream& operator<<(ostream& os, const Identificateur& dt);
 	};
 #endif
