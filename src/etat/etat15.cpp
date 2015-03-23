@@ -13,7 +13,9 @@ bool Etat15::transition(Automate & automate, Symbole * s ){
 		case pv :
 		{	//Reduction r9 : V -> id
 			int nbSymboles = 1;
-			Symbole* s= new DeclarationVar();		
+			DeclarationVar* s= new DeclarationVar();
+			Identificateur* identif = (Identificateur*) automate.getNthSymbole(0);
+			s->	addIdentificateur(identif);	
 			automate.reduction(nbSymboles,s);
 			break;
 		}
