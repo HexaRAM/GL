@@ -12,7 +12,7 @@ using namespace std;
 			Expression():Symbole(7) {}
 			Expression(int ident):Symbole(ident) {}
 			virtual ~Expression() {}
-			double eval(const map<string, double> &valeurs);
+			virtual double eval(const map<string, double> &valeurs);
 	};
 	
 #endif

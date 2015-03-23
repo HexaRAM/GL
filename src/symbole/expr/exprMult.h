@@ -7,6 +7,7 @@
 		public:
 			ExprMult(): ExprBin() {}
 			ExprMult(Expression* gauche, Expression* droite): ExprBin(gauche, droite) {}
+			double eval(const map<string, double> &valeurs);
 			virtual ~ExprMult() {}
 	};
 #endif
