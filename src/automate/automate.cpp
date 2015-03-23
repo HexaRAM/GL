@@ -19,10 +19,12 @@ Automate::Automate()
     this->analyse = false;
     this->optimisation = false;
     this->execution = false;
+
     this->code = "";
     this->buffer = "";
     this->lexer = Lexer();
-    this->current_state = new Etat0;
+
+    this->current_state = new Etat0("0");
 }
 
 Automate::Automate(bool affichage, bool analyse, bool optimisation, bool execution, string code)
@@ -31,10 +33,12 @@ Automate::Automate(bool affichage, bool analyse, bool optimisation, bool executi
     this->analyse = analyse;
     this->optimisation = optimisation;
     this->execution = execution;
+
     this->code = code;
     this->buffer = code;
     this->lexer = Lexer();
-    this->current_state = new Etat0;
+
+    this->current_state = new Etat0("0");
 }
 
 Automate::~Automate()
@@ -190,6 +194,42 @@ void Automate::execute(OPTIONS option)
         break;
     }
 }
+
+void Automate::displayState(string type, Etat* next, Symbole* nextSymbole)
+{
+    #ifdef DEBUG
+        cout << "---------------------------------------------" << endl;
+        cout << "Etat de l'automate (" << *current_state << ") : " << endl;
+        if (type == "decalage")
+        {
+            cout << "\tDécalage [changement d'état] : " << *current_state << " -> " << *next << endl;
+        }
+        else if (type == "reduction")
+        {
+            cout << "\tRéduction [changement d'état] : " << *current_state << " -> " << *states.front() << endl;
+            cout << "\tSymbole créé : " << *nextSymbole << endl;
+        }
+        else
+        {
+            cout << "\tType inconnu : " << type << endl;
+        }
+
+        cout << "\tPile symbole (taille=" << symboles.size() << ") : ";
+        for (auto const& it : this->symboles)
+        {
+            cout << *it << " ";
+        }
+        cout << endl;
+        cout << "\tPile state (taille=" << states.size() << ") : ";
+        for (auto const& it : this->states)
+        {
+            cout << *it << " ";
+        }
+        cout << endl;
+
+    #endif
+}
+
 void Automate::updateState(Etat* e)
 {
     states.push_front(e);
@@ -199,24 +239,36 @@ void Automate::updateState(Etat* e)
 void Automate::decalage(Symbole* s, Etat* e)
 {
     symboles.push_front(s);
+    this->displayState("decalage", e, NULL);
     updateState(e);
     Symbole* next = getNext();
+
+    #ifdef DEBUG
+        cout << "Prochain état : " << *e << " / Prochain symbole : " << *next << endl;
+    #endif
+
     e->transition(*this, next);
 }
 
 void Automate::reduction(int nbSymboles, Symbole* newSymbole)
 {
     // dépile de 2*B
+
+    this->displayState("reduction", NULL, newSymbole);
+
     for(int i = 0; i< nbSymboles; ++i)
     {
-        Symbole * s = symboles.front();
-        Etat * e = states.front();
+        Symbole* s = symboles.front();
+        Etat* e = states.front();
         symboles.pop_front();
         delete s;
         states.pop_front();
         delete e;
         //appeler la fct de tansition du new etat
     }
+
+    // TODO : update current_state
+
     states.front()->transition(*this, newSymbole);
 }
 
@@ -232,6 +284,7 @@ void Automate::executeSyntaxicalAnalyse()
     // push state 0
     states.push_front(current_state);
     Symbole* nextSymbole = getNext();
+
     bool retour = current_state->transition(*this, nextSymbole);
 
     if (retour)
@@ -486,6 +539,8 @@ Symbole* Lexer::getNext(string& buff)
 
     Symbole* retour = NULL;
 
+    //cout << "Valeur du symbole lu : " << buffer << "(ID : " << id << ")" << endl;
+
     switch(id)
     {
     	case -1:
@@ -578,12 +633,14 @@ Symbole* Lexer::getNext(string& buff)
     	}
     	break;
     	case 15:
-    	    retour = new Identificateur(buffer);
+            retour = new Identificateur(buffer);
     	break;
     	default:
             // error
     	break;
     }
+
+    cout << " --> Lecture d'un symbole : " << *retour << endl;
 
     return retour;
 

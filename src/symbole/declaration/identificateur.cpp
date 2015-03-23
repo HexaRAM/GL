@@ -1,14 +1,14 @@
 #include "identificateur.h"
 
-Identificateur::Identificateur(string str){
-	Expression(104);
-	nom = str; 
-}
+// Identificateur::Identificateur(string str) : Expression(104), nom(str) {
+// 	//Expression(104);
+// 	//nom = str; 
+// }
 
-ostream& operator<<(ostream& os, const Identificateur& dt){
+/*ostream& operator<<(ostream& os, const Identificateur& dt){
 	os<<dt.nom;
 	return os;
-}
+}*/
 
 double Identificateur::eval(const map<string, double> &valeurs){
 	auto it = valeurs.find(nom);

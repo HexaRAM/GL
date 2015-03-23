@@ -14,16 +14,16 @@ bool Etat3::transition(Automate & automate, Symbole * s ){
 	int idSym = *s ; 
 	switch (idSym) {
 		case I :
-			automate.decalage(s, new Etat7);
+			automate.decalage(s, new Etat7("7"));
 			break;
 		case id :
-			automate.decalage(s, new Etat8);
+			automate.decalage(s, new Etat8("8"));
 			break;
 		case r :
-			automate.decalage(s, new Etat9);
+			automate.decalage(s, new Etat9("9"));
 			break;
 		case w :
-			automate.decalage(s, new Etat10);
+			automate.decalage(s, new Etat10("10"));
 			break;
 		case dollar :
 		{

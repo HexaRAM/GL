@@ -12,9 +12,9 @@ using namespace std;
 			string nom;
 		public:
 			Identificateur(): Expression(104) {}
-			Identificateur(string str); 
+			Identificateur(string str) : Expression(104), nom(str) {} 
 			double eval(const map<string, double> &valeurs);
 			virtual ~Identificateur() {}
-			friend ostream& operator<<(ostream& os, const Identificateur& dt);
+			//friend ostream& operator<<(ostream& os, const Identificateur& dt);
 	};
 #endif

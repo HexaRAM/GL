@@ -18,6 +18,7 @@ class Automate;
 			virtual ~Etat();
 			void print() const;
 			virtual bool transition(Automate & automate, Symbole * s ) = 0;
+			friend ostream& operator<<(ostream& os, const Etat& e);
 		protected: 
 			string name;
 	};

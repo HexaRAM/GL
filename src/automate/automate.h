@@ -75,14 +75,14 @@ class Automate
         bool execution;
 
         // structure de données
-        Etat* current_state;
         map_var variables;
         map_const constantes;
         set<string> idents;
+
+        // syntaxical
+        Etat* current_state;
         deque<Symbole*> symboles;
         deque<Etat*> states;
-
-        // map<int, instruction_s> instructions;
 
         // Lexer
         string code;
@@ -95,6 +95,9 @@ class Automate
         void executeOptimisation();
         void executeExecution();
         void executeSyntaxicalAnalyse();
+
+        // debug
+        void displayState(string type, Etat* next, Symbole* nextSymbole);
 
 };
 

@@ -20,21 +20,22 @@ Etat0::~Etat0(){}
 bool Etat0::transition(Automate & automate, Symbole * s )
 {
 	int idSym = *s ; 
+
 	switch (idSym) 
 	{
 		case P :
-			automate.decalage(s, new Etat1);
+			automate.decalage(s, new Etat1("1"));
 			break;
 		case LD :
-			automate.decalage(s, new Etat2);
+			automate.decalage(s, new Etat2("2"));
 			break;
 		case ct :
 		case va :
 		case dollar :
 		{
 			//R3
-			int nbSymboles = 1;
-			Symbole* s= new BlocDeclaration();		
+			int nbSymboles = 0;
+			Symbole* s= new BlocDeclaration();
 			automate.reduction(nbSymboles,s);
 		}
 			break;

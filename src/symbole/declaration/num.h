@@ -7,8 +7,8 @@
 		protected:
 			int valeur;
 		public:
-			Num(): Expression(106) {}
-			Num(int val);
+			Num() : Expression(106) {}
+			Num(int val) : Expression(106), valeur(val) {}
 			double eval(const map<string, double> &valeurs);
 			virtual ~Num() {}
 	};
