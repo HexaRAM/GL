@@ -2,11 +2,14 @@
 #define ETAT_H
 
 #include <string>
+#include <map>
 using namespace std;
 
-#include "../automate/automate.h"
+//#include "../automate/automate.h"
 #include "../symbole/symbole.h"
+#include "../config.h"
 
+class Automate;
 
 	class Etat {
 		public: 	

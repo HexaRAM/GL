@@ -29,7 +29,7 @@ int main(int argc, char ** argv)
         exit(1);
     }
 
-    automate->execute();
+    //automate->execute();
 
     // automate->addVariable("a");
     // automate->addVariable("b");

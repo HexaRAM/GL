@@ -191,13 +191,40 @@ void Automate::execute(OPTIONS option)
         break;
     }
 }
-void Automate::decalage(Symbole* s, Etat* e){
-    // TODO
+void Automate::updateState(Etat* e)
+{
+    states.push_front(e);
+    current_state = e;
 }
 
-// void Automate::reduction(Symbole symboleGauche, int nbSymbolesDroite){
-//     // TODO
-// }
+void Automate::decalage(Symbole* s, Etat* e)
+{
+    symboles.push_front(s);
+    updateState(e);
+    Symbole* next = getNext();
+    e->transition(*this, next);
+}
+
+void Automate::reduction(int nbSymboles, Symbole* newSymbole)
+{
+    // dépile de 2*B
+    for(int i = 0; i< nbSymboles; ++i)
+    {
+        Symbole * s = symboles.front();
+        Etat * e = states.front();
+        symboles.pop_front();
+        delete s;
+        states.pop_front();
+        delete e;
+        //appeler la fct de tansition du new etat
+    }
+    states.front()->transition(*this, newSymbole);
+}
+
+Symbole* Automate::getNthSymbole(int n)
+{
+	return symboles[n];
+}
 
 void Automate::executeSyntaxicalAnalyse()
 {
@@ -320,6 +347,7 @@ string Lexer::regex[] = {"^const$", "^var$", "^lire$", "^ecrire$", ";", "\\(", "
 
 Symbole* Lexer::getNext(string& buff)
 {
+    
     if (buff.empty())
     {
         return new Symbole(ID_SYMBOLE::dollar); // symbole DOLLAR / EOF
@@ -555,6 +583,7 @@ Symbole* Lexer::getNext(string& buff)
 
     return retour;
 
+
         /**
          * /!\ Implémentation légèrement différente de l'algo décrit ci-dessous avec l'intégration du ":=" qui a nécessité d'ajouter un compteur "no_pattern_sequence" pour tolérer le fait qu'on ne rencontre aucun pattern par moment (e.g quand on reçoit ":")
          * TODO :
@@ -573,4 +602,5 @@ Symbole* Lexer::getNext(string& buff)
          *                  ** si flag à non match => retourner erreur (aucun pattern trouvé)
          *
          */
+       
 }

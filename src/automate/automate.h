@@ -3,14 +3,14 @@
 
 #include "../config.h"
 #include "../symbole/symbole.h"
+#include "../etat/etat.h"
 #include <string>
 #include <map>
 #include <deque>
 #include <set>
-class Etat;
 using namespace std;
 
-class Etat;
+//class Etat;
 
 #define NB_REGEX 16
 #define MAX_NO_PATTERN_SEQUENCE 10
@@ -60,8 +60,12 @@ class Automate
         bool instanciateVariable(const string& name, int value);
         void displayMemory();
         void decalage(Symbole* s, Etat* e);
-        //void reduction(Symbole s, Etat* e);
+        void reduction(int nbSymboles, Symbole* s);
+        //string getNext(); 
+        void updateState(Etat* e);
         Symbole* getNext();
+	Symbole* getNthSymbole(int n);
+
 
     private:
         // options

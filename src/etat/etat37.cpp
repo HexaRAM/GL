@@ -1,5 +1,6 @@
 #include "etat37.h"
 #include "../config.h"
+#include "../symbole/declaration/declarationConst.h"
 
 
 Etat37::Etat37(string pName) : Etat(pName){}
@@ -10,11 +11,14 @@ bool Etat37::transition(Automate & automate, Symbole * s ){
 	int idSym = *s ; 
 	switch (idSym) {
 		case v :
-			//TODO: r7
-			break;
 		case pv :
-			//TODO: r7
+		{
+			//Regle R7 : C → id eg num
+			int nbSymboles = 3;
+			Symbole* s= new DeclarationConst();
+			automate.reduction(nbSymboles,s);
 			break;
+		}
 		default : break;
 	}
 	return false;
