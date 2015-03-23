@@ -1,5 +1,7 @@
 #include "automate.h"
 #include <iostream>
+#include "../symbole/declaration/num.h"
+#include "../symbole/declaration/identificateur.h"
 #include <boost/regex.hpp>
 using namespace std;
 
@@ -301,7 +303,7 @@ Symbole* Lexer::getNext(string& buff)
 {
     if (buff.empty())
     {
-        return "$"; // symbole DOLLAR / EOF
+        return new Symbole(ID_SYMBOLE::dollar); // symbole DOLLAR / EOF
     }
 
     stringstream flux(buff);
@@ -428,100 +430,111 @@ Symbole* Lexer::getNext(string& buff)
     if (error)
     {
         //return "Erreur - aucun pattern trouvé dans les " + std::to_string(MAX_NO_PATTERN_SEQUENCE) + " derniers caractères.";
-	return NULL;
+	   return NULL;
     }
+
+    Symbole* retour = NULL;
+
     switch(id)
     {
-	case -1:
-		switch (buffer)
-        	{
-		    case ";":
-			return new Symbole(ID_SYMBOLE::pv);
-		    break;
-		    case "+":
-			return new Symbole(ID_SYMBOLE::add);
-		    break;
-		    case "-":
-			return new Symbole(ID_SYMBOLE::moins);
-		    break;
-		    case "/":
-			return new Symbole(ID_SYMBOLE::divise);
-		    break;
-		    case "*":
-			return new Symbole(ID_SYMBOLE::fois);
-		    break;
-		    case ",":
-			return new Symbole(ID_SYMBOLE::v);
-		    break;
-		    case "(":
-			return new Symbole(ID_SYMBOLE::po);
-		    break;
-		    case ")":
-			return new Symbole(ID_SYMBOLE::pf);
-		    break;
-		    default:
-		    break;
-		}
-	break;
-	case 0:
-	    return new Symbole(ID_SYMBOLE::ct);
-	break;
-	case 1:
-	    return new Symbole(ID_SYMBOLE::va);
-	break;
-	case 2:
-	    return new Symbole(ID_SYMBOLE::r);
-	break;
-	case 3:
-	    return new Symbole(ID_SYMBOLE::w);
-	break;
-	case 4:
-	    return new Symbole(ID_SYMBOLE::pv);
-	break;
-	case 5:
-	    return new Symbole(ID_SYMBOLE::po);
-	break;
-	case 6:
-	    return new Symbole(ID_SYMBOLE::pf);
-	break;
-	case 7:
-	    return new Symbole(ID_SYMBOLE::af);
-	break;
-	case 8:
-	    return new Symbole(ID_SYMBOLE::eg);
-	break;
-	case 9:
-	    return new Symbole(ID_SYMBOLE::add);
-	break;
-	case 10:
-	    return new Symbole(ID_SYMBOLE::moins);
-	break;
-	case 11:
-	    return new Symbole(ID_SYMBOLE::fois);
-	break;
-	case 12:
-	    return new Symbole(ID_SYMBOLE::divise);
-	break;
-	case 13:
-	    return new Symbole(ID_SYMBOLE::v);
-	break;
-	case 14:
-	{
-		// convertir buffer -> int
-		int num;
-		istringstream iss(buffer);
-		iss >> num;
-		return new Num(num);
-	}
-	break;
-	case 15:
-	    return new Identificateur(buffer);
-	break;
-	default :
-	break;
+    	case -1:
+            if (buffer == ";")
+            {
+                retour = new Symbole(ID_SYMBOLE::pv);
+            }
+            else if (buffer == "+")
+            {
+                retour = new Symbole(ID_SYMBOLE::add); 
+            }
+            else if (buffer == "-")
+            {
+                retour = new Symbole(ID_SYMBOLE::moins);
+            }
+            else if (buffer == "/")
+            {
+                retour = new Symbole(ID_SYMBOLE::divise);
+            }
+            else if (buffer == "*")
+            {
+                retour = new Symbole(ID_SYMBOLE::fois);
+            }
+            else if (buffer == ",")
+            {
+                retour = new Symbole(ID_SYMBOLE::v);
+            }
+            else if (buffer == "(")
+            {
+                retour = new Symbole(ID_SYMBOLE::po);
+            }
+            else if (buffer == ")")
+            {
+                retour = new Symbole(ID_SYMBOLE::pf);
+            }
+            else
+            {
+                // error
+            }
+    	break;
+    	case 0:
+    	    retour = new Symbole(ID_SYMBOLE::ct);
+    	break;
+    	case 1:
+    	    retour = new Symbole(ID_SYMBOLE::va);
+    	break;
+    	case 2:
+    	    retour = new Symbole(ID_SYMBOLE::r);
+    	break;
+    	case 3:
+    	    retour = new Symbole(ID_SYMBOLE::w);
+    	break;
+    	case 4:
+    	    retour = new Symbole(ID_SYMBOLE::pv);
+    	break;
+    	case 5:
+    	    retour = new Symbole(ID_SYMBOLE::po);
+    	break;
+    	case 6:
+    	    retour = new Symbole(ID_SYMBOLE::pf);
+    	break;
+    	case 7:
+    	    retour = new Symbole(ID_SYMBOLE::af);
+    	break;
+    	case 8:
+    	    retour = new Symbole(ID_SYMBOLE::eg);
+    	break;
+    	case 9:
+    	    retour = new Symbole(ID_SYMBOLE::add);
+    	break;
+    	case 10:
+    	    retour = new Symbole(ID_SYMBOLE::moins);
+    	break;
+    	case 11:
+    	    retour = new Symbole(ID_SYMBOLE::fois);
+    	break;
+    	case 12:
+    	    retour = new Symbole(ID_SYMBOLE::divise);
+    	break;
+    	case 13:
+    	    retour = new Symbole(ID_SYMBOLE::v);
+    	break;
+    	case 14:
+    	{
+    		// convertir buffer -> int
+    		int num;
+    		istringstream iss(buffer);
+    		iss >> num;
+    		retour = new Num(num);
+    	}
+    	break;
+    	case 15:
+    	    retour = new Identificateur(buffer);
+    	break;
+    	default:
+            // error
+    	break;
     }
-	
-    return buffer;
+
+    return retour;
 
         /**
          * /!\ Implémentation légèrement différente de l'algo décrit ci-dessous avec l'intégration du ":=" qui a nécessité d'ajouter un compteur "no_pattern_sequence" pour tolérer le fait qu'on ne rencontre aucun pattern par moment (e.g quand on reçoit ":")
