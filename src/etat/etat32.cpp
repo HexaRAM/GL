@@ -30,3 +30,17 @@ bool Etat32::transition(Automate & automate, Symbole * s ){
 	return false;
 }
 
+Etat* Etat32::next(Symbole* s)
+{
+	switch (*s)
+	{
+		case F:
+			return new Etat40("40");
+		break;
+
+		default:
+			return NULL;
+		break;
+	}
+}
+

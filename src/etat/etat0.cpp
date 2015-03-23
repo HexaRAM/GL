@@ -45,3 +45,20 @@ bool Etat0::transition(Automate & automate, Symbole * s )
 	return false;
 }
 
+Etat* Etat0::next(Symbole* s)
+{
+	switch (*s)
+	{
+		case P:
+			return new Etat1("1");
+		break;
+
+		case LD:
+			return new Etat2("2");
+		break;
+
+		default:
+			return NULL;
+		break;
+	}
+}

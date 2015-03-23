@@ -21,3 +21,17 @@ bool Etat5::transition(Automate & automate, Symbole * s ){
 	return false;
 }
 
+Etat* Etat5::next(Symbole* s)
+{
+	switch (*s)
+	{
+		case C:
+			return new Etat12("12");
+		break;
+
+		default:
+			return NULL;
+		break;
+	}
+}
+

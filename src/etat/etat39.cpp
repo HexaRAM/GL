@@ -26,7 +26,6 @@ bool Etat39::transition(Automate & automate, Symbole * s ){
 			break;	
 		}	
 
-		
 		case fois :
 			automate.decalage(s, new Etat33);
 		case divise :
@@ -40,3 +39,16 @@ bool Etat39::transition(Automate & automate, Symbole * s ){
 	return false;
 }
 
+Etat* Etat39::next(Symbole* s)
+{
+	switch (*s)
+	{
+		case OM:
+			return new Etat32("32");
+		break;
+
+		default:
+			return NULL;
+		break;
+	}
+}

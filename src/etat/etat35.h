@@ -14,6 +14,7 @@ using namespace std;
 			Etat35(string name);
 			Etat35();
 			virtual ~Etat35();
+			Etat* next(Symbole* s);
 			void print() const;
 			bool transition(Automate & automate, Symbole * s );
 		protected: 

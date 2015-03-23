@@ -47,3 +47,21 @@ bool Etat2::transition(Automate & automate, Symbole * s ){
 	return false;
 }
 
+Etat* Etat2::next(Symbole* s)
+{
+	switch (*s)
+	{
+		case LI:
+			return new Etat3("3");
+		break;
+
+		case D:
+			return new Etat4("4");
+		break;
+
+		default:
+			return NULL;
+		break;
+	}
+}
+

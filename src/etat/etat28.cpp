@@ -34,3 +34,17 @@ bool Etat28::transition(Automate & automate, Symbole * s ){
 	return false;
 }
 
+Etat* Etat28::next(Symbole* s)
+{
+	switch (*s)
+	{
+		case OA:
+			return new Etat29("29");
+		break;
+
+		default:
+			return NULL;
+		break;
+	}
+}
+

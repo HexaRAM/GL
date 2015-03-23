@@ -37,3 +37,17 @@ bool Etat20::transition(Automate & automate, Symbole * s ){
 	return false;
 }
 
+Etat* Etat20::next(Symbole* s)
+{
+	switch (*s)
+	{
+		case OM:
+			return new Etat32("32");
+		break;
+
+		default:
+			return NULL;
+		break;
+	}
+}
+
