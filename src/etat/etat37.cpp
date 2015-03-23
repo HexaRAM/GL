@@ -15,8 +15,11 @@ bool Etat37::transition(Automate & automate, Symbole * s ){
 		{
 			//Regle R7 : C → id eg num
 			int nbSymboles = 3;
-			Symbole* s= new DeclarationConst();
-			automate.reduction(nbSymboles,s);
+			Num* newNum = (Num*)automate.getNthSymbole(0);
+			Identificateur* newId = (Identificateur*)automate.getNthSymbole(2);
+			DeclarationConst* newConst= new DeclarationConst();
+			newConst->addConst(newId, newNum);
+			automate.reduction(nbSymboles, newConst);
 			break;
 		}
 		default : break;
