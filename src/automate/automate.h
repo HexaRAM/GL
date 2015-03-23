@@ -64,6 +64,7 @@ class Automate
         //string getNext(); 
         void updateState(Etat* e);
         Symbole* getNext();
+	Symbole* getNthSymbole(int n);
 
 
     private:
