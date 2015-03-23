@@ -3,6 +3,7 @@
 #include "../symbole/declaration/num.h"
 #include "../symbole/declaration/identificateur.h"
 #include <boost/regex.hpp>
+#include "../etat/etat0.h"
 using namespace std;
 
  //     _              _                                 _          
@@ -21,8 +22,7 @@ Automate::Automate()
     this->code = "";
     this->buffer = "";
     this->lexer = Lexer();
-    //this->current_state = new Etat0;
-    this->current_state = NULL;
+    this->current_state = new Etat0;
 }
 
 Automate::Automate(bool affichage, bool analyse, bool optimisation, bool execution, string code)
@@ -34,13 +34,12 @@ Automate::Automate(bool affichage, bool analyse, bool optimisation, bool executi
     this->code = code;
     this->buffer = code;
     this->lexer = Lexer();
-    //this->current_state = new Etat0;
-    this->current_state = NULL;
+    this->current_state = new Etat0;
 }
 
 Automate::~Automate()
 {
-    //delete current_state;
+    delete current_state;
 
     // si les piles symboles ou states ne sont pas vides
     // les vider à coup de delete pour ne pas causer de memory leaks
@@ -230,17 +229,21 @@ void Automate::executeSyntaxicalAnalyse()
 {
     // analyse syntaxique : analyseur ascendant
 
-    bool keepGoing = true;
-
     // push state 0
-    // states.push_front(current_state);
+    states.push_front(current_state);
+    Symbole* nextSymbole = getNext();
+    bool retour = current_state->transition(*this, nextSymbole);
 
-    while (keepGoing)
+    if (retour)
     {
-        // Symbole* nextSymbole = getNext();
-        // keepGoing = init->transition(*this, nextSymbole);
-        keepGoing = false; // TODO : remove this line
+        // récupérer le programme en haut de la pile
+        cout << "LA SYNTAXE EST TIP TOP <3" << endl;
     }
+    else
+    {
+        cout << "# Erreur pendant l'analyse !" << endl;
+    }
+
 }
 void Automate::executeAll()
 {
