@@ -9,7 +9,7 @@ bool Etat1::transition(Automate & automate, Symbole * s ){
 	int idSym = *s ; 
 	switch (idSym) {
 		case dollar :
-			//accepter
+			return true;
 			break;
 		default : break;
 	}
