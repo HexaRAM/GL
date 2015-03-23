@@ -4,6 +4,11 @@
 #include "commandLineReader.h"
 #include "automate/automate.h"
 #include "config.h"
+
+#include "symbole/ecriture.h"
+#include "symbole/expr/exprMult.h"
+#include "symbole/declaration/identificateur.h"
+
 using namespace std;
 
 /**
@@ -12,7 +17,7 @@ using namespace std;
  *    - faire un fichier config.h avec l'ensemble des constantes du projet
  */
 
-int main(int argc, char ** argv)
+int main(int argc, char** argv)
 {   
 
     #ifdef DEBUG
@@ -106,4 +111,5 @@ int main(int argc, char ** argv)
 
 
     delete automate;
+
 }
