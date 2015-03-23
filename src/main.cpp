@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <map>
 #include "config.h"
 #include "commandLineReader.h"
 #include "automate/automate.h"
@@ -7,7 +8,10 @@
 
 #include "symbole/ecriture.h"
 #include "symbole/expr/exprMult.h"
+#include "symbole/expr/exprPlus.h"
+#include "symbole/expr/expression.h"
 #include "symbole/declaration/identificateur.h"
+#include "symbole/declaration/num.h"
 
 using namespace std;
 
@@ -19,6 +23,7 @@ using namespace std;
 
 int main(int argc, char** argv)
 {   
+    
 
     #ifdef DEBUG
         cout << "# Le mode DEBUG est activé !" << endl << endl;
@@ -35,7 +40,23 @@ int main(int argc, char** argv)
     }
 
     automate->execute();
+   
 
+    /*
+    cout<<"TestEval"<<endl;
+    Identificateur* a = new Identificateur("a");
+    Identificateur* b = new Identificateur("b");
+    Num* c = new Num(4);
+    map<string, double> valeurs;
+    valeurs["a"] = 3;
+    valeurs["b"] = 1;
+    cout<<"eval a "<<a->eval(valeurs)<<endl;
+    cout<<"eval b "<<b->eval(valeurs)<<endl;
+    cout<<"eval c "<<c->eval(valeurs)<<endl;
+    ExprMult* bc = new ExprMult(b,c);
+    ExprPlus* abc = new ExprPlus(a,bc);
+    cout<<"eval tout "<<abc->eval(valeurs)<<endl;
+    */
     // automate->addVariable("a");
     // automate->addVariable("b");
     // automate->addConstante("c", 69);
@@ -101,6 +122,6 @@ int main(int argc, char** argv)
 
 
 
-    delete automate;
+    //delete automate;
 
 }
