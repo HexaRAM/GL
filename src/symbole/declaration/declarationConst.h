@@ -11,6 +11,7 @@
 	public:
 		DeclarationConst(): Declaration() {}
 		void addConst(Identificateur* ident, Num* num);
+		void declarationFinie() { ident = 3; }
 		virtual ~DeclarationConst() {}
 	};
 #endif

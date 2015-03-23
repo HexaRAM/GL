@@ -7,6 +7,7 @@
 	
 	public:
 		Declaration(): Symbole(2) {}
+		virtual void declarationFinie()=0;
 		virtual ~Declaration() {}
 	};
 #endif
