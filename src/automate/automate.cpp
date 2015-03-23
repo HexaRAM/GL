@@ -1,11 +1,9 @@
 #include "automate.h"
 #include <iostream>
+#include "../symbole/declaration/num.h"
+#include "../symbole/declaration/identificateur.h"
 #include <boost/regex.hpp>
 using namespace std;
-
-/**
- * TODO : retirer tous les commentaires sur les lignes utilisant les états une fois que les classes états seront implémentées
- */
 
  //     _              _                                 _          
  //    / \     _   _  | |_    ___    _ __ ___     __ _  | |_    ___ 
@@ -252,6 +250,9 @@ void Automate::executeAll()
     executeExecution();
 }
 
+/**
+ * A faire après l'analyse sémantique
+ */
 void Automate::executeAffichage()
 {
     if (!this->affichage)
@@ -262,8 +263,12 @@ void Automate::executeAffichage()
     cout << code << endl;
 
     // TODO
+    // Affichage des map de constantes et de variables (sous forme de code) --> var x; var y; const n = 3; const m = 12;
 }
 
+/**
+ * Analyse sémantique
+ */
 void Automate::executeAnalyse()
 {
     if (!this->analyse)
@@ -271,21 +276,20 @@ void Automate::executeAnalyse()
         cout << "# Warning : l'analyse n'a pas été demandé par l'utilisateur." << endl;
     }
 
-    // TODO
+    /**
+     * TODO : ajouter un Programme* program dans les attributs qui contient l'ensemble du programme analysé par l'automate ascendant
+     * Avec `program`, faire l'analyse sémantique !
+     *      -> Faire toutes les déclarations (utiliser les méthodes déjà codées)
+     *      -> Faire toutes les instructions :
+     *              ** read : s'assurer que la variable a bien été déclarée
+     *              ** write : s'assurer que l'expression a bien été déclarée (& instanciée dans le cas d'une variable)
+     *              ** opération = : s'assurer que le membre de gauche est bien une variable DECLAREE / s'assurer que tous les membres de droites sont soit des constantes, soit des variables déclarées et instanciées !!
+     */
 }
 
-void Automate::executeOptimisation(){
-    if (!this->analyse)
-{
-    if (!this->optimisation)
-    {
-        cout << "# Warning : l'optimisation n'a pas été demandé par l'utilisateur." << endl;
-    }
-
-    // TODO
-}
-}
-
+/**
+ * A faire après l'analyse sémantique
+ */
 void Automate::executeExecution()
 {
     if (!this->execution)
@@ -294,7 +298,22 @@ void Automate::executeExecution()
     }
 
     // TODO
+    // Jouer chaque instruction une par une et mettre à jour la map des variables lors d'opération (=)
 }
+
+/**
+ * Optionnel : à faire après analyse syntaxique / sémantique / exécution / affichage
+ */
+void Automate::executeOptimisation()
+{
+    if (!this->optimisation)
+    {
+        cout << "# Warning : l'optimisation n'a pas été demandé par l'utilisateur." << endl;
+    }
+
+    // TODO
+}
+
 Symbole* Automate::getNext()
 {
     return this->lexer.getNext(this->buffer);
@@ -328,10 +347,10 @@ string Lexer::regex[] = {"^const$", "^var$", "^lire$", "^ecrire$", ";", "\\(", "
 
 Symbole* Lexer::getNext(string& buff)
 {
-    /*
+    
     if (buff.empty())
     {
-        return "$"; // symbole DOLLAR / EOF
+        return new Symbole(ID_SYMBOLE::dollar); // symbole DOLLAR / EOF
     }
 
     stringstream flux(buff);
@@ -458,101 +477,113 @@ Symbole* Lexer::getNext(string& buff)
     if (error)
     {
         //return "Erreur - aucun pattern trouvé dans les " + std::to_string(MAX_NO_PATTERN_SEQUENCE) + " derniers caractères.";
-	return NULL;
+	   return NULL;
     }
+
+    Symbole* retour = NULL;
+
     switch(id)
     {
-	case -1:
-		switch (buffer)
-        	{
-		    case ";":
-			return new Symbole(ID_SYMBOLE::pv);
-		    break;
-		    case "+":
-			return new Symbole(ID_SYMBOLE::add);
-		    break;
-		    case "-":
-			return new Symbole(ID_SYMBOLE::moins);
-		    break;
-		    case "/":
-			return new Symbole(ID_SYMBOLE::divise);
-		    break;
-		    case "*":
-			return new Symbole(ID_SYMBOLE::fois);
-		    break;
-		    case ",":
-			return new Symbole(ID_SYMBOLE::v);
-		    break;
-		    case "(":
-			return new Symbole(ID_SYMBOLE::po);
-		    break;
-		    case ")":
-			return new Symbole(ID_SYMBOLE::pf);
-		    break;
-		    default:
-		    break;
-		}
-	break;
-	case 0:
-	    return new Symbole(ID_SYMBOLE::ct);
-	break;
-	case 1:
-	    return new Symbole(ID_SYMBOLE::va);
-	break;
-	case 2:
-	    return new Symbole(ID_SYMBOLE::r);
-	break;
-	case 3:
-	    return new Symbole(ID_SYMBOLE::w);
-	break;
-	case 4:
-	    return new Symbole(ID_SYMBOLE::pv);
-	break;
-	case 5:
-	    return new Symbole(ID_SYMBOLE::po);
-	break;
-	case 6:
-	    return new Symbole(ID_SYMBOLE::pf);
-	break;
-	case 7:
-	    return new Symbole(ID_SYMBOLE::af);
-	break;
-	case 8:
-	    return new Symbole(ID_SYMBOLE::eg);
-	break;
-	case 9:
-	    return new Symbole(ID_SYMBOLE::add);
-	break;
-	case 10:
-	    return new Symbole(ID_SYMBOLE::moins);
-	break;
-	case 11:
-	    return new Symbole(ID_SYMBOLE::fois);
-	break;
-	case 12:
-	    return new Symbole(ID_SYMBOLE::divise);
-	break;
-	case 13:
-	    return new Symbole(ID_SYMBOLE::v);
-	break;
-	case 14:
-	{
-		// convertir buffer -> int
-		int num;
-		istringstream iss(buffer);
-		iss >> num;
-		return new Num(num);
-	}
-	break;
-	case 15:
-	    return new Identificateur(buffer);
-	break;
-	default :
-	break;
+    	case -1:
+            if (buffer == ";")
+            {
+                retour = new Symbole(ID_SYMBOLE::pv);
+            }
+            else if (buffer == "+")
+            {
+                retour = new Symbole(ID_SYMBOLE::add); 
+            }
+            else if (buffer == "-")
+            {
+                retour = new Symbole(ID_SYMBOLE::moins);
+            }
+            else if (buffer == "/")
+            {
+                retour = new Symbole(ID_SYMBOLE::divise);
+            }
+            else if (buffer == "*")
+            {
+                retour = new Symbole(ID_SYMBOLE::fois);
+            }
+            else if (buffer == ",")
+            {
+                retour = new Symbole(ID_SYMBOLE::v);
+            }
+            else if (buffer == "(")
+            {
+                retour = new Symbole(ID_SYMBOLE::po);
+            }
+            else if (buffer == ")")
+            {
+                retour = new Symbole(ID_SYMBOLE::pf);
+            }
+            else
+            {
+                // error
+            }
+    	break;
+    	case 0:
+    	    retour = new Symbole(ID_SYMBOLE::ct);
+    	break;
+    	case 1:
+    	    retour = new Symbole(ID_SYMBOLE::va);
+    	break;
+    	case 2:
+    	    retour = new Symbole(ID_SYMBOLE::r);
+    	break;
+    	case 3:
+    	    retour = new Symbole(ID_SYMBOLE::w);
+    	break;
+    	case 4:
+    	    retour = new Symbole(ID_SYMBOLE::pv);
+    	break;
+    	case 5:
+    	    retour = new Symbole(ID_SYMBOLE::po);
+    	break;
+    	case 6:
+    	    retour = new Symbole(ID_SYMBOLE::pf);
+    	break;
+    	case 7:
+    	    retour = new Symbole(ID_SYMBOLE::af);
+    	break;
+    	case 8:
+    	    retour = new Symbole(ID_SYMBOLE::eg);
+    	break;
+    	case 9:
+    	    retour = new Symbole(ID_SYMBOLE::add);
+    	break;
+    	case 10:
+    	    retour = new Symbole(ID_SYMBOLE::moins);
+    	break;
+    	case 11:
+    	    retour = new Symbole(ID_SYMBOLE::fois);
+    	break;
+    	case 12:
+    	    retour = new Symbole(ID_SYMBOLE::divise);
+    	break;
+    	case 13:
+    	    retour = new Symbole(ID_SYMBOLE::v);
+    	break;
+    	case 14:
+    	{
+    		// convertir buffer -> int
+    		int num;
+    		istringstream iss(buffer);
+    		iss >> num;
+    		retour = new Num(num);
+    	}
+    	break;
+    	case 15:
+    	    retour = new Identificateur(buffer);
+    	break;
+    	default:
+            // error
+    	break;
     }
-	
-    return buffer;
-*/
+
+    return retour;
+
+
         /**
          * /!\ Implémentation légèrement différente de l'algo décrit ci-dessous avec l'intégration du ":=" qui a nécessité d'ajouter un compteur "no_pattern_sequence" pour tolérer le fait qu'on ne rencontre aucun pattern par moment (e.g quand on reçoit ":")
          * TODO :
@@ -571,5 +602,5 @@ Symbole* Lexer::getNext(string& buff)
          *                  ** si flag à non match => retourner erreur (aucun pattern trouvé)
          *
          */
-     return new Symbole(ID_SYMBOLE::po);    
+       
 }
