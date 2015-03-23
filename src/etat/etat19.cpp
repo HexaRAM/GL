@@ -2,6 +2,7 @@
 #include "etat30.h"
 #include "etat31.h"
 #include "etat29.h"
+#include "../symbole/instruction.h"
 #include "../config.h"
 
 Etat19::Etat19(string pName) : Etat(pName){}
@@ -18,8 +19,14 @@ bool Etat19::transition(Automate & automate, Symbole * s ){
 			automate.decalage(s, new Etat31);
 			break;
 		case pv :
-			//TODO : r14
-			break;
+		{
+			//TODO I → w E
+			int nbSymboles = 2;
+			Symbole* s= new Instruction();		
+			automate.reduction(nbSymboles,s);
+			break;	
+		}
+			
 		case OA : 
 			automate.decalage(s, new Etat29);
 			break;

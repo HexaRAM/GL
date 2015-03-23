@@ -4,6 +4,7 @@
 #include "etat9.h"
 #include "etat10.h"
 #include "../config.h"
+#include "../symbole/programme.h"
 
 Etat3::Etat3(string pName) : Etat(pName){}
 Etat3::Etat3(){}
@@ -25,8 +26,13 @@ bool Etat3::transition(Automate & automate, Symbole * s ){
 			automate.decalage(s, new Etat10);
 			break;
 		case dollar :
+		{
 			//réduction r1 : P -> LD LI
+			int nbSymboles = 2;
+			Symbole* s= new Programme();
+			automate.reduction(nbSymboles,s);
 			break;
+		}
 		default : break;
 	}
 	return false;

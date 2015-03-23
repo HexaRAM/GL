@@ -221,6 +221,11 @@ void Automate::reduction(int nbSymboles, Symbole* newSymbole)
     states.front()->transition(*this, newSymbole);
 }
 
+Symbole* Automate::getNthSymbole(int n)
+{
+	return symboles[n];
+}
+
 void Automate::executeSyntaxicalAnalyse()
 {
     // analyse syntaxique : analyseur ascendant

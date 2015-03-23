@@ -2,6 +2,7 @@
 #include "etat32.h"
 #include "etat33.h"
 #include "etat34.h"
+//#include "../symbole/expr/terme.h"
 #include "../config.h"
 
 Etat20::Etat20(string pName) : Etat(pName){}
@@ -21,8 +22,13 @@ bool Etat20::transition(Automate & automate, Symbole * s ){
 		case add :
 		case moins :
 		case pv :
-			//TODO : r16
+		{
+			//TODO : r16 E → T
+			int nbSymboles = 1;
+			Symbole* s /*= new TERME()*/;		
+			automate.reduction(nbSymboles,s);
 			break;
+		}
 		case OM : 
 			automate.decalage(s, new Etat32);
 			break;
