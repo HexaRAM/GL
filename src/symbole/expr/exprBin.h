@@ -10,6 +10,7 @@
 		public:
 			ExprBin(): Expression() {}
 			ExprBin(Expression* gauche, Expression* droite);
+			virtual double eval(const map<string, double> &valeurs)=0;
 			virtual ~ExprBin() {}
 	};
 #endif
