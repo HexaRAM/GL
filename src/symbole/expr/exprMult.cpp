@@ -3,12 +3,11 @@
 
 using namespace std;
 
-void ExprMult::print(ostream& os) const{
-	os<<expr_gauche<<"*"<<expr_droite;
-}
-
 ostream& operator<<(ostream& os, const ExprMult& dt){
 	os << *(dt.expr_gauche) << " * " << *(dt.expr_droite) << endl;
-	//dt.print(os);
 	return os;
+}
+
+double ExprMult::eval(const map<string, double> &valeurs){
+	return ( expr_gauche->eval(valeurs) * expr_droite->eval(valeurs));
 }

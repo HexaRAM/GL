@@ -265,6 +265,7 @@ void Automate::executeExecution()
     }
 
     // TODO
+    // construire la map (ident, val) avant de l'envoyer à eval
 }
 string Automate::getNext()
 {

@@ -3,6 +3,7 @@
 
 #include "../expr/expression.h"
 #include <string>
+#include <map>
 
 using namespace std;
 
@@ -12,6 +13,7 @@ using namespace std;
 		public:
 			Identificateur(): Expression(104) {}
 			Identificateur(string str); 
+			double eval(const map<string, double> &valeurs);
 			virtual ~Identificateur() {}
 			friend ostream& operator<<(ostream& os, const Identificateur& dt);
 	};
