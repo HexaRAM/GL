@@ -8,5 +8,6 @@
             virtual ~Symbole() {}
             void print();
             operator int() const { return ident; }
+            //friend ostream& operator<<(ostream& os, const Date& dt);
     };
 #endif
