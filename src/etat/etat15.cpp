@@ -8,15 +8,16 @@ Etat15::Etat15(){}
 Etat15::~Etat15(){}
 
 bool Etat15::transition(Automate & automate, Symbole * s ){
-	int idSym = *s ; 
+	int idSym = *s ;
+
 	switch (idSym) {
 		case v :
 		case pv :
 		{	//Reduction r9 : V -> id
 			int nbSymboles = 1;
-			DeclarationVar* s= new DeclarationVar();
+			DeclarationVar* s = new DeclarationVar(); // V
 			Identificateur* identif = (Identificateur*) automate.getNthSymbole(0);
-			s->	addIdentificateur(identif);	
+			s->addIdentificateur(identif);
 			automate.reduction(nbSymboles,s);
 			break;
 		}

@@ -25,6 +25,9 @@ Automate::Automate()
     this->lexer = Lexer();
 
     this->current_state = new Etat0("0");
+    this->current_symbole = NULL;
+
+    this->syntaxeChecked = false;
 }
 
 Automate::Automate(bool affichage, bool analyse, bool optimisation, bool execution, string code)
@@ -39,14 +42,27 @@ Automate::Automate(bool affichage, bool analyse, bool optimisation, bool executi
     this->lexer = Lexer();
 
     this->current_state = new Etat0("0");
+    this->current_symbole = NULL;
+
+    this->syntaxeChecked = false;
 }
 
 Automate::~Automate()
 {
-    delete current_state;
-
     // si les piles symboles ou states ne sont pas vides
     // les vider à coup de delete pour ne pas causer de memory leaks
+
+    for (auto *it : states) // contient current_state
+    {
+        delete it;
+    }
+
+    delete current_symbole;
+
+    for (auto *it : symboles)
+    {
+        delete it;
+    }
 }
 
 /**
@@ -195,25 +211,9 @@ void Automate::execute(OPTIONS option)
     }
 }
 
-void Automate::displayState(string type, Etat* next, Symbole* nextSymbole)
+void Automate::displayState()
 {
     #ifdef DEBUG
-        cout << "---------------------------------------------" << endl;
-        cout << "Etat de l'automate (" << *current_state << ") : " << endl;
-        if (type == "decalage")
-        {
-            cout << "\tDécalage [changement d'état] : " << *current_state << " -> " << *next << endl;
-        }
-        else if (type == "reduction")
-        {
-            cout << "\tRéduction [changement d'état] : " << *current_state << " -> " << *states.front() << endl;
-            cout << "\tSymbole créé : " << *nextSymbole << endl;
-        }
-        else
-        {
-            cout << "\tType inconnu : " << type << endl;
-        }
-
         cout << "\tPile symbole (taille=" << symboles.size() << ") : ";
         for (auto const& it : this->symboles)
         {
@@ -226,55 +226,101 @@ void Automate::displayState(string type, Etat* next, Symbole* nextSymbole)
             cout << *it << " ";
         }
         cout << endl;
+        cout << "\tEtat courant avant transition : " << *current_state << endl;
+        cout << "\tSymbole sous la tête de lecture : " << *current_symbole << endl;
+        cout << "-------------------------------------------------" << endl;
 
     #endif
 }
 
+
+// manage deque
 void Automate::updateState(Etat* e)
 {
     states.push_front(e);
-    current_state = e;
+    this->current_state = e;
+}
+
+void Automate::popSymbole()
+{
+    symboles.pop_front();
+}
+void Automate::popAndDeleteSymbole()
+{
+    Symbole* s = symboles.front();
+    this->popSymbole();
+    delete s;
+}
+
+void Automate::popState()
+{
+    states.pop_front();
+}
+void Automate::popAndDeleteState()
+{
+    Etat* e = states.front();
+    this->popState();
+    delete e;
 }
 
 void Automate::decalage(Symbole* s, Etat* e)
 {
+    cout << "\t-> Décalage " << *e << endl;
     symboles.push_front(s);
-    this->displayState("decalage", e, NULL);
-    updateState(e);
-    Symbole* next = getNext();
+    this->updateState(e);
+    current_symbole = getNext();
 
-    #ifdef DEBUG
-        cout << "Prochain état : " << *e << " / Prochain symbole : " << *next << endl;
-    #endif
+    this->displayState();
 
-    e->transition(*this, next);
+    this->current_state->transition(*this, current_symbole);
 }
 
+/**
+ * réduction avec dépilement manuel pour gérer les cas où on conserve un élément de la pile (le delete créé un segfault [normal])
+ */
+void Automate::reduction(Symbole* newSymbole)
+{
+    symboles.push_front(newSymbole); // on pousse le nouveau symbole sur la pile
+    Etat* new_state = states.front()->next(newSymbole); // on récupère le nouvel état à partir du haut de la pile
+
+    this->updateState(new_state); // mise à jour de l'état courant
+
+    this->displayState();
+
+    current_state->transition(*this, current_symbole);
+}
+
+
+/**
+ * réduction avec dépilement automatique
+ */
 void Automate::reduction(int nbSymboles, Symbole* newSymbole)
 {
-    // dépile de 2*B
+    cout << "\t-> Réduction : création de " << *newSymbole << " (nbSymboles=" << nbSymboles << ")" << endl;
 
-    this->displayState("reduction", NULL, newSymbole);
-
+    // on dépile
     for(int i = 0; i< nbSymboles; ++i)
     {
-        Symbole* s = symboles.front();
         Etat* e = states.front();
-        symboles.pop_front();
-        delete s;
         states.pop_front();
         delete e;
-        //appeler la fct de tansition du new etat
+
+        Symbole* s = symboles.front();
+        symboles.pop_front();
+        delete s; 
     }
 
-    // TODO : update current_state
-
-    states.front()->transition(*this, newSymbole);
+    this->reduction(newSymbole);
 }
 
 Symbole* Automate::getNthSymbole(int n)
 {
 	return symboles[n];
+}
+
+void Automate::validateSyntaxe()
+{
+    syntaxeChecked = true;
 }
 
 void Automate::executeSyntaxicalAnalyse()
@@ -283,11 +329,11 @@ void Automate::executeSyntaxicalAnalyse()
 
     // push state 0
     states.push_front(current_state);
-    Symbole* nextSymbole = getNext();
+    current_symbole = getNext();
 
-    bool retour = current_state->transition(*this, nextSymbole);
+    current_state->transition(*this, current_symbole);
 
-    if (retour)
+    if (syntaxeChecked)
     {
         // récupérer le programme en haut de la pile
         cout << "LA SYNTAXE EST TIP TOP <3" << endl;
@@ -640,7 +686,7 @@ Symbole* Lexer::getNext(string& buff)
     	break;
     }
 
-    cout << " --> Lecture d'un symbole : " << *retour << endl;
+    //cout << " --> Lecture d'un symbole : " << *retour << endl;
 
     return retour;
 

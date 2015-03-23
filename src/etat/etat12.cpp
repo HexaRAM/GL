@@ -19,7 +19,7 @@ bool Etat12::transition(Automate & automate, Symbole * s ){
 			//Reduction r4 : D -> ct C
 			int nbSymboles = 2;
 			DeclarationConst* newDec= (DeclarationConst*)automate.getNthSymbole(0);
-			newDec->declarationFinie();
+			//newDec->declarationFinie();
 			automate.reduction(nbSymboles,s);
 
 			break;

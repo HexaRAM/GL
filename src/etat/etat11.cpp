@@ -19,7 +19,18 @@ bool Etat11::transition(Automate & automate, Symbole * s ){
 			Declaration* dec = (Declaration*) automate.getNthSymbole(1);
 			BlocDeclaration* blocDec = (BlocDeclaration*) automate.getNthSymbole(2);
 			blocDec->addDeclaration(dec);
-			automate.reduction(nbSymboles,blocDec);
+
+			// réduction manuelle ici
+			for (unsigned int i = 0; i < nbSymboles; ++i) 
+			{
+				automate.popAndDeleteState();
+			}
+
+			automate.popAndDeleteSymbole();
+			automate.popAndDeleteSymbole();
+			automate.popSymbole(); // on le pop sans le supprimer car il s'agit de blocDec
+
+			automate.reduction(blocDec); // réduction manuelle
 			break;
 		}
 		default : break;

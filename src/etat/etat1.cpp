@@ -9,6 +9,7 @@ bool Etat1::transition(Automate & automate, Symbole * s ){
 	int idSym = *s ; 
 	switch (idSym) {
 		case dollar :
+            automate.validateSyntaxe(); // pour éviter de devoir remonter tous les retours ...
 			return true;
 			break;
 		default : break;

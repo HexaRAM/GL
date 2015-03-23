@@ -11,7 +11,7 @@ bool Etat14::transition(Automate & automate, Symbole * s ){
 	int idSym = *s ; 
 	switch (idSym) {
 		case v :
-			automate.decalage(s, new Etat27);
+			automate.decalage(s, new Etat27("27"));
 			break;
 		case pv :
 		{
@@ -19,7 +19,17 @@ bool Etat14::transition(Automate & automate, Symbole * s ){
 			int nbSymboles = 2;
 			DeclarationVar* declaV = ((DeclarationVar*) automate.getNthSymbole(0));
 			declaV->declarationFinie();
-			automate.reduction(nbSymboles,declaV);
+
+			// réduction manuelle ici
+			for (unsigned int i = 0; i < nbSymboles; ++i) 
+			{
+				automate.popAndDeleteState();
+			}
+
+			automate.popSymbole(); // on le pop sans le supprimer car il s'agit de declaV
+			automate.popAndDeleteSymbole();
+
+			automate.reduction(declaV); // réduction manuelle
 			break;
 		}
 		default : break;

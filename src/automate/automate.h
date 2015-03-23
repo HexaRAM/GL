@@ -60,11 +60,20 @@ class Automate
         bool instanciateVariable(const string& name, int value);
         void displayMemory();
         void decalage(Symbole* s, Etat* e);
+        void reduction(Symbole* s);
         void reduction(int nbSymboles, Symbole* s);
         //string getNext(); 
-        void updateState(Etat* e);
         Symbole* getNext();
 	Symbole* getNthSymbole(int n);
+
+        // manage deque
+        void updateState(Etat* e);
+        void popSymbole();
+        void popState();
+        void popAndDeleteState();
+        void popAndDeleteSymbole();
+
+        void validateSyntaxe();
 
 
     private:
@@ -81,6 +90,7 @@ class Automate
 
         // syntaxical
         Etat* current_state;
+        Symbole* current_symbole;
         deque<Symbole*> symboles;
         deque<Etat*> states;
 
@@ -88,6 +98,9 @@ class Automate
         string code;
         Lexer lexer;
         string buffer;
+
+        // check
+        bool syntaxeChecked;
 
         void executeAll();
         void executeAffichage();
@@ -97,7 +110,7 @@ class Automate
         void executeSyntaxicalAnalyse();
 
         // debug
-        void displayState(string type, Etat* next, Symbole* nextSymbole);
+        void displayState();
 
 };
 
