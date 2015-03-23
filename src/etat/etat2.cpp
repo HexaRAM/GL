@@ -6,7 +6,7 @@
 #include "etat5.h"
 #include "etat6.h"
 #include "../config.h"
-#include "../symbole/expr/blocInstruction.h"
+#include "../symbole/blocInstruction.h"
 
 
 Etat2::Etat2(string pName) : Etat(pName){}

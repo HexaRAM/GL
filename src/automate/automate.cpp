@@ -284,6 +284,7 @@ void Automate::executeOptimisation(){
 
     // TODO
 }
+}
 
 void Automate::executeExecution()
 {

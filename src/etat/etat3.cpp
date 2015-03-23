@@ -4,7 +4,7 @@
 #include "etat9.h"
 #include "etat10.h"
 #include "../config.h"
-#include "../symbole/expr/programme.h"
+#include "../symbole/programme.h"
 
 Etat3::Etat3(string pName) : Etat(pName){}
 Etat3::Etat3(){}
