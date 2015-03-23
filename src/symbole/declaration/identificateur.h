@@ -15,5 +15,6 @@ using namespace std;
 			Identificateur(string str); 
 			double eval(const map<string, double> &valeurs);
 			virtual ~Identificateur() {}
+			friend ostream& operator<<(ostream& os, const Identificateur& dt);
 	};
 #endif
