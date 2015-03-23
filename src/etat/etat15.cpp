@@ -1,5 +1,6 @@
 #include "etat15.h"
 #include "../symbole/declaration/declarationVar.h"
+#include "../symbole/declaration/identificateur.h"
 #include "../config.h"
 
 Etat15::Etat15(string pName) : Etat(pName){}

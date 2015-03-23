@@ -1,6 +1,7 @@
 #include "etat11.h"
 #include "../config.h"
 #include "../symbole/declaration/blocDeclaration.h"
+#include "../symbole/declaration/declaration.h"
 
 Etat11::Etat11(string pName) : Etat(pName){}
 Etat11::Etat11(){}
