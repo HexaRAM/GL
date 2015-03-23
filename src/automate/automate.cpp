@@ -315,6 +315,7 @@ void Automate::executeOptimisation()
     }
 
     // TODO
+    // construire la map (ident, val) avant de l'envoyer à eval
 }
 
 Symbole* Automate::getNext()

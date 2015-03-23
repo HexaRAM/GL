@@ -9,6 +9,7 @@
 		public:
 			Num(): Expression(106) {}
 			Num(int val);
+			double eval(const map<string, double> &valeurs);
 			virtual ~Num() {}
 	};
 #endif

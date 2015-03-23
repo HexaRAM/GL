@@ -29,7 +29,9 @@ bool Etat3::transition(Automate & automate, Symbole * s ){
 		{
 			//réduction r1 : P -> LD LI
 			int nbSymboles = 2;
-			Symbole* s= new Programme();
+			BlocInstruction* newLi = (BlocInstruction*)automate.getNthSymbole(0);
+			BlocDeclaration* newLd = (BlocDeclaration*)automate.getNthSymbole(1);
+			Symbole * s = new Programme(newLd, newLi);
 			automate.reduction(nbSymboles,s);
 			break;
 		}

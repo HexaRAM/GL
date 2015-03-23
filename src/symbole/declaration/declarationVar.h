@@ -13,6 +13,7 @@ using namespace std;
 	public:
 		DeclarationVar(): Declaration() {}
 		void addIdentificateur(Identificateur* ident);
+		void declarationFinie() { ident = 4; }
 		virtual ~DeclarationVar() {}
 	};
 #endif

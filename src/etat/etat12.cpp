@@ -2,6 +2,7 @@
 #include "etat25.h"
 #include "../config.h"
 #include "../symbole/declaration/declaration.h"
+#include "../symbole/declaration/declarationConst.h"
 
 Etat12::Etat12(string pName) : Etat(pName){}
 Etat12::Etat12(){}
@@ -17,8 +18,10 @@ bool Etat12::transition(Automate & automate, Symbole * s ){
 		{
 			//Reduction r4 : D -> ct C
 			int nbSymboles = 2;
-			Symbole* s= new Declaration();
+			DeclarationConst* newDec= (DeclarationConst*)automate.getNthSymbole(0);
+			newDec->declarationFinie();
 			automate.reduction(nbSymboles,s);
+
 			break;
 		}
 		default : break;

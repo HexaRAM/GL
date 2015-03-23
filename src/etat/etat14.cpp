@@ -1,7 +1,7 @@
 #include "etat14.h"
 #include "etat27.h"
 #include "../config.h"
-#include "../symbole/declaration/declaration.h"
+#include "../symbole/declaration/declarationVar.h"
 
 Etat14::Etat14(string pName) : Etat(pName){}
 Etat14::Etat14(){}
@@ -17,8 +17,9 @@ bool Etat14::transition(Automate & automate, Symbole * s ){
 		{
 			//Reduction r5 : D -> va V
 			int nbSymboles = 2;
-			Symbole* s= new Declaration();
-			automate.reduction(nbSymboles,s);
+			DeclarationVar* declaV = ((DeclarationVar*) automate.getNthSymbole(0));
+			declaV->declarationFinie();
+			automate.reduction(nbSymboles,declaV);
 			break;
 		}
 		default : break;
