@@ -17,8 +17,8 @@ bool Etat14::transition(Automate & automate, Symbole * s ){
 		{
 			//Reduction r5 : D -> va V
 			int nbSymboles = 2;
-			Symbole* s= new Declaration();
-			automate.reduction(nbSymboles,s);
+			DeclarationVar* declaV = ((DeclarationVar*) automate.getNthSymbole(0))->declarationFinie();
+			automate.reduction(nbSymboles,declaV);
 			break;
 		}
 		default : break;
