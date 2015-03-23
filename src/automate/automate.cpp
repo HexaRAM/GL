@@ -28,6 +28,7 @@ Automate::Automate()
     this->current_symbole = NULL;
 
     this->syntaxeChecked = false;
+    this->programme = NULL;
 }
 
 Automate::Automate(bool affichage, bool analyse, bool optimisation, bool execution, string code)
@@ -45,6 +46,7 @@ Automate::Automate(bool affichage, bool analyse, bool optimisation, bool executi
     this->current_symbole = NULL;
 
     this->syntaxeChecked = false;
+    this->programme = NULL;
 }
 
 Automate::~Automate()
@@ -52,7 +54,7 @@ Automate::~Automate()
     // si les piles symboles ou states ne sont pas vides
     // les vider à coup de delete pour ne pas causer de memory leaks
 
-    for (auto *it : states) // contient current_state
+    /*for (auto *it : states) // contient current_state
     {
         delete it;
     }
@@ -62,7 +64,7 @@ Automate::~Automate()
     for (auto *it : symboles)
     {
         delete it;
-    }
+    }*/
 }
 
 /**
@@ -337,6 +339,9 @@ void Automate::executeSyntaxicalAnalyse()
     {
         // récupérer le programme en haut de la pile
         cout << "LA SYNTAXE EST TIP TOP <3" << endl;
+        programme = (Programme*) symboles.front();
+
+        cout << "Le programme est disponible ici : " << *programme << endl;
     }
     else
     {

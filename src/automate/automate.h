@@ -3,6 +3,7 @@
 
 #include "../config.h"
 #include "../symbole/symbole.h"
+#include "../symbole/programme.h"
 #include "../etat/etat.h"
 #include <string>
 #include <map>
@@ -101,6 +102,8 @@ class Automate
 
         // check
         bool syntaxeChecked;
+
+        Programme* programme;
 
         void executeAll();
         void executeAffichage();
