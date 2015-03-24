@@ -1,2 +1,5 @@
-var x;
-const n = 3;
+var a,b,c, d,    e;
+const a=3, b = 3965 , c = 30;
+var x, y;
+var z;
+const b=3;
