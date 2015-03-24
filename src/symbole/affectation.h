@@ -13,6 +13,6 @@
 			Affectation():Instruction(107) {}
 			Affectation(Expression* expression,	Identificateur* ident);
 			virtual ~Affectation() {}
-			void print();
+			void print(ostream& os) const;
 	};
 #endif

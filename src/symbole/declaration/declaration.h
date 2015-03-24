@@ -9,5 +9,6 @@
 		Declaration(): Symbole(2) {}
 		virtual void declarationFinie()=0;
 		virtual ~Declaration() {}
+		void print(ostream& os) const;
 	};
 #endif

@@ -7,3 +7,7 @@ OpParenthese::OpParenthese(Expression* expression) {
 double OpParenthese::eval(const map<string, double> &valeurs){
 	return expr->eval(valeurs);
 }
+
+void OpParenthese::print(ostream& os) const {
+	//TODO
+}

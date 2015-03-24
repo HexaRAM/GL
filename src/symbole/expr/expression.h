@@ -13,6 +13,7 @@ using namespace std;
 			Expression(int ident):Symbole(ident) {}
 			virtual ~Expression() {}
 			virtual double eval(const map<string, double> &valeurs);
+			virtual void print(ostream& os) const;
 
 	};
 	

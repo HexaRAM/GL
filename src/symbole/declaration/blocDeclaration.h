@@ -15,6 +15,6 @@ using namespace std;
 		BlocDeclaration(): Symbole(1) {}
 		void addDeclaration(Declaration* d);
 		virtual ~BlocDeclaration() {}
-		void print();
+		void print(ostream& os) const;
 	};
 #endif

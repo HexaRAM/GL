@@ -15,6 +15,6 @@ using namespace std;
 			BlocInstruction(): Symbole(5) {}
 			void addInstruction(Instruction* inst);
 			virtual ~BlocInstruction() {}
-			void print();
+			void print(ostream& os) const;
 	};
 #endif

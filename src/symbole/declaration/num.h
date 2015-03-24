@@ -11,5 +11,6 @@
 			Num(int val);
 			double eval(const map<string, double> &valeurs);
 			virtual ~Num() {}
+			virtual void print(ostream& os) const;
 	};
 #endif

@@ -7,3 +7,7 @@ Num::Num(int val) {
 double Num::eval(const map<string, double> &valeurs){
 	return valeur;
 }
+
+void Num::print(ostream& os) const {
+	os<<valeur;
+}
