@@ -11,6 +11,6 @@
 			Lecture(): Instruction(){}
 			Lecture(Identificateur* ident);
 			virtual ~Lecture() {}
-			void print();
+			void print(ostream& os) const;
 	};
 #endif

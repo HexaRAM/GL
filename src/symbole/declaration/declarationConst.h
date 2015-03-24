@@ -13,5 +13,6 @@
 		void addConst(Identificateur* ident, Num* num);
         void declarationFinie() { ident = 2; }
 		virtual ~DeclarationConst() {}
+		void print(ostream& os) const;
 	};
 #endif

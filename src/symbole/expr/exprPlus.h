@@ -9,5 +9,6 @@
 			ExprPlus(Expression* gauche, Expression* droite): ExprBin(gauche, droite) {}
 			double eval(const map<string, double> &valeurs);
 			virtual ~ExprPlus() {}
+			void print(ostream& os) const;
 	};
 #endif

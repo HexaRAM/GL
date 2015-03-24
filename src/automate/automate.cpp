@@ -357,19 +357,12 @@ void Automate::executeAll()
     executeExecution();
 }
 
-/**
- * A faire après l'analyse sémantique
- */
 void Automate::executeAffichage()
 {
-    if (!this->affichage)
+    if (syntaxeChecked)
     {
-        cout << "# Warning : l'affichage n'a pas été demandé par l'utilisateur." << endl;
+        cout << *programme;
     }
-
-    cout << code << endl;
-
-    // TODO
     // Affichage des map de constantes et de variables (sous forme de code) --> var x; var y; const n = 3; const m = 12;
 }
 
