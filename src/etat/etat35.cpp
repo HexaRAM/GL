@@ -14,16 +14,16 @@ bool Etat35::transition(Automate & automate, Symbole * s ){
 	int idSym = *s ; 
 	switch (idSym) {
 		case pf :
-			automate.decalage(s, new Etat41);
+			automate.decalage(s, new Etat41("41"));
 			break;
 		case add :
-			automate.decalage(s, new Etat30);
+			automate.decalage(s, new Etat30("30"));
 			break;
 		case moins :
-			automate.decalage(s, new Etat31);
+			automate.decalage(s, new Etat31("31"));
 			break;
 		case OA :
-			automate.decalage(s, new Etat29);
+			automate.decalage(s, new Etat29("29"));
 			break;
 		default : break;
 	}

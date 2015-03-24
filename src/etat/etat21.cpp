@@ -14,11 +14,16 @@ bool Etat21::transition(Automate & automate, Symbole * s ){
 		case moins :
 		case fois :
 		case divise :
+		case pv :
 			//Reduction r18 : T-> F
 		{
-			int nbSymboles = 1;
-			Symbole* s= new Num();		
-			automate.reduction(nbSymboles,s);
+			Expression* expr = (Expression*)automate.getNthSymbole(0);
+			expr->setT();
+
+			automate.popAndDeleteState();
+			automate.popSymbole();
+
+			automate.reduction(expr);
 			break;
 		}
 			

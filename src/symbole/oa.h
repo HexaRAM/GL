@@ -12,6 +12,7 @@ using namespace std;
 		public:
 			oa(): Symbole(10) {}
 			oa(string t); 
-			virtual ~oa() {}			
+			virtual ~oa() {}
+            string getType() { return type; }
 	};
 #endif

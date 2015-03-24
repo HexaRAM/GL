@@ -4,6 +4,9 @@
 #include "etat32.h"
 #include "etat1.h"
 #include "../symbole/expr/expression.h"
+#include "../symbole/oa.h"
+#include "../symbole/expr/exprPlus.h"
+#include "../symbole/expr/exprMoins.h"
 #include "../config.h"
 
 
@@ -18,23 +21,46 @@ bool Etat39::transition(Automate & automate, Symbole * s ){
 		case add :
 		case moins :
 		case pv :
-		{//TODO : r15 E → E OA T
+		{
+			//R15 : E → E OA T
 			int nbSymboles = 3;
-			Symbole* s= new Expression();		
-			automate.reduction(nbSymboles,s);
+			Expression* exprDroite = (Expression*) automate.getNthSymbole(0);
+			oa* operateur = (oa*) automate.getNthSymbole(1);
+			Expression* exprGauche = (Expression*) automate.getNthSymbole(2);
 
+			string type = operateur->getType();
+
+			Expression* expr = NULL;
+
+			if (type == "+")
+			{
+				// +
+				expr = (ExprPlus*) new ExprPlus(exprGauche, exprDroite);
+			}
+			else if (type == "-")
+			{
+				// -
+				expr = (ExprMoins*) new ExprMoins(exprGauche, exprDroite);
+			}
+			else
+			{
+				// error dans le type
+			}
+
+			automate.reduction(nbSymboles,expr);
 			break;	
 		}	
 
 		case fois :
-			automate.decalage(s, new Etat33);
+			automate.decalage(s, new Etat33("33"));
 		case divise :
-			automate.decalage(s, new Etat34);
+			automate.decalage(s, new Etat34("34"));
 		
 		case OM :
-			automate.decalage(s, new Etat32);
+			automate.decalage(s, new Etat32("32"));
 			break;
-		default : break;
+		default:
+		break;
 	}
 	return false;
 }

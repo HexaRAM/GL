@@ -14,11 +14,16 @@ bool Etat22::transition(Automate & automate, Symbole * s ){
 		case moins :
 		case fois :
 		case divise :
+		case pv :
 			//Reduction r19 : F -> id
 		{
-			int nbSymboles = 1;
-			Symbole* s= new Identificateur();		
-			automate.reduction(nbSymboles,s);
+			Identificateur* identif= (Identificateur*) automate.getNthSymbole(0);
+			identif->setF();
+
+			automate.popAndDeleteState();
+			automate.popSymbole();
+
+			automate.reduction(identif);
 			break;
 		}
 			

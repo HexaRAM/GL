@@ -1,5 +1,5 @@
 #include "etat18.h"
-#include "../symbole/instruction.h"
+#include "../symbole/lecture.h"
 #include "../config.h"
 
 Etat18::Etat18(string pName) : Etat(pName){}
@@ -13,7 +13,7 @@ bool Etat18::transition(Automate & automate, Symbole * s ){
 		{
 			//TODO : r13 I → r id
 			int nbSymboles = 2;
-			Symbole* s= new Instruction();		
+			Symbole* s= new Lecture();
 			automate.reduction(nbSymboles,s);
 			break;
 		}
@@ -21,4 +21,3 @@ bool Etat18::transition(Automate & automate, Symbole * s ){
 	}
 	return false;
 }
-

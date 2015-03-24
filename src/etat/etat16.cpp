@@ -16,8 +16,23 @@ bool Etat16::transition(Automate & automate, Symbole * s ){
 		{
 			// TODO r10 LI → LI I pv
 			int nbSymboles = 3;
-			Symbole* s= new BlocDeclaration();		
-			automate.reduction(nbSymboles,s);
+			Instruction* inst = (Instruction*) automate.getNthSymbole(1);
+			BlocInstruction* blocInst = (BlocInstruction*) automate.getNthSymbole(2);
+			blocInst->addInstruction(inst);
+
+			// réduction manuelle ici
+			for (unsigned int i = 0; i < nbSymboles; ++i) 
+			{
+				automate.popAndDeleteState();
+			}
+
+			automate.popAndDeleteSymbole();
+			automate.popAndDeleteSymbole();
+			automate.popSymbole(); // on le pop sans le supprimer car il s'agit de blocDec
+
+			automate.reduction(blocInst); // réduction manuelle
+
+
 			break;
 		}
 		default : break;

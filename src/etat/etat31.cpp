@@ -1,6 +1,6 @@
 #include "etat31.h"
 #include "../config.h"
-#include "../symbole/expr/exprMoins.h"
+#include "../symbole/oa.h"
 
 
 Etat31::Etat31(string pName) : Etat(pName){}
@@ -14,9 +14,9 @@ bool Etat31::transition(Automate & automate, Symbole * s ){
 		case num :
 		case po :
 		{
-			//R23
+			//R23 : OA -> -
 			int nbSymboles = 1;
-			Symbole* s= new ExprMoins();		
+			oa* s = new oa("-");
 			automate.reduction(nbSymboles,s);
 			break;
 		}

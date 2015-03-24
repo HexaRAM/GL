@@ -6,7 +6,7 @@
 	class ExprDiv : public ExprBin {
 		public:
 			ExprDiv(): ExprBin() {}
-			ExprDiv(Expression* gauche, Expression* droite): ExprBin(gauche, droite) {}
+			ExprDiv(Expression* gauche, Expression* droite): ExprBin(gauche, droite) { ident = 8; }
 			double eval(const map<string, double> &valeurs);
 			virtual ~ExprDiv() {}
 	};

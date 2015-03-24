@@ -3,4 +3,5 @@
 OpParenthese::OpParenthese(Expression* expression) {
 	Expression();
 	expr = expression;
+    ident = 9;
 }

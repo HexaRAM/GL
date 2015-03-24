@@ -3,7 +3,7 @@
 using namespace std;
 
 Ecriture::Ecriture(Expression e) : expr(e){
-	Instruction(7);
+	Instruction(109);
 }
 
 void Ecriture::print(ostream& os) const {

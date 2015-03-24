@@ -12,6 +12,7 @@ using namespace std;
 		public:
 			om(): Symbole(11) {}
 			om(string t); 
-			virtual ~om() {}			
+			virtual ~om() {}
+            string getType() { return type; }		
 	};
 #endif

@@ -1,5 +1,6 @@
-var a,b,c, d,    e;
-const a=3, b = 3965 , c = 30;
-var x, y;
-var z;
 const b=3;
+var z;
+const n=3,             u       =      12222;
+a := (3+4)*5;
+ecrire a*(b+2053);
+lire a;
