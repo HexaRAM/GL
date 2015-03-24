@@ -12,8 +12,15 @@ Celui-ci peut également vous fournir le résultat de l'exécution du programme 
 #### Utilisation
 ```shell
 ./analyseur fichier.lt -e # execute le programme
-./analyseur fichier.lt -a # affiche l'état du programme en mémoire
-[...]
+./analyseur fichier.lt -a # effectue une analyse statique du programme
+./analyseur fichier.lt -p # affiche l'état du programme en mémoire
+./analyseur fichier.lt -o # effectue des optimisations au niveau du programme
+```
+
+Il est possible de combiner les différentes options
+
+```shell
+./analyseur fichier.lt -o -p # affiche le programme avec les optimisations effectuées
 ```
 
 ## Compilation
