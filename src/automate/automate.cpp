@@ -83,7 +83,6 @@ bool Automate::addVariable(const string& name)
         // var doesn't exist
         this->variables[name] = {0, false};
         this->idents.insert(name);
-        cout.flush();
         return true;
     }
 }
@@ -217,10 +216,12 @@ void Automate::displayState()
 {
     #ifdef DEBUG
         cout << "\tPile symbole (taille=" << symboles.size() << ") : ";
+        cout.flush();
         for (auto const& it : this->symboles)
         {
             cout << *it << " ";
         }
+
         cout << endl;
         cout << "\tPile state (taille=" << states.size() << ") : ";
         for (auto const& it : this->states)
@@ -283,6 +284,7 @@ void Automate::decalage(Symbole* s, Etat* e)
 void Automate::reduction(Symbole* newSymbole)
 {
     symboles.push_front(newSymbole); // on pousse le nouveau symbole sur la pile
+
     Etat* new_state = states.front()->next(newSymbole); // on récupère le nouvel état à partir du haut de la pile
 
     this->updateState(new_state); // mise à jour de l'état courant
@@ -340,8 +342,6 @@ void Automate::executeSyntaxicalAnalyse()
         // récupérer le programme en haut de la pile
         cout << "LA SYNTAXE EST TIP TOP <3" << endl;
         programme = (Programme*) symboles.front();
-
-        cout << "Le programme est disponible ici : " << *programme << endl;
     }
     else
     {
@@ -357,19 +357,12 @@ void Automate::executeAll()
     executeExecution();
 }
 
-/**
- * A faire après l'analyse sémantique
- */
 void Automate::executeAffichage()
 {
-    if (!this->affichage)
+    if (syntaxeChecked)
     {
-        cout << "# Warning : l'affichage n'a pas été demandé par l'utilisateur." << endl;
+        cout << *programme;
     }
-
-    cout << code << endl;
-
-    // TODO
     // Affichage des map de constantes et de variables (sous forme de code) --> var x; var y; const n = 3; const m = 12;
 }
 

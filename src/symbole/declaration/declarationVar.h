@@ -15,5 +15,6 @@ using namespace std;
 		void addIdentificateur(Identificateur* ident);
 		void declarationFinie() { ident = 2; }
 		virtual ~DeclarationVar() {}
+		void print(ostream& os) const;
 	};
 #endif

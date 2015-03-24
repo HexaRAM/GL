@@ -46,7 +46,17 @@ bool Etat40::transition(Automate & automate, Symbole * s ){
 			{
 				// error dans le type
 			}
-			automate.reduction(nbSymboles,expr);
+
+			for (unsigned int i = 0; i < nbSymboles; ++i)
+			{
+				automate.popAndDeleteState();
+			}
+
+			automate.popSymbole(); // on garde F
+			automate.popAndDeleteSymbole();
+			automate.popSymbole(); // on garde T
+
+			automate.reduction(expr);
 		}
 		break;
 		default:

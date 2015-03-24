@@ -31,8 +31,17 @@ bool Etat3::transition(Automate & automate, Symbole * s ){
 			int nbSymboles = 2;
 			BlocInstruction* newLi = (BlocInstruction*)automate.getNthSymbole(0);
 			BlocDeclaration* newLd = (BlocDeclaration*)automate.getNthSymbole(1);
-			Symbole * s = new Programme(newLd, newLi);
-			automate.reduction(nbSymboles,s);
+			Symbole* prog = new Programme(newLd, newLi);
+
+			for (unsigned int i = 0; i < nbSymboles; ++i)
+			{
+				automate.popAndDeleteState();
+			}
+
+			automate.popSymbole(); // on garde LI
+			automate.popSymbole(); // on garde LD
+
+			automate.reduction(prog);
 			break;
 		}
 		default : break;

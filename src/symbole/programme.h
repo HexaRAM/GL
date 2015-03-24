@@ -13,6 +13,6 @@
 			Programme(): Symbole(0) {}
 			Programme(BlocDeclaration* blocDecl, BlocInstruction* blocInstr);
 			virtual ~Programme() {}
-			void print();
+			void print(ostream& os) const;
 	};
 #endif

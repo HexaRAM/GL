@@ -29,11 +29,11 @@ bool Etat43::transition(Automate & automate, Symbole * s ){
 				automate.popAndDeleteState();
 			}
 
-			for (unsigned int i = 0; i < nbSymboles-1; ++i)
-			{
-				automate.popAndDeleteSymbole();
-			}
-			automate.popSymbole(); // on le pop sans le supprimer car il s'agit de declaC
+			automate.popSymbole(); // on garde num
+			automate.popAndDeleteSymbole();
+			automate.popSymbole(); // on garde id
+			automate.popAndDeleteSymbole();
+			automate.popSymbole(); // on garde C
 
 			automate.reduction(declaC); // réduction manuelle
 			break;

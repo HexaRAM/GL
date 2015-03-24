@@ -10,12 +10,11 @@ using namespace std;
 
 	class  Ecriture : public Instruction{
 		protected:
-			Expression expr;
+			Expression* expr;
 		public:
 			Ecriture(){}
-			Ecriture(Expression e);
+			Ecriture(Expression* e);
 			virtual ~Ecriture() {}
-			friend ostream& operator<<(ostream& os, const Ecriture& dt);
 			void print(ostream& os) const;
 	};
 #endif

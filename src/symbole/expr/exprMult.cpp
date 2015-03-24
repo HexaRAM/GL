@@ -11,3 +11,7 @@ ostream& operator<<(ostream& os, const ExprMult& dt){
 double ExprMult::eval(const map<string, double> &valeurs){
 	return ( expr_gauche->eval(valeurs) * expr_droite->eval(valeurs));
 }
+
+void ExprMult::print(ostream& os) const {
+	os << *expr_gauche << " * " << *expr_droite;
+}

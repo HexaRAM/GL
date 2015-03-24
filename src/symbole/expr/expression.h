@@ -16,6 +16,8 @@ using namespace std;
             virtual void setF() { ident = 9; }
             virtual void setT() { ident = 8; }
 			virtual double eval(const map<string, double> &valeurs);
+			virtual void print(ostream& os) const;
+
 	};
 	
 #endif

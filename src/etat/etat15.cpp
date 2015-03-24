@@ -18,7 +18,11 @@ bool Etat15::transition(Automate & automate, Symbole * s ){
 			DeclarationVar* s = new DeclarationVar(); // V
 			Identificateur* identif = (Identificateur*) automate.getNthSymbole(0);
 			s->addIdentificateur(identif);
-			automate.reduction(nbSymboles,s);
+
+			automate.popAndDeleteState();
+			automate.popSymbole(); // on ne supprime pas id
+
+			automate.reduction(s);
 			break;
 		}
 		default : break;

@@ -9,6 +9,8 @@
 		public:
 			OpParenthese(): Expression() {}
 			OpParenthese(Expression* expression);
+			double eval(const map<string, double> &valeurs);
 			virtual ~OpParenthese() {}
+			void print(ostream& os) const;
 	};
 #endif

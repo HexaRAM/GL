@@ -9,5 +9,6 @@
 		Instruction(): Symbole(6) {}
 		Instruction(int id): Symbole(id) {}
 		virtual ~Instruction() {}
+		void print(ostream& os) const;
 	};
 #endif
