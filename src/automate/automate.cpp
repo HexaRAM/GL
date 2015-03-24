@@ -227,14 +227,10 @@ void Automate::executeAll()
 
 void Automate::executeAffichage()
 {
-    if (!this->affichage)
+    if (syntaxeChecked)
     {
-        cout << "# Warning : l'affichage n'a pas été demandé par l'utilisateur." << endl;
+        cout << *programme;
     }
-
-    cout << code << endl;
-
-    // TODO
 }
 
 void Automate::executeAnalyse()
