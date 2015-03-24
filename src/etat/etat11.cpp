@@ -12,6 +12,9 @@ bool Etat11::transition(Automate & automate, Symbole * s ){
 	switch (idSym) {
 		case ct :
 		case va :
+		case r:
+		case w:
+		case id:
 		case dollar :
 		{
 			//Reduction r2 : LD -> LD D pv
