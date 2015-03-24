@@ -1,11 +1,13 @@
 #include "exprBin.h"
 
-ExprBin::ExprBin(Expression* gauche, Expression* droite){
+ExprBin::ExprBin(Expression* gauche, Expression* droite)
+{
 	Expression();
 	expr_gauche = gauche;
 	expr_droite = droite;
-	}
+}
 
-void ExprBin::print(ostream& os) const {
-	//TODO
+void ExprBin::print(ostream& os) const 
+{
+	//vide
 }

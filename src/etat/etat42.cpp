@@ -13,7 +13,7 @@ bool Etat42::transition(Automate & automate, Symbole * s ){
 	int idSym = *s ; 
 	switch (idSym) {
 		case num :
-			automate.decalage(s, new Etat43);
+			automate.decalage(s, new Etat43("43"));
 			break;
 		default : break;
 	}

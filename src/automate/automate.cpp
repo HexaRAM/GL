@@ -1,11 +1,10 @@
 #include "automate.h"
 #include <iostream>
+#include "../symbole/declaration/num.h"
+#include "../symbole/declaration/identificateur.h"
 #include <boost/regex.hpp>
+#include "../etat/etat0.h"
 using namespace std;
-
-/**
- * TODO : retirer tous les commentaires sur les lignes utilisant les états une fois que les classes états seront implémentées
- */
 
  //     _              _                                 _          
  //    / \     _   _  | |_    ___    _ __ ___     __ _  | |_    ___ 
@@ -20,11 +19,16 @@ Automate::Automate()
     this->analyse = false;
     this->optimisation = false;
     this->execution = false;
+
     this->code = "";
     this->buffer = "";
     this->lexer = Lexer();
-    //this->current_state = new Etat0;
-    this->current_state = NULL;
+
+    this->current_state = new Etat0("0");
+    this->current_symbole = NULL;
+
+    this->syntaxeChecked = false;
+    this->programme = NULL;
 }
 
 Automate::Automate(bool affichage, bool analyse, bool optimisation, bool execution, string code)
@@ -33,19 +37,34 @@ Automate::Automate(bool affichage, bool analyse, bool optimisation, bool executi
     this->analyse = analyse;
     this->optimisation = optimisation;
     this->execution = execution;
+
     this->code = code;
     this->buffer = code;
     this->lexer = Lexer();
-    //this->current_state = new Etat0;
-    this->current_state = NULL;
+
+    this->current_state = new Etat0("0");
+    this->current_symbole = NULL;
+
+    this->syntaxeChecked = false;
+    this->programme = NULL;
 }
 
 Automate::~Automate()
 {
-    //delete current_state;
-
     // si les piles symboles ou states ne sont pas vides
     // les vider à coup de delete pour ne pas causer de memory leaks
+
+    /*for (auto *it : states) // contient current_state
+    {
+        delete it;
+    }
+
+    delete current_symbole;
+
+    for (auto *it : symboles)
+    {
+        delete it;
+    }*/
 }
 
 /**
@@ -193,29 +212,142 @@ void Automate::execute(OPTIONS option)
         break;
     }
 }
-void Automate::decalage(Symbole* s, Etat* e){
-    // TODO
+
+void Automate::displayState()
+{
+    #ifdef DEBUG
+        cout << "\tPile symbole (taille=" << symboles.size() << ") : ";
+        for (auto const& it : this->symboles)
+        {
+            cout << *it << " ";
+        }
+        cout << endl;
+        cout << "\tPile state (taille=" << states.size() << ") : ";
+        for (auto const& it : this->states)
+        {
+            cout << *it << " ";
+        }
+        cout << endl;
+        cout << "\tEtat courant avant transition : " << *current_state << endl;
+        cout << "\tSymbole sous la tête de lecture : " << *current_symbole << endl;
+        cout << "-------------------------------------------------" << endl;
+
+    #endif
 }
 
-// void Automate::reduction(Symbole symboleGauche, int nbSymbolesDroite){
-//     // TODO
-// }
+
+// manage deque
+void Automate::updateState(Etat* e)
+{
+    states.push_front(e);
+    this->current_state = e;
+}
+
+void Automate::popSymbole()
+{
+    symboles.pop_front();
+}
+void Automate::popAndDeleteSymbole()
+{
+    Symbole* s = symboles.front();
+    this->popSymbole();
+    delete s;
+}
+
+void Automate::popState()
+{
+    states.pop_front();
+}
+void Automate::popAndDeleteState()
+{
+    Etat* e = states.front();
+    this->popState();
+    delete e;
+}
+
+void Automate::decalage(Symbole* s, Etat* e)
+{
+    cout << "\t-> Décalage " << *e << endl;
+    symboles.push_front(s);
+    this->updateState(e);
+    current_symbole = getNext();
+
+    this->displayState();
+
+    this->current_state->transition(*this, current_symbole);
+}
+
+/**
+ * réduction avec dépilement manuel pour gérer les cas où on conserve un élément de la pile (le delete créé un segfault [normal])
+ */
+void Automate::reduction(Symbole* newSymbole)
+{
+    symboles.push_front(newSymbole); // on pousse le nouveau symbole sur la pile
+    Etat* new_state = states.front()->next(newSymbole); // on récupère le nouvel état à partir du haut de la pile
+
+    this->updateState(new_state); // mise à jour de l'état courant
+
+    this->displayState();
+
+    current_state->transition(*this, current_symbole);
+}
+
+
+/**
+ * réduction avec dépilement automatique
+ */
+void Automate::reduction(int nbSymboles, Symbole* newSymbole)
+{
+    cout << "\t-> Réduction : création de " << *newSymbole << " (nbSymboles=" << nbSymboles << ")" << endl;
+
+    // on dépile
+    for(int i = 0; i< nbSymboles; ++i)
+    {
+        Etat* e = states.front();
+        states.pop_front();
+        delete e;
+
+        Symbole* s = symboles.front();
+        symboles.pop_front();
+        delete s; 
+    }
+
+    this->reduction(newSymbole);
+}
+
+Symbole* Automate::getNthSymbole(int n)
+{
+	return symboles[n];
+}
+
+void Automate::validateSyntaxe()
+{
+    syntaxeChecked = true;
+}
 
 void Automate::executeSyntaxicalAnalyse()
 {
     // analyse syntaxique : analyseur ascendant
 
-    bool keepGoing = true;
-
     // push state 0
-    // states.push_front(current_state);
+    states.push_front(current_state);
+    current_symbole = getNext();
 
-    while (keepGoing)
+    current_state->transition(*this, current_symbole);
+
+    if (syntaxeChecked)
     {
-        // Symbole* nextSymbole = getNext();
-        // keepGoing = init->transition(*this, nextSymbole);
-        keepGoing = false; // TODO : remove this line
+        // récupérer le programme en haut de la pile
+        cout << "LA SYNTAXE EST TIP TOP <3" << endl;
+        programme = (Programme*) symboles.front();
+
+        cout << "Le programme est disponible ici : " << *programme << endl;
     }
+    else
+    {
+        cout << "# Erreur pendant l'analyse !" << endl;
+    }
+
 }
 void Automate::executeAll()
 {
@@ -231,8 +363,12 @@ void Automate::executeAffichage()
     {
         cout << *programme;
     }
+    // Affichage des map de constantes et de variables (sous forme de code) --> var x; var y; const n = 3; const m = 12;
 }
 
+/**
+ * Analyse sémantique
+ */
 void Automate::executeAnalyse()
 {
     if (!this->analyse)
@@ -240,19 +376,20 @@ void Automate::executeAnalyse()
         cout << "# Warning : l'analyse n'a pas été demandé par l'utilisateur." << endl;
     }
 
-    // TODO
+    /**
+     * TODO : ajouter un Programme* program dans les attributs qui contient l'ensemble du programme analysé par l'automate ascendant
+     * Avec `program`, faire l'analyse sémantique !
+     *      -> Faire toutes les déclarations (utiliser les méthodes déjà codées)
+     *      -> Faire toutes les instructions :
+     *              ** read : s'assurer que la variable a bien été déclarée
+     *              ** write : s'assurer que l'expression a bien été déclarée (& instanciée dans le cas d'une variable)
+     *              ** opération = : s'assurer que le membre de gauche est bien une variable DECLAREE / s'assurer que tous les membres de droites sont soit des constantes, soit des variables déclarées et instanciées !!
+     */
 }
 
-void Automate::executeOptimisation()
-{
-    if (!this->optimisation)
-    {
-        cout << "# Warning : l'optimisation n'a pas été demandé par l'utilisateur." << endl;
-    }
-
-    // TODO
-}
-
+/**
+ * A faire après l'analyse sémantique
+ */
 void Automate::executeExecution()
 {
     if (!this->execution)
@@ -261,9 +398,24 @@ void Automate::executeExecution()
     }
 
     // TODO
+    // Jouer chaque instruction une par une et mettre à jour la map des variables lors d'opération (=)
+}
+
+/**
+ * Optionnel : à faire après analyse syntaxique / sémantique / exécution / affichage
+ */
+void Automate::executeOptimisation()
+{
+    if (!this->optimisation)
+    {
+        cout << "# Warning : l'optimisation n'a pas été demandé par l'utilisateur." << endl;
+    }
+
+    // TODO
     // construire la map (ident, val) avant de l'envoyer à eval
 }
-string Automate::getNext()
+
+Symbole* Automate::getNext()
 {
     return this->lexer.getNext(this->buffer);
 }
@@ -294,11 +446,12 @@ Lexer::~Lexer()
 
 string Lexer::regex[] = {"^const$", "^var$", "^lire$", "^ecrire$", ";", "\\(", "\\)", ":=", "=", "\\+", "\\-", "\\*", "\\/", "\\,", "^\\d*$","(?!(^var$|^const$|^ecrire$|^lire$))^[a-zA-Z][a-zA-Z0-9]*$"};
 
-string Lexer::getNext(string& buff)
+Symbole* Lexer::getNext(string& buff)
 {
+    
     if (buff.empty())
     {
-        return "$"; // symbole DOLLAR / EOF
+        return new Symbole(ID_SYMBOLE::dollar); // symbole DOLLAR / EOF
     }
 
     stringstream flux(buff);
@@ -307,6 +460,7 @@ string Lexer::getNext(string& buff)
     bool error = false;
     bool last_was_no_pattern = false;
     int no_pattern_sequence = 0;
+    int id = -1;
 
     while (!flux.fail())
     {
@@ -374,6 +528,7 @@ string Lexer::getNext(string& buff)
             bool match = boost::regex_match(new_buff.c_str(), matches, re);
             if (match)
             {
+		id = i;
                 matched = true;
                 break;
             }
@@ -422,10 +577,117 @@ string Lexer::getNext(string& buff)
 
     if (error)
     {
-        return "Erreur - aucun pattern trouvé dans les " + std::to_string(MAX_NO_PATTERN_SEQUENCE) + " derniers caractères.";
+        //return "Erreur - aucun pattern trouvé dans les " + std::to_string(MAX_NO_PATTERN_SEQUENCE) + " derniers caractères.";
+	   return NULL;
     }
 
-    return buffer;
+    Symbole* retour = NULL;
+
+    //cout << "Valeur du symbole lu : " << buffer << "(ID : " << id << ")" << endl;
+
+    switch(id)
+    {
+    	case -1:
+            if (buffer == ";")
+            {
+                retour = new Symbole(ID_SYMBOLE::pv);
+            }
+            else if (buffer == "+")
+            {
+                retour = new Symbole(ID_SYMBOLE::add); 
+            }
+            else if (buffer == "-")
+            {
+                retour = new Symbole(ID_SYMBOLE::moins);
+            }
+            else if (buffer == "/")
+            {
+                retour = new Symbole(ID_SYMBOLE::divise);
+            }
+            else if (buffer == "*")
+            {
+                retour = new Symbole(ID_SYMBOLE::fois);
+            }
+            else if (buffer == ",")
+            {
+                retour = new Symbole(ID_SYMBOLE::v);
+            }
+            else if (buffer == "(")
+            {
+                retour = new Symbole(ID_SYMBOLE::po);
+            }
+            else if (buffer == ")")
+            {
+                retour = new Symbole(ID_SYMBOLE::pf);
+            }
+            else
+            {
+                // error
+            }
+    	break;
+    	case 0:
+    	    retour = new Symbole(ID_SYMBOLE::ct);
+    	break;
+    	case 1:
+    	    retour = new Symbole(ID_SYMBOLE::va);
+    	break;
+    	case 2:
+    	    retour = new Symbole(ID_SYMBOLE::r);
+    	break;
+    	case 3:
+    	    retour = new Symbole(ID_SYMBOLE::w);
+    	break;
+    	case 4:
+    	    retour = new Symbole(ID_SYMBOLE::pv);
+    	break;
+    	case 5:
+    	    retour = new Symbole(ID_SYMBOLE::po);
+    	break;
+    	case 6:
+    	    retour = new Symbole(ID_SYMBOLE::pf);
+    	break;
+    	case 7:
+    	    retour = new Symbole(ID_SYMBOLE::af);
+    	break;
+    	case 8:
+    	    retour = new Symbole(ID_SYMBOLE::eg);
+    	break;
+    	case 9:
+    	    retour = new Symbole(ID_SYMBOLE::add);
+    	break;
+    	case 10:
+    	    retour = new Symbole(ID_SYMBOLE::moins);
+    	break;
+    	case 11:
+    	    retour = new Symbole(ID_SYMBOLE::fois);
+    	break;
+    	case 12:
+    	    retour = new Symbole(ID_SYMBOLE::divise);
+    	break;
+    	case 13:
+    	    retour = new Symbole(ID_SYMBOLE::v);
+    	break;
+    	case 14:
+    	{
+    		// convertir buffer -> int
+    		int num;
+    		istringstream iss(buffer);
+    		iss >> num;
+    		retour = new Num(num);
+    	}
+    	break;
+    	case 15:
+            retour = new Identificateur(buffer);
+    	break;
+    	default:
+            // error
+    	break;
+    }
+
+    //cout << " --> Lecture d'un symbole : " << *retour << endl;
+
+    return retour;
+
 
         /**
          * /!\ Implémentation légèrement différente de l'algo décrit ci-dessous avec l'intégration du ":=" qui a nécessité d'ajouter un compteur "no_pattern_sequence" pour tolérer le fait qu'on ne rencontre aucun pattern par moment (e.g quand on reçoit ":")
@@ -445,4 +707,5 @@ string Lexer::getNext(string& buff)
          *                  ** si flag à non match => retourner erreur (aucun pattern trouvé)
          *
          */
+       
 }

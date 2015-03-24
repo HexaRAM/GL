@@ -7,6 +7,7 @@
 	
 	public:
 		Declaration(): Symbole(2) {}
+        Declaration(int identifiant) : Symbole(identifiant) {}
 		virtual void declarationFinie()=0;
 		virtual ~Declaration() {}
 		void print(ostream& os) const;

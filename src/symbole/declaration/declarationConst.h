@@ -9,9 +9,9 @@
 	protected:
 		map<Identificateur*,Num*> map_const;
 	public:
-		DeclarationConst(): Declaration() {}
+		DeclarationConst(): Declaration(3) {}
 		void addConst(Identificateur* ident, Num* num);
-		void declarationFinie() { ident = 3; }
+        void declarationFinie() { ident = 2; }
 		virtual ~DeclarationConst() {}
 		void print(ostream& os) const;
 	};

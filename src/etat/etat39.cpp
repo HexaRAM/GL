@@ -3,6 +3,7 @@
 #include "etat34.h"
 #include "etat32.h"
 #include "etat1.h"
+#include "../symbole/expr/expression.h"
 #include "../config.h"
 
 
@@ -14,19 +15,22 @@ bool Etat39::transition(Automate & automate, Symbole * s ){
 	int idSym = *s ; 
 	switch (idSym) {
 		case pf :
-			//TODO : r15
-			break;
 		case add :
-			//TODO : r15
-			break;
 		case moins :
-			//TODO : r15
+		case pv :
+		{//TODO : r15 E → E OA T
+			int nbSymboles = 3;
+			Symbole* s= new Expression();		
+			automate.reduction(nbSymboles,s);
+
+			break;	
+		}	
+
 		case fois :
 			automate.decalage(s, new Etat33);
 		case divise :
 			automate.decalage(s, new Etat34);
-		case pv :
-			//TODO : r15
+		
 		case OM :
 			automate.decalage(s, new Etat32);
 			break;
@@ -35,3 +39,16 @@ bool Etat39::transition(Automate & automate, Symbole * s ){
 	return false;
 }
 
+Etat* Etat39::next(Symbole* s)
+{
+	switch (*s)
+	{
+		case OM:
+			return new Etat32("32");
+		break;
+
+		default:
+			return NULL;
+		break;
+	}
+}

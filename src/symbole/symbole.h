@@ -11,7 +11,7 @@ using namespace std;
         public:
             Symbole(int id) : ident(id) {}
             virtual ~Symbole() {}
-            virtual void print(ostream& os) const = 0;
+            virtual void print(ostream& os) const;
             operator int() const { return ident; }
             friend ostream& operator<<(ostream& os, const Symbole& dt);
     };

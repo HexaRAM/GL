@@ -1,11 +1,7 @@
 #include "identificateur.h"
 
-Identificateur::Identificateur(string str){
-	Expression(104);
-	nom = str; 
-}
-
-double Identificateur::eval(const map<string, double> &valeurs){
+double Identificateur::eval(const map<string, double> &valeurs)
+{
 	auto it = valeurs.find(nom);
 
 	if ( it == valeurs.end() ) {
@@ -15,6 +11,7 @@ double Identificateur::eval(const map<string, double> &valeurs){
   	return it->second;
 }
 
-void Identificateur::print(ostream& os) const {
+void Identificateur::print(ostream& os) const 
+{
 	os<<nom;
 }

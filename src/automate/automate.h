@@ -3,14 +3,15 @@
 
 #include "../config.h"
 #include "../symbole/symbole.h"
+#include "../symbole/programme.h"
+#include "../etat/etat.h"
 #include <string>
 #include <map>
 #include <deque>
 #include <set>
-class Etat;
 using namespace std;
 
-class Etat;
+//class Etat;
 
 #define NB_REGEX 16
 #define MAX_NO_PATTERN_SEQUENCE 10
@@ -41,8 +42,7 @@ class Lexer
     public:
         Lexer();
         ~Lexer();
-        //Symbole getNext(const string& code); // en attendant les classes Symboles
-        string getNext(string& buff);
+        Symbole* getNext(string& buff);
         static string regex[];
     private:
 };
@@ -61,9 +61,21 @@ class Automate
         bool instanciateVariable(const string& name, int value);
         void displayMemory();
         void decalage(Symbole* s, Etat* e);
-        //void reduction(Symbole s, Etat* e);
-        string getNext(); // Todo : switch to getNextStringSymbole();
-        // Symbole* getNext();
+        void reduction(Symbole* s);
+        void reduction(int nbSymboles, Symbole* s);
+        //string getNext(); 
+        Symbole* getNext();
+	Symbole* getNthSymbole(int n);
+
+        // manage deque
+        void updateState(Etat* e);
+        void popSymbole();
+        void popState();
+        void popAndDeleteState();
+        void popAndDeleteSymbole();
+
+        void validateSyntaxe();
+
 
     private:
         // options
@@ -73,19 +85,25 @@ class Automate
         bool execution;
 
         // structure de données
-        Etat* current_state;
         map_var variables;
         map_const constantes;
         set<string> idents;
+
+        // syntaxical
+        Etat* current_state;
+        Symbole* current_symbole;
         deque<Symbole*> symboles;
         deque<Etat*> states;
-
-        // map<int, instruction_s> instructions;
 
         // Lexer
         string code;
         Lexer lexer;
         string buffer;
+
+        // check
+        bool syntaxeChecked;
+
+        Programme* programme;
 
         void executeAll();
         void executeAffichage();
@@ -93,6 +111,9 @@ class Automate
         void executeOptimisation();
         void executeExecution();
         void executeSyntaxicalAnalyse();
+
+        // debug
+        void displayState();
 
 };
 

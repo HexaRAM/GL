@@ -11,9 +11,9 @@ using namespace std;
 	protected:
 		deque<Identificateur*> liste_identif;
 	public:
-		DeclarationVar(): Declaration() {}
+		DeclarationVar(): Declaration(4) {}
 		void addIdentificateur(Identificateur* ident);
-		void declarationFinie() { ident = 4; }
+		void declarationFinie() { ident = 2; }
 		virtual ~DeclarationVar() {}
 		void print(ostream& os) const;
 	};

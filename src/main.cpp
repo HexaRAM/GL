@@ -101,26 +101,33 @@ int main(int argc, char** argv)
     //     }
     //     else if (press == "n")
     //     {
-    //         string next = automate->getNext();
-    //         while (next != "$" && next != "Erreur - aucun pattern trouvé")
+    //         Symbole* next = automate->getNext();
+    //         while (*next != ID_SYMBOLE::dollar && next != NULL)
     //         {
-    //             cout << "# Prochain symbole : " << next << endl;
+    //             cout << "# Prochain symbole : " << *next << endl;
     //             next = automate->getNext();
 
-    //             if (next == "$")
+    //             if (*next == ID_SYMBOLE::dollar)
     //             {
-    //                 cout << "# Prochain symbole : " << next << endl << "\tFin de la lecture" << endl;
+    //                 cout << "# Prochain symbole : " << *next << endl << "\tFin de la lecture" << endl;
     //             }
+    //         }
+
+    //         if (next != NULL)
+    //         {
+    //             delete next;
     //         }
     //     }
     //     else
     //     {
-    //         string next = automate->getNext();
-    //         cout << "# Prochain symbole : " << next << endl;
+    //         Symbole* next = automate->getNext();
+    //         cout << "# Prochain symbole : " << *next << endl;
+    //         if (next != NULL)
+    //         {
+    //             delete next;
+    //         }
     //     }
     // }
-
-
 
     //delete automate;
 
