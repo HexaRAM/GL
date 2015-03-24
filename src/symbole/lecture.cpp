@@ -7,5 +7,5 @@ Lecture::Lecture(Identificateur* ident) {
 
 
 void Lecture::print(ostream& os) const {
-	//TODO
+	os<<"Lire " << *id << ";" << endl;
 }

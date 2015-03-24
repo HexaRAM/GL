@@ -9,5 +9,5 @@ double OpParenthese::eval(const map<string, double> &valeurs){
 }
 
 void OpParenthese::print(ostream& os) const {
-	//TODO
+	os << "( " << *expr << " )";
 }

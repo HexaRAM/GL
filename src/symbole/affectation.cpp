@@ -7,5 +7,5 @@ Affectation::Affectation(Expression* expression, Identificateur* ident) {
 }
 
 void Affectation::print(ostream& os) const {
-	//TODO
+	os << *id << " := " << *expr << ";" << endl;
 }

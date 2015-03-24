@@ -5,5 +5,7 @@ void BlocInstruction::addInstruction(Instruction* inst){
 }
 
 void BlocInstruction::print(ostream& os) const {
-	//TODO
+	for(auto const &it:liste_instruction){
+		os << *it;
+	}
 }

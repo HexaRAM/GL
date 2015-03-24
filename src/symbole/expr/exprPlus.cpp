@@ -5,5 +5,5 @@ double ExprPlus::eval(const map<string, double> &valeurs){
 }
 
 void ExprPlus::print(ostream& os) const {
-	//TODO
+	os << *expr_gauche << "+" << *expr_droite;
 }

@@ -13,5 +13,5 @@ double ExprMult::eval(const map<string, double> &valeurs){
 }
 
 void ExprMult::print(ostream& os) const {
-	//TODO
+	os << *expr_gauche << " * " << *expr_droite;
 }
