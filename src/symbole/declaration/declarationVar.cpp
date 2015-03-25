@@ -1,7 +1,7 @@
 #include "declarationVar.h"
 
 void DeclarationVar::addIdentificateur(Identificateur* ident){
-	liste_identif.push_front(ident);
+	liste_identif.push_back(ident);
 	}
 
 void DeclarationVar::print(ostream& os) const {

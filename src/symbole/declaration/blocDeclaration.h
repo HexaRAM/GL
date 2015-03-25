@@ -4,14 +4,14 @@
 #include "../symbole.h"
 #include "declaration.h"
 
-#include <deque>
+#include <vector>
 #include <map>
 
 using namespace std;
 
 	class BlocDeclaration : public Symbole {
 	protected:
-		deque<Declaration*> liste_declaration;
+		vector<Declaration*> liste_declaration;
 	public:
 		BlocDeclaration(): Symbole(1) {}
 		void addDeclaration(Declaration* d);

@@ -4,12 +4,12 @@
 #include "declaration.h"
 #include "identificateur.h"
 
-#include <deque>
+#include <vector>
 using namespace std;
 
 	class DeclarationVar : public Declaration {
 	protected:
-		deque<Identificateur*> liste_identif;
+		vector<Identificateur*> liste_identif;
 	public:
 		DeclarationVar(): Declaration(4) {}
 		void addIdentificateur(Identificateur* ident);

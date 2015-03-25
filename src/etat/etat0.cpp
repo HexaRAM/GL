@@ -10,13 +10,6 @@ Etat0::Etat0(string pName) : Etat(pName){}
 Etat0::Etat0() : Etat(){}
 Etat0::~Etat0(){}
 
-/*
-*création du nouveau symbole lors d'une réduction: E->E1+E2
-*on a lu sur la pile E1 et E2 , on fait un op plis de E1 et E2 et on obtient le nouveau symbole.
-* 
-*/
-
-
 bool Etat0::transition(Automate & automate, Symbole * s )
 {
 	int idSym = *s ; 
