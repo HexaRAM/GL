@@ -7,8 +7,7 @@
 #include "../symbole/ecriture.h"
 #include "../symbole/lecture.h"
 #include "../symbole/affectation.h"
-#include <deque>
-#include <algorithm>
+#include <vector>
 
 using namespace std;
 
@@ -409,8 +408,7 @@ void Automate::executeExecution()
     
 
     BlocInstruction* blocInstruction = (this->programme)->getBlocInstruction() ;
-    deque<Instruction*> liste_instruction = blocInstruction->getListeInstruction();
-    reverse(liste_instruction.begin(), liste_instruction.end());
+    vector<Instruction*> liste_instruction = blocInstruction->getListeInstruction();
 
     for(auto const &it:liste_instruction){
        Affectation *aff = dynamic_cast<Affectation*> (it);
