@@ -268,12 +268,12 @@ void Automate::popAndDeleteState()
 
 void Automate::decalage(Symbole* s, Etat* e)
 {
-    cout << "\t-> Décalage " << *e << endl;
+    //cout << "\t-> Décalage " << *e << endl;
     symboles.push_front(s);
     this->updateState(e);
     current_symbole = getNext();
 
-    this->displayState();
+    //this->displayState();
 
     this->current_state->transition(*this, current_symbole);
 }
@@ -289,7 +289,7 @@ void Automate::reduction(Symbole* newSymbole)
 
     this->updateState(new_state); // mise à jour de l'état courant
 
-    this->displayState();
+    //this->displayState();
 
     current_state->transition(*this, current_symbole);
 }
@@ -300,7 +300,7 @@ void Automate::reduction(Symbole* newSymbole)
  */
 void Automate::reduction(int nbSymboles, Symbole* newSymbole)
 {
-    cout << "\t-> Réduction : création de " << *newSymbole << " (nbSymboles=" << nbSymboles << ")" << endl;
+    //cout << "\t-> Réduction : création de " << *newSymbole << " (nbSymboles=" << nbSymboles << ")" << endl;
 
     // on dépile
     for(int i = 0; i< nbSymboles; ++i)
