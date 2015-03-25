@@ -7,11 +7,14 @@ SRC= $(wildcard src/*.cpp src/*/*.cpp src/*/*/*.cpp)
 HEADER= $(wildcard src/*.h src/*/*.h src/*/*/*.h)
 BUILD_DIR=object
 OBJ= $(addprefix $(BUILD_DIR)/,$(notdir $(SRC:.cpp=.o)))
+TEST_FOLDER=Tests
+TEST_EXEC=lut
 
 # /!\ Pas de gestion des dépendances aux headers
 
 all: $(EXEC)
 	@echo "/!\ Si vous avez modifié uniquement les headers (.h), effectuez un : make -B"
+	cp $(EXEC) $(TEST_EXEC)
 
 analyseur: $(OBJ)
 	$(COMP) -o $@ $^ $(LDFLAGS) 
@@ -29,7 +32,9 @@ PHONY: clean test
 
 test:
 	@echo "Execution des tests"
-	@./test.sh
+	# pwd
+	./test.sh
+	# pwd
 
 clean:
 	rm -rf $(BUILD_DIR)/*.o $(EXEC)

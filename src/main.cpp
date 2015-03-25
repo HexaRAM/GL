@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 
     if (automate == NULL)
     {
-        cout << "# La création de l'automate n'a pas été rendu possible." << endl;
+        //cout << "# La création de l'automate n'a pas été rendu possible." << endl;
         exit(1);
     }
 

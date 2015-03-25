@@ -19,6 +19,7 @@ do
   fi
   let "nTotal=$nTotal+1"
 done
+pwd
 
 echo "Passed tests     : $nOk"
 echo "Failed tests     : $nKo"

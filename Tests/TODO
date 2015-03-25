@@ -1,0 +1,3 @@
+01 - Changer l'ordre du parsing (soit dans le Test, soit dans le programme)
+	Nous : ./lut fichier [options]
+	Eux : ./lut [options] fichiers
