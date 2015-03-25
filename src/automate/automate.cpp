@@ -428,6 +428,8 @@ void Automate::executeOptimisation()
 
     // TODO
     // construire la map (ident, val) avant de l'envoyer à eval
+    cout<<"Ziiiiiziiiiiiiiiiiiiii"<<endl;
+    programme->getAffectationsConstants();
 }
 
 Symbole* Automate::getNext()

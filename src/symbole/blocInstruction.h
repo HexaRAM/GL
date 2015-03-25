@@ -2,8 +2,9 @@
 #define BLOCINSTRUCTION_H
 
 #include "symbole.h"
+#include "expr/exprBin.h"
 #include "instruction.h"
-
+#include "affectation.h"
 #include <deque>
 
 using namespace std;
@@ -17,5 +18,6 @@ using namespace std;
 			deque<Instruction*> getListeInstruction();
 			virtual ~BlocInstruction() {}
 			void print(ostream& os) const;
+			void getAffectationConstants();
 	};
 #endif
