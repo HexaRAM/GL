@@ -17,7 +17,11 @@ void BlocInstruction::getAffectationConstants(){
 	for(auto const &it:liste_instruction){
 		Affectation* aff = dynamic_cast<Affectation*> (it);
 		if(aff != NULL){
-			aff->getExpression()->print(cout);
+			ExprBin * rht = dynamic_cast<ExprBin*> (aff->getExpression());
+			if (rht != NULL){
+				rht->getExprGauche()->print(cout);
+			}
+
 		} 
 	}
 

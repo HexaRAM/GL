@@ -13,5 +13,7 @@
 			virtual double eval(const map<string, double> &valeurs)=0;
 			virtual ~ExprBin() {}
 			virtual void print(ostream& os) const;
+			Expression* getExprGauche();
+			Expression* getExprDroite();
 	};
 #endif

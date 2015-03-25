@@ -2,6 +2,7 @@
 #define BLOCINSTRUCTION_H
 
 #include "symbole.h"
+#include "expr/exprBin.h"
 #include "instruction.h"
 #include "affectation.h"
 #include <deque>
