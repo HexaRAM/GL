@@ -25,7 +25,7 @@ bool Etat38::transition(Automate & automate, Symbole * s ){
 				automate.popAndDeleteState();
 			}
 
-			automate.popAndDeleteSymbole();
+			automate.popSymbole(); // id
 			automate.popAndDeleteSymbole();
 			automate.popSymbole(); // on le pop sans le supprimer car il s'agit de declaV
 

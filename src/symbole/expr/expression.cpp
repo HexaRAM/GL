@@ -4,5 +4,5 @@ double Expression::eval(const map<string, double> &valeurs) {
 }
 
 void Expression::print(ostream& os) const {
-	//TODO
+	// expression inconnue
 }

@@ -9,5 +9,5 @@ ExprBin::ExprBin(Expression* gauche, Expression* droite)
 
 void ExprBin::print(ostream& os) const 
 {
-	//vide
+	// expression binaire inconnue
 }
