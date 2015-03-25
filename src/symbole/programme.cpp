@@ -6,7 +6,15 @@ Programme::Programme(BlocDeclaration* blocDecl, BlocInstruction* blocInstr) : Sy
 	bloc_instruction = blocInstr;
 }
 
+void Programme::getAffectationsConstants(){
+	//cout<<"hello"<<endl;
+	bloc_instruction->getAffectationConstants();
+}
+	
 
 void Programme::print(ostream& os) const {
 	os << *bloc_declaration << *bloc_instruction;
+}
+BlocInstruction* Programme::getBlocInstruction() {
+	return bloc_instruction;
 }

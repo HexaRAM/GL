@@ -9,3 +9,6 @@ Ecriture::Ecriture(Expression* e) : expr(e){
 void Ecriture::print(ostream& os) const {
 	os << "ecrire " << *expr << ";" << endl;
 }
+Expression* Ecriture::getExpression(){
+	return expr;
+}

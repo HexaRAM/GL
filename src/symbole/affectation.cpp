@@ -9,3 +9,11 @@ Affectation::Affectation(Expression* expression, Identificateur* ident) {
 void Affectation::print(ostream& os) const {
 	os << *id << " := " << *expr << ";" << endl;
 }
+
+Expression* Affectation::getExpression(){
+	return expr;
+}
+
+Identificateur* Affectation::getIndentificateur(){
+	return id;
+}

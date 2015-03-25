@@ -9,3 +9,7 @@ void BlocDeclaration::print(ostream& os) const {
 		os << *it;
 	}
 }
+
+map<string, double> BlocDeclaration::getAllConstants(){
+
+}

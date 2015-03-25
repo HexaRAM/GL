@@ -16,5 +16,6 @@ using namespace std;
 			Ecriture(Expression* e);
 			virtual ~Ecriture() {}
 			void print(ostream& os) const;
+			Expression* getExpression();
 	};
 #endif

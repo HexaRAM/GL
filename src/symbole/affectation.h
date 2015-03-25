@@ -14,5 +14,7 @@
 			Affectation(Expression* expression,	Identificateur* ident);
 			virtual ~Affectation() {}
 			void print(ostream& os) const;
+			Expression* getExpression();
+			Identificateur* getIndentificateur();
 	};
 #endif

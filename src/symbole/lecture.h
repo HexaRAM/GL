@@ -12,5 +12,6 @@
 			Lecture(Identificateur* ident);
 			virtual ~Lecture() {}
 			void print(ostream& os) const;
+			Identificateur* getIndentificateur();
 	};
 #endif

@@ -5,6 +5,7 @@
 #include "declaration.h"
 
 #include <deque>
+#include <map>
 
 using namespace std;
 
@@ -16,5 +17,6 @@ using namespace std;
 		void addDeclaration(Declaration* d);
 		virtual ~BlocDeclaration() {}
 		void print(ostream& os) const;
+		map<string, double> getAllConstants();
 	};
 #endif

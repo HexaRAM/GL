@@ -4,6 +4,12 @@
 #include "../symbole/declaration/identificateur.h"
 #include <boost/regex.hpp>
 #include "../etat/etat0.h"
+#include "../symbole/ecriture.h"
+#include "../symbole/lecture.h"
+#include "../symbole/affectation.h"
+#include <deque>
+#include <algorithm>
+
 using namespace std;
 
  //     _              _                                 _          
@@ -400,9 +406,37 @@ void Automate::executeExecution()
     {
         cout << "# Warning : l'exécution n'a pas été demandé par l'utilisateur." << endl;
     }
+    
 
-    // TODO
-    // Jouer chaque instruction une par une et mettre à jour la map des variables lors d'opération (=)
+    BlocInstruction* blocInstruction = (this->programme)->getBlocInstruction() ;
+    deque<Instruction*> liste_instruction = blocInstruction->getListeInstruction();
+    reverse(liste_instruction.begin(), liste_instruction.end());
+
+    for(auto const &it:liste_instruction){
+       Affectation *aff = dynamic_cast<Affectation*> (it);
+       Lecture *lec = dynamic_cast<Lecture*> (it);
+       Ecriture *ecr = dynamic_cast<Ecriture*> (it);
+       if(aff != NULL){
+            cout<<"Affectation ";
+            cout<<"exp = " << *(aff->getExpression());
+            cout<<" id = " << *(aff->getIndentificateur());
+            cout<<endl;
+
+       }else if(lec != NULL){
+            cout<<"Lecture ";
+            cout<<"id = " << *(lec->getIndentificateur());
+            cout<<endl;
+       }else if(ecr != NULL){
+            cout<<"Ecriture ";
+            cout<<"exp = " << *(ecr->getExpression());
+            cout<<endl;
+       }
+    }
+
+   
+
+    cout<<"Nombre d'instructions = "<< liste_instruction.size() << endl;
+        
 }
 
 /**
@@ -417,6 +451,8 @@ void Automate::executeOptimisation()
 
     // TODO
     // construire la map (ident, val) avant de l'envoyer à eval
+    cout<<"Ziiiiiziiiiiiiiiiiiiii"<<endl;
+    programme->getAffectationsConstants();
 }
 
 Symbole* Automate::getNext()
