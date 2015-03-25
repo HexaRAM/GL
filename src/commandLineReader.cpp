@@ -35,11 +35,11 @@ CommandLineReader::CommandLineReader(int argc, char** argv)
     }
     else
     {
-        if (syntaxe_filename(argv[1]))
+        if (syntaxe_filename(argv[argc-1]))
         {
-            this->nomFichier = argv[1];
+            this->nomFichier = argv[argc-1];
 
-            for (unsigned int i=2; i<(unsigned int)argc;i++)
+            for (unsigned int i=1; i<(unsigned int)argc-1;i++)
             {
                 if (syntaxe_options(argv[i]))
                 {
@@ -82,7 +82,7 @@ CommandLineReader::CommandLineReader(int argc, char** argv)
                 cout << "# Nom fichier incorrecte : " << argv[1] << endl;
             #endif
                 // ostringstream oss(argv[1]);
-                string str(argv[1]);
+                string str(argv[argc-1]);
 
             cerr << "Erreur a l'ouverture du fichier " << str << endl; // a changer en argv[c-1]
         }
