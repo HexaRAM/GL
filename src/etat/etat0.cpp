@@ -30,6 +30,9 @@ bool Etat0::transition(Automate & automate, Symbole * s )
 			automate.decalage(s, new Etat2("2"));
 			break;
 		case ct :
+		case r:
+		case w:
+		case id:
 		case va :
 		case dollar :
 		{

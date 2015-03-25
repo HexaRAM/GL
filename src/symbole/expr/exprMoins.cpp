@@ -6,5 +6,5 @@ double ExprMoins::eval(const map<string, double> &valeurs) {
 }
 
 void ExprMoins::print(ostream& os) const {
-	os << *expr_gauche << " - " << *expr_droite;
+	os << *expr_gauche << "-" << *expr_droite;
 }
