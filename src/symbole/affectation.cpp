@@ -13,3 +13,7 @@ void Affectation::print(ostream& os) const {
 Expression* Affectation::getExpression(){
 	return expr;
 }
+
+Identificateur* Affectation::getIndentificateur(){
+	return id;
+}

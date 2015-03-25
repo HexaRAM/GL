@@ -4,7 +4,12 @@
 #include "../symbole/declaration/identificateur.h"
 #include <boost/regex.hpp>
 #include "../etat/etat0.h"
+#include "../symbole/ecriture.h"
+#include "../symbole/lecture.h"
+#include "../symbole/affectation.h"
 #include <deque>
+#include <algorithm>
+
 using namespace std;
 
  //     _              _                                 _          
@@ -401,13 +406,27 @@ void Automate::executeExecution()
 
     BlocInstruction* blocInstruction = (this->programme)->getBlocInstruction() ;
     deque<Instruction*> liste_instruction = blocInstruction->getListeInstruction();
+    reverse(liste_instruction.begin(), liste_instruction.end());
 
     for(auto const &it:liste_instruction){
        Affectation *aff = dynamic_cast<Affectation*> (it);
+       Lecture *lec = dynamic_cast<Lecture*> (it);
+       Ecriture *ecr = dynamic_cast<Ecriture*> (it);
        if(aff != NULL){
-            aff->getExpression()->print(cout);
+            cout<<"Affectation ";
+            cout<<"exp = " << *(aff->getExpression());
+            cout<<" id = " << *(aff->getIndentificateur());
+            cout<<endl;
+
+       }else if(lec != NULL){
+            cout<<"Lecture ";
+            cout<<"id = " << *(lec->getIndentificateur());
+            cout<<endl;
+       }else if(ecr != NULL){
+            cout<<"Ecriture ";
+            cout<<"exp = " << *(ecr->getExpression());
+            cout<<endl;
        }
-        
     }
 
    

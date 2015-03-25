@@ -5,7 +5,6 @@
 #include "affectation.h"
 #include "blocInstruction.h"
 #include "declaration/blocDeclaration.h"
-#include <deque>
 
 	class Programme : public Symbole {
 		protected:
