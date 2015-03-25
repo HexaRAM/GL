@@ -3,7 +3,7 @@
 
 #include "symbole.h"
 #include "instruction.h"
-
+#include "affectation.h"
 #include <deque>
 
 using namespace std;
@@ -16,5 +16,6 @@ using namespace std;
 			void addInstruction(Instruction* inst);
 			virtual ~BlocInstruction() {}
 			void print(ostream& os) const;
+			void getAffectationConstants();
 	};
 #endif
