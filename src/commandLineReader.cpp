@@ -25,14 +25,21 @@ CommandLineReader::CommandLineReader(int argc, char** argv)
         #ifdef DEBUG
             cout << "# Sans arguments" << endl;
         #endif
+        cerr << "Erreur, veuillez specifier des arguments" << endl <<
+        "  Utilisation :" << endl <<
+        "    ../lut [-p] [-a] [-e] [-o] source.lt" << endl <<
+        "      [-p] affiche le code source reconnu" << endl <<
+        "      [-a] analyse le programme de maniere statique" << endl <<
+        "      [-e] execute interactivement le programme" << endl <<
+        "      [-o] optimise les expressions et instructions" << endl;
     }
     else
     {
-        if (syntaxe_filename(argv[1]))
+        if (syntaxe_filename(argv[argc-1]))
         {
-            this->nomFichier = argv[1];
+            this->nomFichier = argv[argc-1];
 
-            for (unsigned int i=2; i<(unsigned int)argc;i++)
+            for (unsigned int i=1; i<(unsigned int)argc-1;i++)
             {
                 if (syntaxe_options(argv[i]))
                 {
@@ -74,6 +81,10 @@ CommandLineReader::CommandLineReader(int argc, char** argv)
             #ifdef DEBUG
                 cout << "# Nom fichier incorrecte : " << argv[1] << endl;
             #endif
+                // ostringstream oss(argv[1]);
+                string str(argv[argc-1]);
+
+            cerr << "Erreur a l'ouverture du fichier " << str << endl; // a changer en argv[c-1]
         }
     }
 }
