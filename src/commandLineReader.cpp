@@ -25,13 +25,8 @@ CommandLineReader::CommandLineReader(int argc, char** argv)
         #ifdef DEBUG
             cout << "# Sans arguments" << endl;
         #endif
-        cerr << "Erreur, veuillez specifier des arguments" << endl <<
-        "  Utilisation :" << endl <<
-        "    ../lut [-p] [-a] [-e] [-o] source.lt" << endl <<
-        "      [-p] affiche le code source reconnu" << endl <<
-        "      [-a] analyse le programme de maniere statique" << endl <<
-        "      [-e] execute interactivement le programme" << endl <<
-        "      [-o] optimise les expressions et instructions" << endl;
+        usage();
+        exit(1);
     }
     else
     {
@@ -81,10 +76,10 @@ CommandLineReader::CommandLineReader(int argc, char** argv)
             #ifdef DEBUG
                 cout << "# Nom fichier incorrecte : " << argv[1] << endl;
             #endif
-                // ostringstream oss(argv[1]);
-                string str(argv[argc-1]);
-
-            cerr << "Erreur a l'ouverture du fichier " << str << endl; // a changer en argv[c-1]
+            
+            string str(argv[argc-1]);
+            cerr << "Erreur a l'ouverture du fichier " << str << endl;
+            exit(1);
         }
     }
 }
@@ -112,7 +107,6 @@ Automate* CommandLineReader::createAutomate()
             getline(fichier, tmp);
             code += tmp;
         }
-        //(istreambuf_iterator<char>(fichier), istreambuf_iterator<char>());
         fichier.close();
 
         Automate* automate = new Automate(this->affichage, this->analyse, this->optimisation, this->execution, code);
@@ -121,6 +115,9 @@ Automate* CommandLineReader::createAutomate()
     return NULL;
 }
 
+/**
+ * @unused
+ */
 bool CommandLineReader::hasOptionUp(OPTIONS option)
 {
     switch (option)
@@ -174,11 +171,16 @@ void CommandLineReader::displayMode()
 /**
  * Private methods
  */
-bool CommandLineReader::syntaxe_id (const string& id)
+
+void CommandLineReader::usage()
 {
-    boost::regex re("(?!(^var$|^const$|^ecrire$|^lire$))^[a-zA-Z][a-zA-Z0-9]*$");
-    boost::cmatch matches;
-    return boost::regex_match(id.c_str(), matches, re);
+    cerr << "Erreur, veuillez specifier des arguments" << endl <<
+        "  Utilisation :" << endl <<
+        "    ../lut [-p] [-a] [-e] [-o] source.lt" << endl <<
+        "      [-p] affiche le code source reconnu" << endl <<
+        "      [-a] analyse le programme de maniere statique" << endl <<
+        "      [-e] execute interactivement le programme" << endl <<
+        "      [-o] optimise les expressions et instructions" << endl;
 }
 
 bool CommandLineReader::syntaxe_filename (const string& filename)
