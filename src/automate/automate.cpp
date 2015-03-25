@@ -4,6 +4,7 @@
 #include "../symbole/declaration/identificateur.h"
 #include <boost/regex.hpp>
 #include "../etat/etat0.h"
+#include <deque>
 using namespace std;
 
  //     _              _                                 _          
@@ -396,9 +397,23 @@ void Automate::executeExecution()
     {
         cout << "# Warning : l'exécution n'a pas été demandé par l'utilisateur." << endl;
     }
+    
 
-    // TODO
-    // Jouer chaque instruction une par une et mettre à jour la map des variables lors d'opération (=)
+    BlocInstruction* blocInstruction = (this->programme)->getBlocInstruction() ;
+    deque<Instruction*> liste_instruction = blocInstruction->getListeInstruction();
+
+    for(auto const &it:liste_instruction){
+       Affectation *aff = dynamic_cast<Affectation*> (it);
+       if(aff != NULL){
+            aff->getExpression()->print(cout);
+       }
+        
+    }
+
+   
+
+    cout<<"Nombre d'instructions = "<< liste_instruction.size() << endl;
+        
 }
 
 /**

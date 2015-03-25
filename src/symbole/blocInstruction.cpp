@@ -9,3 +9,6 @@ void BlocInstruction::print(ostream& os) const {
 		os << *it;
 	}
 }
+deque<Instruction*> BlocInstruction::getListeInstruction() {
+	return liste_instruction;
+}

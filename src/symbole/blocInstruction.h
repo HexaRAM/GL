@@ -14,6 +14,7 @@ using namespace std;
 		public:
 			BlocInstruction(): Symbole(5) {}
 			void addInstruction(Instruction* inst);
+			deque<Instruction*> getListeInstruction();
 			virtual ~BlocInstruction() {}
 			void print(ostream& os) const;
 	};
