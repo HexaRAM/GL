@@ -89,10 +89,11 @@ bool Automate::addVariable(Identificateur* const id)
     }
     else
     {
+
         // var doesn't exist
-        this->variables[name] = {0, false};
+        this->variables[name] = {-1, false, false};
         this->idents.insert(name);
-        id->linkToVar();
+
         return true;
     }
 }
@@ -113,7 +114,7 @@ bool Automate::addConstante(const string& name, int value)
 }
 
 // only var
-bool Automate::isVariableInstanciate(const string& name)
+bool Automate::isVariableSemanticInstanciated(const string& name)
 {
     map_var::iterator it = this->variables.find(name);
 
@@ -124,7 +125,7 @@ bool Automate::isVariableInstanciate(const string& name)
         return false;
     }
 
-    return it->second.instanciated;
+    return it->second.isSemanticInstanciated;
 }
 
 // only var
@@ -147,8 +148,43 @@ bool Automate::isIdentificateurDeclared(const string& name)
     return false;
 }
 
+bool Automate::isVariable(const string& name)
+{
+    if (this->variables.find(name) != this->variables.end())
+    {
+        return true;
+    }
+    return false;
+}
+
+void Automate::semanticInstanciation(const string& name)
+{
+    if (this->idents.find(name) == this->idents.end())
+    {
+        // idents `name` doesn't exist
+        cout << "# La variable " << name << " n'existe pas." << endl;
+        return;
+    }
+
+    map_var::iterator it = variables.find(name);
+
+    if (it == variables.end())
+    {
+        // var doesn't exist
+        cout << "# La variable " << name << " n'existe pas." << endl;
+        return;
+    }
+
+    // var exist
+    it->second.isSemanticInstanciated = true;
+}
+
 bool Automate::instanciateVariable(const string& name, int value)
 {
+
+    #ifdef DEBUG
+        cout << "On affecte " << value << " à la variable " << name << endl;
+    #endif
 
     if (this->idents.find(name) == this->idents.end())
     {
@@ -170,10 +206,7 @@ bool Automate::instanciateVariable(const string& name, int value)
     it->second.instanciated = true;
 
     // si on ne précise pas de valeur (-1 est la valeur par défaut, on n'ajoute pas la valeur dans la map) => pour que l'analyse sémantique n'ait pas à tout détruire pour effectuer ses tests.
-    if (value != -1)
-    {
-        it->second.value = value;
-    }
+    it->second.value = value;
     return true;
 }
 
@@ -197,7 +230,13 @@ void Automate::displayMemory()
         {
             cout << "non instanciée";
         }
-        cout << ")" << endl;
+        cout << ")";
+
+        if (it.second.isSemanticInstanciated)
+        {
+            cout << " but semantic instanciated !";
+        }
+        cout << endl;
     }
 }
 
@@ -536,17 +575,16 @@ void Automate::executeAnalyse()
 
             for (auto const& ident : idents)
             {
-
                 string name = (string)*ident;
 
-                if (ident->isLinkedToVar())
+                if (this->isVariable(name))
                 {
                     // référence une variable
-                    if (!this->isVariableInstanciate(name))
+                    if (!this->isVariableSemanticInstanciated(name))
                     {
                         // variable non instanciée (voire non déclarée)
                         #ifdef DEBUG
-                            cout << "# La variable `" << name << "` n'a pas été instanciée." << endl;
+                            cout << "# La variable `" << name << "` au sein de l'expression `" << *expr << "` n'a pas été instanciée." << endl;
                         #endif
                         exit(1);
                     }
@@ -579,21 +617,63 @@ void Automate::executeAnalyse()
             }
 
             // on n'attribue pas la valeur à l'expression, par contre on check le bool comme quoi elle a été affectée
-            this->instanciateVariable(name);
+            this->semanticInstanciation(name);
 
         }
         else if (lecture != NULL)
         {
             // c'est une lecture
 
-
             // get identificateur -> checker que c'est bien une variable et qu'elle a été déclarée
+            Identificateur* id = affectation->getIdentificateur();
+            string name = (string)(*id);
+
+            if (!this->isVariableDeclared(name))
+            {
+                #ifdef DEBUG
+                    cout << "# Le paramètre `" << name << "` au sein de l'instruction `" << *lecture << "` n'a pas été déclaré comme variable." << endl;
+                #endif
+                exit(1);
+            }
+
         }
         else if (ecriture != NULL)
         {
             // c'est une écriture
 
             // get expression -> récupérer tous les identificateurs de l'expression et checker s'ils existent et si pour les variables ils ont bien été instanciés
+            Expression* expr = ecriture->getExpression();
+            set<Identificateur*> idents = expr->getIdents();
+
+            for (auto const& ident : idents)
+            {
+
+                string name = (string)*ident;
+
+                if (this->isVariable(name))
+                {
+                    // référence une variable
+                    if (!this->isVariableSemanticInstanciated(name))
+                    {
+                        // variable non instanciée (voire non déclarée)
+                        #ifdef DEBUG
+                            cout << "# La variable `" << name << "` n'a pas été instanciée." << endl;
+                        #endif
+                        exit(1);
+                    }
+                }
+                else
+                {
+                    // référence autre chose : une constante ou rien du tout
+                    if (!this->isIdentificateurDeclared(name))
+                    {
+                        #ifdef DEBUG
+                            cout << "# L'identificateur `" << name << "` au sein de l'expression `" << *expr << "` n'a pas été déclarée." << endl;
+                        #endif
+                        exit(1);
+                    }
+                }
+            }
         }
         else
         {

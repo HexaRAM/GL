@@ -19,6 +19,7 @@ using namespace std;
 struct variable_s {
     int value;
     bool instanciated;
+    bool isSemanticInstanciated;
 };
 
 struct constante_s {
@@ -59,7 +60,8 @@ class Automate
         void execute(OPTIONS option = CHECKED);
         bool addVariable(Identificateur* const id);
         bool addConstante(const string& name, int value);
-        bool instanciateVariable(const string& name, int value = -1);
+        void semanticInstanciation(const string& name);
+        bool instanciateVariable(const string& name, int value);
         void displayMemory();
         void decalage(Symbole* s, Etat* e);
         void reduction(Symbole* s);
@@ -97,9 +99,10 @@ class Automate
         deque<Etat*> states;
 
         // semantic
-        bool isVariableInstanciate(const string& name);
+        bool isVariableSemanticInstanciated(const string& name);
         bool isVariableDeclared(const string& name);
         bool isIdentificateurDeclared(const string& name);
+        bool isVariable(const string & name);
 
         // Lexer
         string code;
