@@ -14,6 +14,6 @@ Expression* Affectation::getExpression(){
 	return expr;
 }
 
-Identificateur* Affectation::getIndentificateur(){
+Identificateur* Affectation::getIdentificateur(){
 	return id;
 }

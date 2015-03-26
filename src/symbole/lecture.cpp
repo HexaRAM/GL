@@ -9,6 +9,6 @@ Lecture::Lecture(Identificateur* ident) {
 void Lecture::print(ostream& os) const {
 	os<<"lire " << *id << ";" << endl;
 }
-Identificateur* Lecture::getIndentificateur(){
+Identificateur* Lecture::getIdentificateur(){
 	return id;
 }
