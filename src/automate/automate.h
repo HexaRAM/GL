@@ -65,10 +65,9 @@ class Automate
         void displayMemory();
         void decalage(Symbole* s, Etat* e);
         void reduction(Symbole* s);
-        void reduction(int nbSymboles, Symbole* s);
-        //string getNext(); 
+        void reduction(int nbSymboles, Symbole* s); 
         Symbole* getNext();
-	Symbole* getNthSymbole(int n);
+	    Symbole* getNthSymbole(int n);
 
         // manage deque
         void updateState(Etat* e);
@@ -119,7 +118,7 @@ class Automate
         void executeAnalyse();
         void executeOptimisation();
         void executeExecution();
-        void executeSyntaxicalAnalyse();
+        bool executeSyntaxicalAnalyse();
 
         // debug
         void displayState();

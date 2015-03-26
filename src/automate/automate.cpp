@@ -244,7 +244,14 @@ void Automate::execute(OPTIONS option)
 {
 
     // analyse syntaxique
-    executeSyntaxicalAnalyse();
+    bool ok = executeSyntaxicalAnalyse();
+
+    if (!ok)
+    {
+        cout << "# Erreur pendant l'analyse syntaxique !" << endl;
+        exit(1);
+    }
+    cout << "LA SYNTAXE EST TIP TOP <3" << endl;
 
     switch (option)
     {
@@ -253,28 +260,35 @@ void Automate::execute(OPTIONS option)
         break;
 
         case CHECKED:
+
+            if (this->analyse)
+            {
+                // analyse statique (-a)
+                executeAnalyse();
+                cout << "LA SEMANTIQUE EST TIP TOP <3" << endl;
+            }
+
             if (this->optimisation)
             {
-                // optimisation
+                // optimisation (-o)
                 // modifier directement les instructions
                 executeOptimisation();
             }
 
-            if (this->analyse)
-            {
-                // analyse statique
-                executeAnalyse();
-            }
-
             if (this->affichage)
             {
-                // affiche le programme (optimisé si -o)
+                // affiche le programme (-p) [optimisé si -o]
                 executeAffichage();
             }
 
             if (this->execution)
             {
-                // execute le programme
+                // execute le programme (-e)
+                if (!this->analyse)
+                {
+                    // inutile d'exécuter le programme si la sémantique n'est pas bonne
+                    executeAnalyse();
+                }
                 executeExecution();
             }
         break;
@@ -420,7 +434,7 @@ void Automate::validateSyntaxe()
     syntaxeChecked = true;
 }
 
-void Automate::executeSyntaxicalAnalyse()
+bool Automate::executeSyntaxicalAnalyse()
 {
     // analyse syntaxique : analyseur ascendant
 
@@ -433,18 +447,10 @@ void Automate::executeSyntaxicalAnalyse()
     if (syntaxeChecked)
     {
         // récupérer le programme en haut de la pile
-        cout << "LA SYNTAXE EST TIP TOP <3" << endl;
         programme = (Programme*) symboles.front();
+        return true;
     }
-    else
-    {
-        cout << "# Erreur pendant l'analyse !" << endl;
-    }
-
-    // --> impossible to reuse objects in Lexer because same objects often don't have the same ident symbole number while processing syntaxic analysis
-
-    // merge identificateur with the same ident HERE ? No necessary
-
+    return false;
 }
 void Automate::executeAll()
 {
@@ -460,11 +466,17 @@ void Automate::executeAffichage()
     {
         cout << *programme;
     }
-    // Affichage des map de constantes et de variables (sous forme de code) --> var x; var y; const n = 3; const m = 12;
 }
 
 /**
  * Analyse sémantique
+ * Pseudo algorithme :
+ * Avec `programme`, faire l'analyse sémantique !
+ *      -> Faire toutes les déclarations (utiliser les méthodes déjà codées)
+ *      -> Faire toutes les instructions :
+ *              ** read : s'assurer que la variable a bien été déclarée
+ *              ** write : s'assurer que l'expression a bien été déclarée (& instanciée dans le cas d'une variable)
+ *              ** opération = : s'assurer que le membre de gauche est bien une variable DECLAREE / s'assurer que tous les membres de droites sont soit des constantes, soit des variables déclarées et instanciées !!
  */
 void Automate::executeAnalyse()
 {
@@ -625,8 +637,13 @@ void Automate::executeAnalyse()
             // c'est une lecture
 
             // get identificateur -> checker que c'est bien une variable et qu'elle a été déclarée
-            Identificateur* id = affectation->getIdentificateur();
+
+            Identificateur* id = lecture->getIdentificateur();
             string name = (string)(*id);
+
+            // #ifdef DEBUG
+            //     cout << "L'identificateur associé à la lecture est : " << *id << endl;
+            // #endif
 
             if (!this->isVariableDeclared(name))
             {
@@ -644,6 +661,15 @@ void Automate::executeAnalyse()
             // get expression -> récupérer tous les identificateurs de l'expression et checker s'ils existent et si pour les variables ils ont bien été instanciés
             Expression* expr = ecriture->getExpression();
             set<Identificateur*> idents = expr->getIdents();
+
+            // #ifdef DEBUG
+            //     cout << "Les identificateurs de l'écriture `" << *ecriture << "` sont (taille=" << idents.size() << ") : ";
+            //     for (auto const& ident : idents)
+            //     {
+            //         cout << *ident << " ";
+            //     }
+            //     cout << endl;
+            // #endif
 
             for (auto const& ident : idents)
             {
@@ -681,15 +707,8 @@ void Automate::executeAnalyse()
         }
     }
 
-    /**
-     * TODO : 
-     * Avec `programme`, faire l'analyse sémantique !
-     *      -> Faire toutes les déclarations (utiliser les méthodes déjà codées)
-     *      -> Faire toutes les instructions :
-     *              ** read : s'assurer que la variable a bien été déclarée
-     *              ** write : s'assurer que l'expression a bien été déclarée (& instanciée dans le cas d'une variable)
-     *              ** opération = : s'assurer que le membre de gauche est bien une variable DECLAREE / s'assurer que tous les membres de droites sont soit des constantes, soit des variables déclarées et instanciées !!
-     */
+
+
 }
 
 /**
