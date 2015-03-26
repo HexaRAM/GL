@@ -6,3 +6,9 @@ double Expression::eval(const map<string, double> &valeurs) {
 void Expression::print(ostream& os) const {
 	// expression inconnue
 }
+
+set<Identificateur*> Expression::getIdents() const
+{
+    set<Identificateur*> idents;
+    return idents;
+}

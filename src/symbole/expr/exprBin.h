@@ -15,5 +15,6 @@
 			virtual void print(ostream& os) const;
 			Expression* getExprGauche();
 			Expression* getExprDroite();
+			set<Identificateur*>  getIdents() const;
 	};
 #endif

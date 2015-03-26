@@ -3,7 +3,10 @@
 
 #include "../symbole.h"
 #include <map>
+#include <set>
 #include <string>
+
+class Identificateur; // cross reference
 
 using namespace std;
 
@@ -17,7 +20,7 @@ using namespace std;
             virtual void setT() { ident = 8; }
 			virtual double eval(const map<string, double> &valeurs);
 			virtual void print(ostream& os) const;
-
+            virtual set<Identificateur*>  getIdents() const;
 	};
 	
 #endif

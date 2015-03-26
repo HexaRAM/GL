@@ -16,5 +16,6 @@ using namespace std;
 		void declarationFinie() { ident = 2; }
 		virtual ~DeclarationVar() {}
 		void print(ostream& os) const;
+		vector<Identificateur*> getIdents() { return liste_identif; }
 	};
 #endif

@@ -45,6 +45,7 @@ class Lexer
         Symbole* getNext(string& buff);
         static string regex[];
     private:
+        set<Identificateur*> idents;
 };
 
 

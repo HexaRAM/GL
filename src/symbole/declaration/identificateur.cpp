@@ -15,3 +15,11 @@ void Identificateur::print(ostream& os) const
 {
 	os<<nom;
 }
+
+set<Identificateur*> Identificateur::getIdents() const
+{
+    set<Identificateur*> idents;
+    Identificateur* id = (Identificateur*) this;
+    idents.insert(id);
+    return idents;
+}

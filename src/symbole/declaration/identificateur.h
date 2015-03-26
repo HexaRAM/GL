@@ -4,6 +4,7 @@
 #include "../expr/expression.h"
 #include <string>
 #include <map>
+#include <set>
 
 using namespace std;
 
@@ -16,6 +17,8 @@ using namespace std;
 			double eval(const map<string, double> &valeurs);
 			virtual ~Identificateur() {}
 			void print(ostream& os) const;
+			operator string() const { return nom; }
+			set<Identificateur*> getIdents() const;
 
 	};
 #endif

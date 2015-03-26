@@ -17,6 +17,7 @@
 			virtual ~Programme() {}
 			void print(ostream& os) const;
 			void getAffectationsConstants();
+			BlocDeclaration* getBlocDeclaration() { return bloc_declaration; }
 
 	};
 #endif
