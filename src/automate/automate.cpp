@@ -7,8 +7,9 @@
 #include "../symbole/ecriture.h"
 #include "../symbole/lecture.h"
 #include "../symbole/affectation.h"
-#include <deque>
-#include <algorithm>
+#include "../symbole/declaration/declarationVar.h"
+#include "../symbole/declaration/declarationConst.h"
+#include <vector>
 
 using namespace std;
 
@@ -274,12 +275,14 @@ void Automate::popAndDeleteState()
 
 void Automate::decalage(Symbole* s, Etat* e)
 {
-    //cout << "\t-> Décalage " << *e << endl;
+    #ifdef DEBUG
+        cout << "\t-> Décalage " << *e << endl;
+    #endif
     symboles.push_front(s);
     this->updateState(e);
     current_symbole = getNext();
 
-    //this->displayState();
+    this->displayState();
 
     this->current_state->transition(*this, current_symbole);
 }
@@ -295,7 +298,7 @@ void Automate::reduction(Symbole* newSymbole)
 
     this->updateState(new_state); // mise à jour de l'état courant
 
-    //this->displayState();
+    this->displayState();
 
     current_state->transition(*this, current_symbole);
 }
@@ -306,7 +309,9 @@ void Automate::reduction(Symbole* newSymbole)
  */
 void Automate::reduction(int nbSymboles, Symbole* newSymbole)
 {
-    //cout << "\t-> Réduction : création de " << *newSymbole << " (nbSymboles=" << nbSymboles << ")" << endl;
+    #ifdef DEBUG
+        cout << "\t-> Réduction : création de " << *newSymbole << " (nbSymboles=" << nbSymboles << ")" << endl;
+    #endif
 
     // on dépile
     for(int i = 0; i< nbSymboles; ++i)
@@ -354,6 +359,10 @@ void Automate::executeSyntaxicalAnalyse()
         cout << "# Erreur pendant l'analyse !" << endl;
     }
 
+    // --> impossible to reuse objects in Lexer because same objects often don't have the same ident symbole number while processing syntaxic analysis
+
+    // merge identificateur with the same ident HERE ?
+
 }
 void Automate::executeAll()
 {
@@ -382,9 +391,110 @@ void Automate::executeAnalyse()
         cout << "# Warning : l'analyse n'a pas été demandé par l'utilisateur." << endl;
     }
 
+    vector<Declaration*> liste_declaration = this->programme ->getBlocDeclaration()->getListeDeclaration();
+    vector<Instruction*> liste_instruction = this->programme->getBlocInstruction()->getListeInstruction();
+
+
+    // on parcourt toutes les déclarations
+    for (auto const& it : liste_instruction)
+    {
+        DeclarationVar* declaVar = dynamic_cast<DeclarationVar*> (it);
+        DeclarationConst* declaConst = dynamic_cast<DeclarationConst*> (it);
+
+        if (declaVar != NULL)
+        {
+            // c'est une déclaration de variable(s)
+            vector<Identificateur*> idents = declaVar->getIdents();
+
+            for (auto const& itvar : idents)
+            {
+                string ident = *itvar;
+                bool ok = this->addVariable(ident);
+                if (!ok)
+                {   
+                    #ifdef DEBUG
+                        cout << "# La variable " << ident << " a déjà été déclarée." << endl;
+                    #endif
+                    exit(1);
+                }
+            }
+
+        }
+        else if (declaConst != NULL)
+        {
+            // c'est une déclaration de constante(s)
+            vector<constante> consts = declaConst->getConstantes();
+
+            for (auto const& itconst : consts)
+            {
+                string ident = *(itconst.ident);
+                int value = *(itconst.value);
+                bool ok = this->addConstante(ident, value);
+                if (!ok)
+                {
+                    #ifdef DEBUG
+                        cout << "# La constante " << ident << " (value=" << value << ") a déjà été déclarée." << endl;
+                    #endif
+                    exit(1);
+                }
+            }
+        }
+        else
+        {
+            // ???
+        }
+    }
+
+    cout << "Parcours des instructions (" << liste_instruction.size() << ") !" << endl;
+
+    // on parcourt toutes les instructions
+    for (auto const& it : liste_instruction)
+    {
+        Affectation* affectation = dynamic_cast<Affectation*> (it);
+        Lecture* lecture = dynamic_cast<Lecture*> (it);
+        Ecriture* ecriture = dynamic_cast<Ecriture*> (it);
+
+        // expression -> faire une fonction récursive (ou itérative, osef) pour récupérer tous les identificateurs d'une expression !
+
+        if (affectation != NULL)
+        {
+            // c'est une affectation
+
+            // get identificateur -> checker que c'est bien une variable et qu'elle a été déclarée
+
+            // get expression -> récupérer tous les identificateurs de l'expression et checker s'ils existent et si pour les variables ils ont bien été instanciés
+            Expression* expr = affectation->getExpression();
+            set<Identificateur*> idents = expr->getIdents();
+
+            cout << "Les identificateurs de " << *affectation << " sont (taille=" << idents.size() << ") : " << endl;
+            for (auto const& ident : idents)
+            {
+                cout << *ident << " ";
+            }
+            cout << endl;
+
+        }
+        else if (lecture != NULL)
+        {
+            // c'est une lecture
+
+            // get indetificateur -> checker que c'est bien une variable et qu'elle a été déclarée
+        }
+        else if (ecriture != NULL)
+        {
+            // c'est une écriture
+
+            // get expression -> récupérer tous les identificateurs de l'expression et checker s'ils existent et si pour les variables ils ont bien été instanciés
+        }
+        else
+        {
+            // ???
+        }
+    }
+
     /**
-     * TODO : ajouter un Programme* program dans les attributs qui contient l'ensemble du programme analysé par l'automate ascendant
-     * Avec `program`, faire l'analyse sémantique !
+     * TODO : 
+     * Avec `programme`, faire l'analyse sémantique !
      *      -> Faire toutes les déclarations (utiliser les méthodes déjà codées)
      *      -> Faire toutes les instructions :
      *              ** read : s'assurer que la variable a bien été déclarée
@@ -402,11 +512,9 @@ void Automate::executeExecution()
     {
         cout << "# Warning : l'exécution n'a pas été demandé par l'utilisateur." << endl;
     }
-    
 
     BlocInstruction* blocInstruction = (this->programme)->getBlocInstruction() ;
-    deque<Instruction*> liste_instruction = blocInstruction->getListeInstruction();
-    reverse(liste_instruction.begin(), liste_instruction.end());
+    vector<Instruction*> liste_instruction = blocInstruction->getListeInstruction();
 
     for(auto const &it:liste_instruction){
        Affectation *aff = dynamic_cast<Affectation*> (it);
@@ -713,7 +821,25 @@ Symbole* Lexer::getNext(string& buff)
     	}
     	break;
     	case 15:
+        {
+            /*
+            retour = NULL;
+            for (auto const& it : this->idents)
+            {
+                if ((string)*it == buffer)
+                {
+                    retour = (Identificateur*)it;
+                    break;
+                }
+            }
+
+            if (retour == NULL)
+            {
+                retour = new Identificateur(buffer);
+                this->idents.insert((Identificateur*)retour);
+            }*/
             retour = new Identificateur(buffer);
+        }
     	break;
     	default:
             // error

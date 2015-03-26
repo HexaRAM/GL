@@ -5,17 +5,17 @@
 #include "expr/exprBin.h"
 #include "instruction.h"
 #include "affectation.h"
-#include <deque>
+#include <vector>
 
 using namespace std;
 
 	class BlocInstruction : public Symbole {
 		protected:
-			deque<Instruction*> liste_instruction;
+			vector<Instruction*> liste_instruction;
 		public:
 			BlocInstruction(): Symbole(5) {}
 			void addInstruction(Instruction* inst);
-			deque<Instruction*> getListeInstruction();
+			vector<Instruction*> getListeInstruction();
 			virtual ~BlocInstruction() {}
 			void print(ostream& os) const;
 			void getAffectationConstants();

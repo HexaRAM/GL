@@ -23,9 +23,10 @@ class CommandLineReader
         bool execution;
         string nomFichier;
 
-        bool syntaxe_id (const string& id);
         bool syntaxe_filename (const string& filename);
         bool syntaxe_options (const string& option);
+
+        void usage(); // affiche les usages du programme
 };
 
 #endif

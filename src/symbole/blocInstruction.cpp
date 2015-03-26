@@ -1,7 +1,7 @@
 #include "blocInstruction.h"
 
 void BlocInstruction::addInstruction(Instruction* inst){
-	liste_instruction.push_front(inst);
+	liste_instruction.push_back(inst);
 }
 
 
@@ -12,7 +12,7 @@ void BlocInstruction::print(ostream& os) const {
 	}
 }
 
-deque<Instruction*> BlocInstruction::getListeInstruction() {
+vector<Instruction*> BlocInstruction::getListeInstruction() {
 	return liste_instruction;
 }
 

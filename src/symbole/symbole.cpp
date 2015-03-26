@@ -7,6 +7,6 @@ ostream& operator<<(ostream& os, const Symbole& dt){
 
 void Symbole::print(ostream& os) const
 {
-    os << "SYMBOLE D'ORIGINE INCONNU" << endl;
+    //os << "SYMBOLE D'ORIGINE INCONNU" << endl;
 	os << ident;
 }
