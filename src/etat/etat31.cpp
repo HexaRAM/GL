@@ -16,8 +16,8 @@ bool Etat31::transition(Automate & automate, Symbole * s ){
 		{
 			//R23 : OA -> -
 			int nbSymboles = 1;
-			oa* s = new oa("-");
-			automate.reduction(nbSymboles,s);
+			oa* new_symbole = new oa("-");
+			automate.reduction(nbSymboles, new_symbole);
 			break;
 		}
 			break;
