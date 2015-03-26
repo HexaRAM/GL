@@ -2,5 +2,5 @@ const b=3;
 var z;
 const n=3, u=12222;
 a := (3+4)*5;
-ecrire a*(b+2053);
-lire a;
+lire b;
+ecrire b;

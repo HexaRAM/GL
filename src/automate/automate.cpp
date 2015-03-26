@@ -516,30 +516,58 @@ void Automate::executeExecution()
     BlocInstruction* blocInstruction = (this->programme)->getBlocInstruction() ;
     vector<Instruction*> liste_instruction = blocInstruction->getListeInstruction();
 
+    // Je construis une map dont je besion pour eval
+    map<string, double> map_val;
+    
+    // Je rajoute à ma map les valeurs des variables et des constantes (celles qui sont dans le bloc déclaration)
+    for(auto it:variables) {
+        map_val[it.first] = it.second.value;
+    }
+
+    for(auto it:constantes) {
+        map_val[it.first] = it.second.value;
+    }
+    
+
+    //cout<<variables.size()<<endl;
+    //cout<<constantes.size()<<endl;
+    //cout<<map_val.size()<<endl;
+
     for(auto const &it:liste_instruction){
        Affectation *aff = dynamic_cast<Affectation*> (it);
        Lecture *lec = dynamic_cast<Lecture*> (it);
        Ecriture *ecr = dynamic_cast<Ecriture*> (it);
+
        if(aff != NULL){
-            cout<<"Affectation ";
-            cout<<"exp = " << *(aff->getExpression());
-            cout<<" id = " << *(aff->getIdentificateur());
-            cout<<endl;
+            cout << "----------------------" << endl;
+            //TODO addVariable()
+
+            double valExpr = (aff->getExpression())->eval(map_val);
+
+            map_val[*(aff->getIdentificateur())] = valExpr;
+            cout << *aff << "AFF: La variable '" << *(aff->getIdentificateur()) <<"' a la valeur " << valExpr << endl;
+            cout << "La taille de ma map: " << map_val.size() << endl;
 
        }else if(lec != NULL){
-            cout<<"Lecture ";
-            cout<<"id = " << *(lec->getIdentificateur());
-            cout<<endl;
+            cout << "----------------------"  << endl;
+            cout << *lec << "LEC: Je lis une valeur pour la variable '" <<  *(lec->getIdentificateur()) << "'" << endl;
+            
+            double val = 0; 
+            cin >> val;
+
+            cout << "J'ai lu " << *(lec->getIdentificateur()) << " = " <<val << endl;
+
+            //Je rajoute dans ma map la nouvelle valeur de la var
+            map_val[*(lec->getIdentificateur())] = val;
+            cout << "La taille de ma map: " << map_val.size() << endl;
+            //TODO addVariable()
+            
        }else if(ecr != NULL){
-            cout<<"Ecriture ";
-            cout<<"exp = " << *(ecr->getExpression());
-            cout<<endl;
+            cout << "----------------------" << endl;
+            cout << *ecr << "J'ecris: " << ecr->getExpression()->eval(map_val) << endl;
        }
     }
 
-   
-
-    cout<<"Nombre d'instructions = "<< liste_instruction.size() << endl;
         
 }
 
