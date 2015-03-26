@@ -1,4 +1,7 @@
 #!/bin/bash
+(cd Tests && ./mktest.sh)
+
+exit 0
 
 echo "-----------------------------------------------------------"
 echo "Tests pour le binome : H4412"
