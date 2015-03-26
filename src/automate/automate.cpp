@@ -359,6 +359,10 @@ void Automate::executeSyntaxicalAnalyse()
         cout << "# Erreur pendant l'analyse !" << endl;
     }
 
+    // --> impossible to reuse objects in Lexer because same objects often don't have the same ident symbole number while processing syntaxic analysis
+
+    // merge identificateur with the same ident HERE ?
+
 }
 void Automate::executeAll()
 {
@@ -818,12 +822,13 @@ Symbole* Lexer::getNext(string& buff)
     	break;
     	case 15:
         {
-            /*retour = NULL;
+            /*
+            retour = NULL;
             for (auto const& it : this->idents)
             {
                 if ((string)*it == buffer)
                 {
-                    retour = it;
+                    retour = (Identificateur*)it;
                     break;
                 }
             }
