@@ -59,7 +59,7 @@ class Automate
         void execute(OPTIONS option = CHECKED);
         bool addVariable(Identificateur* const id);
         bool addConstante(const string& name, int value);
-        bool instanciateVariable(const string& name, int value);
+        bool instanciateVariable(const string& name, int value = -1);
         void displayMemory();
         void decalage(Symbole* s, Etat* e);
         void reduction(Symbole* s);

@@ -567,18 +567,19 @@ void Automate::executeAnalyse()
             // Si on a survécu jusqu'ici, c'est que l'expression est correcte sémantiquement
 
             // get identificateur -> checker que c'est bien une variable et qu'elle a été déclarée
-            //Identificateur* id = affectation->getIdentificateur();
-            // string name = (string)(*id);
+            Identificateur* id = affectation->getIdentificateur();
+            string name = (string)(*id);
 
-            // if (!this->isVariableDeclared(name))
-            // {
-            //     #ifdef DEBUG
-            //         cout << "# La partie gauche (variable) " << name << " au sein de l'instruction `" << *affectation << "` n'a pas été déclarée." << endl;
-            //         exit(1);
-            // }
+            if (!this->isVariableDeclared(name))
+            {
+                #ifdef DEBUG
+                    cout << "# La partie gauche `" << name << "` au sein de l'instruction `" << *affectation << "` n'a pas été déclarée comme variable." << endl;
+                #endif
+                exit(1);
+            }
 
             // on n'attribue pas la valeur à l'expression, par contre on check le bool comme quoi elle a été affectée
-            // this->instanciateVariable(name);
+            this->instanciateVariable(name);
 
         }
         else if (lecture != NULL)
@@ -586,7 +587,7 @@ void Automate::executeAnalyse()
             // c'est une lecture
 
 
-            // get indentificateur -> checker que c'est bien une variable et qu'elle a été déclarée
+            // get identificateur -> checker que c'est bien une variable et qu'elle a été déclarée
         }
         else if (ecriture != NULL)
         {
