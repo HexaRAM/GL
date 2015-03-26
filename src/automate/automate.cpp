@@ -77,8 +77,10 @@ Automate::~Automate()
 /**
  * Public methods
  */
-bool Automate::addVariable(const string& name)
+bool Automate::addVariable(Identificateur* const id)
 {
+    string name = (string)(*id);
+
     if (this->idents.find(name) != this->idents.end())
     {
         // var already exists
@@ -90,6 +92,7 @@ bool Automate::addVariable(const string& name)
         // var doesn't exist
         this->variables[name] = {0, false};
         this->idents.insert(name);
+        id->linkToVar();
         return true;
     }
 }
@@ -107,6 +110,41 @@ bool Automate::addConstante(const string& name, int value)
     this->constantes[name] = {value};
     this->idents.insert(name);
     return true;
+}
+
+// only var
+bool Automate::isVariableInstanciate(const string& name)
+{
+    map_var::iterator it = this->variables.find(name);
+
+    if (it == this->variables.end())
+    {
+        // variable `name` doesn't exist
+        cout << "# La variable " << name << " n'existe pas." << endl;
+        return false;
+    }
+
+    return it->second.instanciated;
+}
+
+// only var
+bool Automate::isVariableDeclared(const string& name)
+{
+    if (this->variables.find(name) != this->variables.end())
+    {
+        return true;
+    }
+    return false;
+}
+
+// const or var
+bool Automate::isIdentificateurDeclared(const string& name)
+{
+    if (this->idents.find(name) != this->idents.end())
+    {
+        return true;
+    }
+    return false;
 }
 
 bool Automate::instanciateVariable(const string& name, int value)
@@ -130,7 +168,12 @@ bool Automate::instanciateVariable(const string& name, int value)
 
     // var exist
     it->second.instanciated = true;
-    it->second.value = value;
+
+    // si on ne précise pas de valeur (-1 est la valeur par défaut, on n'ajoute pas la valeur dans la map) => pour que l'analyse sémantique n'ait pas à tout détruire pour effectuer ses tests.
+    if (value != -1)
+    {
+        it->second.value = value;
+    }
     return true;
 }
 
@@ -361,7 +404,7 @@ void Automate::executeSyntaxicalAnalyse()
 
     // --> impossible to reuse objects in Lexer because same objects often don't have the same ident symbole number while processing syntaxic analysis
 
-    // merge identificateur with the same ident HERE ?
+    // merge identificateur with the same ident HERE ? No necessary
 
 }
 void Automate::executeAll()
@@ -391,12 +434,24 @@ void Automate::executeAnalyse()
         cout << "# Warning : l'analyse n'a pas été demandé par l'utilisateur." << endl;
     }
 
+    #ifdef DEBUG
+        cout << "------------------------------" << endl;
+
+        cout << "\t###\tDébut de l'analyse sémantique (option -a)\t###" << endl;
+    #endif
+
+
+
     vector<Declaration*> liste_declaration = this->programme ->getBlocDeclaration()->getListeDeclaration();
     vector<Instruction*> liste_instruction = this->programme->getBlocInstruction()->getListeInstruction();
 
+    #ifdef DEBUG
+        cout << "Parcours des déclarations (" << liste_declaration.size() << ") !" << endl;
+    #endif
+
 
     // on parcourt toutes les déclarations
-    for (auto const& it : liste_instruction)
+    for (auto const& it : liste_declaration)
     {
         DeclarationVar* declaVar = dynamic_cast<DeclarationVar*> (it);
         DeclarationConst* declaConst = dynamic_cast<DeclarationConst*> (it);
@@ -409,7 +464,7 @@ void Automate::executeAnalyse()
             for (auto const& itvar : idents)
             {
                 string ident = *itvar;
-                bool ok = this->addVariable(ident);
+                bool ok = this->addVariable(itvar);
                 if (!ok)
                 {   
                     #ifdef DEBUG
@@ -445,7 +500,13 @@ void Automate::executeAnalyse()
         }
     }
 
-    cout << "Parcours des instructions (" << liste_instruction.size() << ") !" << endl;
+    #ifdef DEBUG
+        this->displayMemory();
+
+        cout << "------------------------------" << endl;
+
+        cout << "Parcours des instructions (" << liste_instruction.size() << ") !" << endl;
+    #endif
 
     // on parcourt toutes les instructions
     for (auto const& it : liste_instruction)
@@ -460,25 +521,72 @@ void Automate::executeAnalyse()
         {
             // c'est une affectation
 
-            // get identificateur -> checker que c'est bien une variable et qu'elle a été déclarée
-
-            // get expression -> récupérer tous les identificateurs de l'expression et checker s'ils existent et si pour les variables ils ont bien été instanciés
+            // get expression -> récupérer tous les identificateurs (get idents) de l'expression et checker s'ils existent (déclarées) et si pour les variables ils ont bien été instanciés
             Expression* expr = affectation->getExpression();
             set<Identificateur*> idents = expr->getIdents();
 
-            cout << "Les identificateurs de " << *affectation << " sont (taille=" << idents.size() << ") : " << endl;
+            // #ifdef DEBUG
+            //     cout << "Les identificateurs de l'affectation `" << *affectation << "` sont (taille=" << idents.size() << ") : ";
+            //     for (auto const& ident : idents)
+            //     {
+            //         cout << *ident << " ";
+            //     }
+            //     cout << endl;
+            // #endif
+
             for (auto const& ident : idents)
             {
-                cout << *ident << " ";
+
+                string name = (string)*ident;
+
+                if (ident->isLinkedToVar())
+                {
+                    // référence une variable
+                    if (!this->isVariableInstanciate(name))
+                    {
+                        // variable non instanciée (voire non déclarée)
+                        #ifdef DEBUG
+                            cout << "# La variable `" << name << "` n'a pas été instanciée." << endl;
+                        #endif
+                        exit(1);
+                    }
+                }
+                else
+                {
+                    // référence autre chose : une constante ou rien du tout
+                    if (!this->isIdentificateurDeclared(name))
+                    {
+                        #ifdef DEBUG
+                            cout << "# L'identificateur `" << name << "` au sein de l'expression `" << *expr << "` n'a pas été déclarée." << endl;
+                        #endif
+                        exit(1);
+                    }
+                }
             }
-            cout << endl;
+
+            // Si on a survécu jusqu'ici, c'est que l'expression est correcte sémantiquement
+
+            // get identificateur -> checker que c'est bien une variable et qu'elle a été déclarée
+            //Identificateur* id = affectation->getIdentificateur();
+            // string name = (string)(*id);
+
+            // if (!this->isVariableDeclared(name))
+            // {
+            //     #ifdef DEBUG
+            //         cout << "# La partie gauche (variable) " << name << " au sein de l'instruction `" << *affectation << "` n'a pas été déclarée." << endl;
+            //         exit(1);
+            // }
+
+            // on n'attribue pas la valeur à l'expression, par contre on check le bool comme quoi elle a été affectée
+            // this->instanciateVariable(name);
 
         }
         else if (lecture != NULL)
         {
             // c'est une lecture
 
-            // get indetificateur -> checker que c'est bien une variable et qu'elle a été déclarée
+
+            // get indentificateur -> checker que c'est bien une variable et qu'elle a été déclarée
         }
         else if (ecriture != NULL)
         {

@@ -57,7 +57,7 @@ class Automate
         ~Automate();
         void displayBuffer();
         void execute(OPTIONS option = CHECKED);
-        bool addVariable(const string& name);
+        bool addVariable(Identificateur* const id);
         bool addConstante(const string& name, int value);
         bool instanciateVariable(const string& name, int value);
         void displayMemory();
@@ -95,6 +95,11 @@ class Automate
         Symbole* current_symbole;
         deque<Symbole*> symboles;
         deque<Etat*> states;
+
+        // semantic
+        bool isVariableInstanciate(const string& name);
+        bool isVariableDeclared(const string& name);
+        bool isIdentificateurDeclared(const string& name);
 
         // Lexer
         string code;

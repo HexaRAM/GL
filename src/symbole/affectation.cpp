@@ -7,7 +7,7 @@ Affectation::Affectation(Expression* expression, Identificateur* ident) {
 }
 
 void Affectation::print(ostream& os) const {
-	os << *id << " := " << *expr << ";" << endl;
+	os << *id << " := " << *expr << ";";
 }
 
 Expression* Affectation::getExpression(){

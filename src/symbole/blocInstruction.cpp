@@ -8,7 +8,7 @@ void BlocInstruction::addInstruction(Instruction* inst){
 
 void BlocInstruction::print(ostream& os) const {
 	for(auto const &it:liste_instruction){
-		os << *it;
+		os << *it << endl;
 	}
 }
 
