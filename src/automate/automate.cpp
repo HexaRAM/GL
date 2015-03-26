@@ -631,12 +631,12 @@ void Automate::executeExecution()
        if(aff != NULL){
             cout<<"Affectation ";
             cout<<"exp = " << *(aff->getExpression());
-            cout<<" id = " << *(aff->getIndentificateur());
+            cout<<" id = " << *(aff->getIdentificateur());
             cout<<endl;
 
        }else if(lec != NULL){
             cout<<"Lecture ";
-            cout<<"id = " << *(lec->getIndentificateur());
+            cout<<"id = " << *(lec->getIdentificateur());
             cout<<endl;
        }else if(ecr != NULL){
             cout<<"Ecriture ";
