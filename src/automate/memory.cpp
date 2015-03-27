@@ -194,6 +194,23 @@ bool Memory::isVariable(const string& name)
             cout << endl;
         }
     #endif
-        
+
     cout << *programme;
+}
+
+map<string, double> Memory::buildEvalMap()
+{
+    map<string, double> map_val;
+    
+    for (auto it : variables)
+    {
+        map_val[it.first] = it.second.value;
+    }
+    
+    for (auto it : constantes)
+    {
+        map_val[it.first] = it.second.value;
+    }
+    
+    return map_val;
 }

@@ -40,6 +40,7 @@ class Memory
         bool isVariable(const string & name);
 
         void displayMemory();
+        map<string, double> buildEvalMap();
 
         // methods related to programme
         inline vector<Declaration*> getDeclarations() { return programme->getBlocDeclaration()->getListeDeclaration(); }
