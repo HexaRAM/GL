@@ -8,9 +8,11 @@
 
 using namespace std;
 
-	class Identificateur : public Expression {
+	class Identificateur : public Expression 
+	{
 		protected:
 			string nom;
+			static set<string> idents;
 		public:
 			Identificateur(): Expression(104) {}
 			Identificateur(string str) : Expression(104), nom(str) {} 
@@ -19,6 +21,7 @@ using namespace std;
 			void print(ostream& os) const;
 			operator string() const { return nom; }
 			set<Identificateur*> getIdents() const;
+			static bool checkDouble(const string& name);
 
 
 	};

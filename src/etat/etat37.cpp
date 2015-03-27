@@ -20,6 +20,13 @@ bool Etat37::transition(Automate& automate, Symbole* s ){
 			DeclarationConst* newConst= new DeclarationConst();
 			newConst->addConst(newId, newNum);
 
+			// check doublons
+			bool ok = Identificateur::checkDouble((string)*newId);
+			if (!ok)
+			{
+				return false;
+			}
+
 			for (unsigned int i = 0; i < nbSymboles; ++i)
 			{
 				automate.popAndDeleteState();

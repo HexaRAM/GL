@@ -23,3 +23,16 @@ set<Identificateur*> Identificateur::getIdents() const
     idents.insert(id);
     return idents;
 }
+
+set<string> Identificateur::idents;
+
+bool Identificateur::checkDouble(const string& name)
+{
+    if (Identificateur::idents.find(name) != Identificateur::idents.end())
+    {
+        cerr << "la variable " << name << " est deja declaree" << endl;
+        return false;
+    }
+    Identificateur::idents.insert(name);
+    return true;
+}

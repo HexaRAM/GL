@@ -23,6 +23,13 @@ bool Etat43::transition(Automate & automate, Symbole * s ){
 			DeclarationConst* declaC = ((DeclarationConst*) automate.getNthSymbole(4));
 			declaC->addConst(identif, num);
 
+			// check doublons
+			bool ok = Identificateur::checkDouble((string)*identif);
+			if (!ok)
+			{
+				return false;
+			}
+
 			// réduction manuelle ici
 			for (unsigned int i = 0; i < nbSymboles; ++i) 
 			{

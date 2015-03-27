@@ -19,6 +19,13 @@ bool Etat38::transition(Automate & automate, Symbole * s ){
 			DeclarationVar* declaV = ((DeclarationVar*) automate.getNthSymbole(2));
 			declaV->addIdentificateur(identif);
 
+			// check doublons
+			bool ok = Identificateur::checkDouble((string)*identif);
+			if (!ok)
+			{
+				return false;
+			}
+
 			// réduction manuelle ici
 			for (unsigned int i = 0; i < nbSymboles; ++i) 
 			{

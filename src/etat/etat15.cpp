@@ -19,6 +19,13 @@ bool Etat15::transition(Automate & automate, Symbole * s ){
 			Identificateur* identif = (Identificateur*) automate.getNthSymbole(0);
 			s->addIdentificateur(identif);
 
+			// check doublons
+			bool ok = Identificateur::checkDouble((string)*identif);
+			if (!ok)
+			{
+				return false;
+			}
+
 			automate.popAndDeleteState();
 			automate.popSymbole(); // on ne supprime pas id
 
