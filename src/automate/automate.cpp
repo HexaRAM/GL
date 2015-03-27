@@ -24,6 +24,9 @@ using namespace std;
  //  / ___ \  | |_| | | |_  | (_) | | | | | | | | (_| | | |_  |  __/
  // /_/   \_\  \__,_|  \__|  \___/  |_| |_| |_|  \__,_|  \__|  \___|
 
+/**
+ * core class
+ */
 Automate::Automate()
 {
     // init
@@ -40,7 +43,6 @@ Automate::Automate()
     this->current_symbole = NULL;
 
     this->syntaxeChecked = false;
-    this->programme = NULL;
     this->memory = NULL;
 }
 
@@ -59,7 +61,6 @@ Automate::Automate(bool affichage, bool analyse, bool optimisation, bool executi
     this->current_symbole = NULL;
 
     this->syntaxeChecked = false;
-    this->programme = NULL;
     this->memory = NULL;
 }
 
@@ -79,204 +80,17 @@ Automate::~Automate()
     delete memory; // todo : destruction dans les classes symboles
 }
 
+
+
+
 /**
- * Public methods
+ * Manage deque
  */
-bool Automate::addVariable(Identificateur* const id)
-{
-    string name = (string)(*id);
-
-    if (this->idents.find(name) != this->idents.end())
-    {
-        // var already exists
-        cout << "# L'identificateur `" << name << "` a déjà été utilisé par une autre variable/constante." << endl;
-        return false;
-    }
-    else
-    {
-
-        // var doesn't exist
-        this->variables[name] = {-1, false, false};
-        this->idents.insert(name);
-
-        return true;
-    }
-}
-
-bool Automate::addConstante(const string& name, int value)
-{
-    if (this->idents.find(name) != this->idents.end())
-    {
-        // const already exists
-        cout << "# L'identificateur `" << name << "` (" << value << ") a déjà été utilisé par une autre variable/constante." << endl;
-        return false;
-    }
-
-    // const doesn't exist
-    this->constantes[name] = {value};
-    this->idents.insert(name);
-    return true;
-}
-
-// only var
-bool Automate::isVariableSemanticInstanciated(const string& name)
-{
-    map_var::iterator it = this->variables.find(name);
-
-    if (it == this->variables.end())
-    {
-        // variable `name` doesn't exist
-        cout << "# La variable " << name << " n'existe pas." << endl;
-        return false;
-    }
-
-    return it->second.isSemanticInstanciated;
-}
-
-// only var
-bool Automate::isVariableDeclared(const string& name)
-{
-    if (this->variables.find(name) != this->variables.end())
-    {
-        return true;
-    }
-    return false;
-}
-
-// const or var
-bool Automate::isIdentificateurDeclared(const string& name)
-{
-    if (this->idents.find(name) != this->idents.end())
-    {
-        return true;
-    }
-    return false;
-}
-
-bool Automate::isVariable(const string& name)
-{
-    if (this->variables.find(name) != this->variables.end())
-    {
-        return true;
-    }
-    return false;
-}
-
-void Automate::semanticInstanciation(const string& name)
-{
-    if (this->idents.find(name) == this->idents.end())
-    {
-        // idents `name` doesn't exist
-        cout << "# La variable " << name << " n'existe pas." << endl;
-        return;
-    }
-
-    map_var::iterator it = variables.find(name);
-
-    if (it == variables.end())
-    {
-        // var doesn't exist
-        cout << "# La variable " << name << " n'existe pas." << endl;
-        return;
-    }
-
-    // var exist
-    it->second.isSemanticInstanciated = true;
-}
-
-bool Automate::instanciateVariable(const string& name, int value)
-{
-
-    #ifdef DEBUG
-        cout << "On affecte " << value << " à la variable " << name << endl;
-    #endif
-
-    if (this->idents.find(name) == this->idents.end())
-    {
-        // idents `name` doesn't exist
-        cout << "# La variable " << name << " n'existe pas. Veuillez la créer avant de vouloir lui affecter une valeur." << endl;
-        return false;
-    }
-
-    map_var::iterator it = variables.find(name);
-
-    if (it == variables.end())
-    {
-        // var doesn't exist
-        cout << "# La variable " << name << " n'existe pas. Veuillez la créer avant de vouloir lui affecter une valeur." << endl;
-        return false;
-    }
-
-    // var exist
-    it->second.instanciated = true;
-
-    // si on ne précise pas de valeur (-1 est la valeur par défaut, on n'ajoute pas la valeur dans la map) => pour que l'analyse sémantique n'ait pas à tout détruire pour effectuer ses tests.
-    it->second.value = value;
-    return true;
-}
-
-void Automate::displayMemory()
-{
-    cout << "# Constantes :" << endl;
-    for (auto const& it : this->constantes)
-    {
-        cout << "\tconst " << it.first << " = " << it.second.value << ";" << endl;
-    }
-    cout << endl << "# Variables : "<< endl;
-    for (auto const &it : this->variables)
-    {
-
-        cout << "\tvar " << it.first << "; (";
-        if (it.second.instanciated)
-        {
-            cout << "valeur : " << it.second.value;
-        }
-        else
-        {
-            cout << "non instanciée";
-        }
-        cout << ")";
-
-        if (it.second.isSemanticInstanciated)
-        {
-            cout << " but semantic instanciated !";
-        }
-        cout << endl;
-    }
-}
-
-void Automate::displayState()
-{
-    #ifdef DEBUG
-        cout << "\tPile symbole (taille=" << symboles.size() << ") : ";
-        cout.flush();
-        for (auto const& it : this->symboles)
-        {
-            cout << *it << " ";
-        }
-
-        cout << endl;
-        cout << "\tPile state (taille=" << states.size() << ") : ";
-        for (auto const& it : this->states)
-        {
-            cout << *it << " ";
-        }
-        cout << endl;
-        cout << "\tEtat courant avant transition : " << *current_state << endl;
-        cout << "\tSymbole sous la tête de lecture : " << *current_symbole << endl;
-        cout << "-------------------------------------------------" << endl;
-
-    #endif
-}
-
-
-// manage deque
 void Automate::updateState(Etat* e)
 {
     states.push_front(e);
     this->current_state = e;
 }
-
 void Automate::popSymbole()
 {
     symboles.pop_front();
@@ -287,7 +101,6 @@ void Automate::popAndDeleteSymbole()
     this->popSymbole();
     delete s;
 }
-
 void Automate::popState()
 {
     states.pop_front();
@@ -299,6 +112,19 @@ void Automate::popAndDeleteState()
     delete e;
 }
 
+
+
+/**
+ * Analyseur
+ */
+
+/**
+ * Obtenir le prochain symbole sous la tête de lecture
+ */
+Symbole* Automate::getNext()
+{
+    return lexer.getNext(this->buffer);
+}
 void Automate::decalage(Symbole* s, Etat* e)
 {
     #ifdef DEBUG
@@ -370,6 +196,10 @@ void Automate::validateSyntaxe()
     syntaxeChecked = true;
 }
 
+
+/**
+ * Execute functions
+ */
 void Automate::execute(OPTIONS option)
 {
 
@@ -397,8 +227,6 @@ void Automate::execute(OPTIONS option)
                 // analyse statique (-a)
                 executeAnalyse();
             }
-
-
 
             if (this->optimisation)
             {
@@ -463,7 +291,6 @@ bool Automate::executeSyntaxicalAnalyse()
     {
         // récupérer le programme en haut de la pile
         Programme* programme = (Programme*) symboles.front();
-        this->programme = programme; // à retirer
         Memory* mem = new Memory(programme);
         this->memory = mem;
         return true;
@@ -542,12 +369,29 @@ void Automate::executeOptimisation()
      */
 }
 
-Symbole* Automate::getNext()
+/**
+ * Debug methods
+ */
+ void Automate::displayState()
 {
-    return lexer.getNext(this->buffer);
-}
+    #ifdef DEBUG
+        cout << "\tPile symbole (taille=" << symboles.size() << ") : ";
+        cout.flush();
+        for (auto const& it : this->symboles)
+        {
+            cout << *it << " ";
+        }
 
-void Automate::displayBuffer()
-{
-    cout << this->buffer << endl;
+        cout << endl;
+        cout << "\tPile state (taille=" << states.size() << ") : ";
+        for (auto const& it : this->states)
+        {
+            cout << *it << " ";
+        }
+        cout << endl;
+        cout << "\tEtat courant avant transition : " << *current_state << endl;
+        cout << "\tSymbole sous la tête de lecture : " << *current_symbole << endl;
+        cout << "-------------------------------------------------" << endl;
+
+    #endif
 }
