@@ -12,3 +12,10 @@ void Ecriture::print(ostream& os) const {
 Expression* Ecriture::getExpression(){
 	return expr;
 }
+
+void Ecriture::setExpression(Expression* expression)
+{
+	if(expr != NULL)
+		delete expr;
+	expr = expression;
+}

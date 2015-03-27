@@ -2,6 +2,7 @@
 #define OPTIMISATION_H
 
 #include "action.h"
+#include "../symbole/declaration/identificateur.h"
 
 class Optimisation : public Action
 {
@@ -9,6 +10,8 @@ class Optimisation : public Action
         Optimisation() : Action() {}
         ~Optimisation();
         bool execute(Memory& mem);
+    protected:
+    	bool isConst(Identificateur* id, Memory& mem);
 };
 
 #endif

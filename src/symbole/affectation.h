@@ -16,5 +16,6 @@
 			void print(ostream& os) const;
 			Expression* getExpression();
 			Identificateur* getIdentificateur();
+			void setExpression(Expression* expression);
 	};
 #endif
