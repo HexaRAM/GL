@@ -166,30 +166,34 @@ bool Memory::isVariable(const string& name)
  */
  void Memory::displayMemory()
 {
-    cout << "# Constantes :" << endl;
-    for (auto const& it : this->constantes)
-    {
-        cout << "\tconst " << it.first << " = " << it.second.value << ";" << endl;
-    }
-    cout << endl << "# Variables : "<< endl;
-    for (auto const &it : this->variables)
-    {
+    #ifdef DEBUG
+        cout << "# Constantes :" << endl;
+        for (auto const& it : this->constantes)
+        {
+            cout << "\tconst " << it.first << " = " << it.second.value << ";" << endl;
+        }
+        cout << endl << "# Variables : "<< endl;
+        for (auto const &it : this->variables)
+        {
 
-        cout << "\tvar " << it.first << "; (";
-        if (it.second.instanciated)
-        {
-            cout << "valeur : " << it.second.value;
-        }
-        else
-        {
-            cout << "non instanciée";
-        }
-        cout << ")";
+            cout << "\tvar " << it.first << "; (";
+            if (it.second.instanciated)
+            {
+                cout << "valeur : " << it.second.value;
+            }
+            else
+            {
+                cout << "non instanciée";
+            }
+            cout << ")";
 
-        if (it.second.isSemanticInstanciated)
-        {
-            cout << " but semantic instanciated !";
+            if (it.second.isSemanticInstanciated)
+            {
+                cout << " but semantic instanciated !";
+            }
+            cout << endl;
         }
-        cout << endl;
-    }
+    #endif
+        
+    cout << *programme;
 }

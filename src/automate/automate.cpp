@@ -1,5 +1,4 @@
 #include "automate.h"
-#include <iostream>
 #include "../symbole/declaration/num.h"
 #include "../symbole/declaration/identificateur.h"
 #include <boost/regex.hpp>
@@ -11,6 +10,10 @@
 #include "../symbole/declaration/declarationConst.h"
 #include <vector>
 
+#include "semantique.h"
+#include "affichage.h"
+
+#include <iostream>
 using namespace std;
 
  //     _              _                                 _          
@@ -36,6 +39,7 @@ Automate::Automate()
 
     this->syntaxeChecked = false;
     this->programme = NULL;
+    this->memory = NULL;
 }
 
 Automate::Automate(bool affichage, bool analyse, bool optimisation, bool execution, string code)
@@ -54,6 +58,7 @@ Automate::Automate(bool affichage, bool analyse, bool optimisation, bool executi
 
     this->syntaxeChecked = false;
     this->programme = NULL;
+    this->memory = NULL;
 }
 
 Automate::~Automate()
@@ -240,81 +245,6 @@ void Automate::displayMemory()
     }
 }
 
-void Automate::execute(OPTIONS option)
-{
-
-    // analyse syntaxique
-    bool ok = executeSyntaxicalAnalyse();
-
-    if (!ok)
-    {
-        cout << "# Erreur pendant l'analyse syntaxique !" << endl;
-        exit(1);
-    }
-    cout << "LA SYNTAXE EST TIP TOP <3" << endl;
-
-    switch (option)
-    {
-        case ALL:
-            executeAll();
-        break;
-
-        case CHECKED:
-
-            if (this->analyse)
-            {
-                // analyse statique (-a)
-                executeAnalyse();
-                cout << "LA SEMANTIQUE EST TIP TOP <3" << endl;
-            }
-
-            if (this->optimisation)
-            {
-                // optimisation (-o)
-                // modifier directement les instructions
-                executeOptimisation();
-            }
-
-            if (this->affichage)
-            {
-                // affiche le programme (-p) [optimisé si -o]
-                executeAffichage();
-            }
-
-            if (this->execution)
-            {
-                // execute le programme (-e)
-                if (!this->analyse)
-                {
-                    // inutile d'exécuter le programme si la sémantique n'est pas bonne
-                    executeAnalyse();
-                }
-                executeExecution();
-            }
-        break;
-
-        case AFFICHAGE:
-            executeAffichage();
-        break;
-
-        case ANALYSE:
-            executeAnalyse();
-        break;
-
-        case OPTIMISATION:
-            executeOptimisation();
-        break;
-
-        case EXECUTION:
-            executeExecution();
-        break;
-
-        default:
-            cout << "# Error : option inconnue demandée." << endl;
-        break;
-    }
-}
-
 void Automate::displayState()
 {
     #ifdef DEBUG
@@ -434,6 +364,85 @@ void Automate::validateSyntaxe()
     syntaxeChecked = true;
 }
 
+void Automate::execute(OPTIONS option)
+{
+
+    // analyse syntaxique
+    bool ok = executeSyntaxicalAnalyse();
+
+    if (!ok)
+    {
+        cerr << "# Erreur pendant l'analyse syntaxique !" << endl;
+        cerr << "Il restait `" << buffer << "` à analyser" << endl;
+        exit(1);
+    }
+    cout << "LA SYNTAXE EST TIP TOP <3" << endl;
+
+    switch (option)
+    {
+        case ALL:
+            executeAll();
+        break;
+
+        case CHECKED:
+
+            if (this->analyse)
+            {
+                // analyse statique (-a)
+                executeAnalyse();
+            }
+
+
+
+            if (this->optimisation)
+            {
+                // optimisation (-o)
+                // modifier directement les instructions
+                executeOptimisation();
+            }
+
+            if (this->affichage)
+            {
+                // affiche le programme (-p) [optimisé si -o]
+                executeAffichage();
+            }
+
+            if (this->execution)
+            {
+                // execute le programme (-e)
+                if (!this->analyse)
+                {
+                    // inutile d'exécuter le programme si la sémantique n'est pas bonne
+                    executeAnalyse();
+                }
+                executeExecution();
+            }
+        break;
+
+        case AFFICHAGE:
+            executeAffichage();
+        break;
+
+        case ANALYSE:
+            executeAnalyse();
+        break;
+
+        case OPTIMISATION:
+            executeOptimisation();
+        break;
+
+        case EXECUTION:
+            executeExecution();
+        break;
+
+        default:
+            #ifdef DEBUG
+                cout << "# Error : option inconnue demandée." << endl;
+            #endif
+        break;
+    }
+}
+
 bool Automate::executeSyntaxicalAnalyse()
 {
     // analyse syntaxique : analyseur ascendant
@@ -447,7 +456,10 @@ bool Automate::executeSyntaxicalAnalyse()
     if (syntaxeChecked)
     {
         // récupérer le programme en haut de la pile
-        programme = (Programme*) symboles.front();
+        Programme* programme = (Programme*) symboles.front();
+        this->programme = programme; // à retirer
+        Memory* mem = new Memory(programme);
+        this->memory = mem;
         return true;
     }
     return false;
@@ -462,253 +474,28 @@ void Automate::executeAll()
 
 void Automate::executeAffichage()
 {
-    if (syntaxeChecked)
+    Affichage a;
+    bool ok = a.execute(*memory);
+
+    if (!ok)
     {
-        cout << *programme;
+        cerr << "Une erreur s'est produite pendant l'affichage de la mémoire. Fermeture du programme." << endl;
+        exit(1);
     }
+    cout << "L'AFFICHAGE EST TIP TOP <3" << endl;
 }
 
-/**
- * Analyse sémantique
- * Pseudo algorithme :
- * Avec `programme`, faire l'analyse sémantique !
- *      -> Faire toutes les déclarations (utiliser les méthodes déjà codées)
- *      -> Faire toutes les instructions :
- *              ** read : s'assurer que la variable a bien été déclarée
- *              ** write : s'assurer que l'expression a bien été déclarée (& instanciée dans le cas d'une variable)
- *              ** opération = : s'assurer que le membre de gauche est bien une variable DECLAREE / s'assurer que tous les membres de droites sont soit des constantes, soit des variables déclarées et instanciées !!
- */
 void Automate::executeAnalyse()
 {
-    if (!this->analyse)
+    Semantique s;
+    bool ok = s.execute(*memory);
+
+    if (!ok)
     {
-        cout << "# Warning : l'analyse n'a pas été demandé par l'utilisateur." << endl;
+        cerr << "Une erreur s'est produite pendant l'analyse sémantique. Fermeture du programme." << endl;
+        exit(1);
     }
-
-    #ifdef DEBUG
-        cout << "------------------------------" << endl;
-
-        cout << "\t###\tDébut de l'analyse sémantique (option -a)\t###" << endl;
-    #endif
-
-
-
-    vector<Declaration*> liste_declaration = this->programme ->getBlocDeclaration()->getListeDeclaration();
-    vector<Instruction*> liste_instruction = this->programme->getBlocInstruction()->getListeInstruction();
-
-    #ifdef DEBUG
-        cout << "Parcours des déclarations (" << liste_declaration.size() << ") !" << endl;
-    #endif
-
-
-    // on parcourt toutes les déclarations
-    for (auto const& it : liste_declaration)
-    {
-        DeclarationVar* declaVar = dynamic_cast<DeclarationVar*> (it);
-        DeclarationConst* declaConst = dynamic_cast<DeclarationConst*> (it);
-
-        if (declaVar != NULL)
-        {
-            // c'est une déclaration de variable(s)
-            vector<Identificateur*> idents = declaVar->getIdents();
-
-            for (auto const& itvar : idents)
-            {
-                string ident = *itvar;
-                bool ok = this->addVariable(itvar);
-                if (!ok)
-                {   
-                    #ifdef DEBUG
-                        cout << "# La variable " << ident << " a déjà été déclarée." << endl;
-                    #endif
-                    exit(1);
-                }
-            }
-
-        }
-        else if (declaConst != NULL)
-        {
-            // c'est une déclaration de constante(s)
-            vector<constante> consts = declaConst->getConstantes();
-
-            for (auto const& itconst : consts)
-            {
-                string ident = *(itconst.ident);
-                int value = *(itconst.value);
-                bool ok = this->addConstante(ident, value);
-                if (!ok)
-                {
-                    #ifdef DEBUG
-                        cout << "# La constante " << ident << " (value=" << value << ") a déjà été déclarée." << endl;
-                    #endif
-                    exit(1);
-                }
-            }
-        }
-        else
-        {
-            // ???
-        }
-    }
-
-    #ifdef DEBUG
-        this->displayMemory();
-
-        cout << "------------------------------" << endl;
-
-        cout << "Parcours des instructions (" << liste_instruction.size() << ") !" << endl;
-    #endif
-
-    // on parcourt toutes les instructions
-    for (auto const& it : liste_instruction)
-    {
-        Affectation* affectation = dynamic_cast<Affectation*> (it);
-        Lecture* lecture = dynamic_cast<Lecture*> (it);
-        Ecriture* ecriture = dynamic_cast<Ecriture*> (it);
-
-        // expression -> faire une fonction récursive (ou itérative, osef) pour récupérer tous les identificateurs d'une expression !
-
-        if (affectation != NULL)
-        {
-            // c'est une affectation
-
-            // get expression -> récupérer tous les identificateurs (get idents) de l'expression et checker s'ils existent (déclarées) et si pour les variables ils ont bien été instanciés
-            Expression* expr = affectation->getExpression();
-            set<Identificateur*> idents = expr->getIdents();
-
-            // #ifdef DEBUG
-            //     cout << "Les identificateurs de l'affectation `" << *affectation << "` sont (taille=" << idents.size() << ") : ";
-            //     for (auto const& ident : idents)
-            //     {
-            //         cout << *ident << " ";
-            //     }
-            //     cout << endl;
-            // #endif
-
-            for (auto const& ident : idents)
-            {
-                string name = (string)*ident;
-
-                if (this->isVariable(name))
-                {
-                    // référence une variable
-                    if (!this->isVariableSemanticInstanciated(name))
-                    {
-                        // variable non instanciée (voire non déclarée)
-                        #ifdef DEBUG
-                            cout << "# La variable `" << name << "` au sein de l'expression `" << *expr << "` n'a pas été instanciée." << endl;
-                        #endif
-                        exit(1);
-                    }
-                }
-                else
-                {
-                    // référence autre chose : une constante ou rien du tout
-                    if (!this->isIdentificateurDeclared(name))
-                    {
-                        #ifdef DEBUG
-                            cout << "# L'identificateur `" << name << "` au sein de l'expression `" << *expr << "` n'a pas été déclarée." << endl;
-                        #endif
-                        exit(1);
-                    }
-                }
-            }
-
-            // Si on a survécu jusqu'ici, c'est que l'expression est correcte sémantiquement
-
-            // get identificateur -> checker que c'est bien une variable et qu'elle a été déclarée
-            Identificateur* id = affectation->getIdentificateur();
-            string name = (string)(*id);
-
-            if (!this->isVariableDeclared(name))
-            {
-                #ifdef DEBUG
-                    cout << "# La partie gauche `" << name << "` au sein de l'instruction `" << *affectation << "` n'a pas été déclarée comme variable." << endl;
-                #endif
-                exit(1);
-            }
-
-            // on n'attribue pas la valeur à l'expression, par contre on check le bool comme quoi elle a été affectée
-            this->semanticInstanciation(name);
-
-        }
-        else if (lecture != NULL)
-        {
-            // c'est une lecture
-
-            // get identificateur -> checker que c'est bien une variable et qu'elle a été déclarée
-
-            Identificateur* id = lecture->getIdentificateur();
-            string name = (string)(*id);
-
-            // #ifdef DEBUG
-            //     cout << "L'identificateur associé à la lecture est : " << *id << endl;
-            // #endif
-
-            if (!this->isVariableDeclared(name))
-            {
-                #ifdef DEBUG
-                    cout << "# Le paramètre `" << name << "` au sein de l'instruction `" << *lecture << "` n'a pas été déclaré comme variable." << endl;
-                #endif
-                exit(1);
-            }
-
-        }
-        else if (ecriture != NULL)
-        {
-            // c'est une écriture
-
-            // get expression -> récupérer tous les identificateurs de l'expression et checker s'ils existent et si pour les variables ils ont bien été instanciés
-            Expression* expr = ecriture->getExpression();
-            set<Identificateur*> idents = expr->getIdents();
-
-            // #ifdef DEBUG
-            //     cout << "Les identificateurs de l'écriture `" << *ecriture << "` sont (taille=" << idents.size() << ") : ";
-            //     for (auto const& ident : idents)
-            //     {
-            //         cout << *ident << " ";
-            //     }
-            //     cout << endl;
-            // #endif
-
-            for (auto const& ident : idents)
-            {
-
-                string name = (string)*ident;
-
-                if (this->isVariable(name))
-                {
-                    // référence une variable
-                    if (!this->isVariableSemanticInstanciated(name))
-                    {
-                        // variable non instanciée (voire non déclarée)
-                        #ifdef DEBUG
-                            cout << "# La variable `" << name << "` n'a pas été instanciée." << endl;
-                        #endif
-                        exit(1);
-                    }
-                }
-                else
-                {
-                    // référence autre chose : une constante ou rien du tout
-                    if (!this->isIdentificateurDeclared(name))
-                    {
-                        #ifdef DEBUG
-                            cout << "# L'identificateur `" << name << "` au sein de l'expression `" << *expr << "` n'a pas été déclarée." << endl;
-                        #endif
-                        exit(1);
-                    }
-                }
-            }
-        }
-        else
-        {
-            // ???
-        }
-    }
-
-
-
+    cout << "LA SEMANTIQUE EST TIP TOP <3" << endl;
 }
 
 /**
@@ -769,313 +556,10 @@ void Automate::executeOptimisation()
 
 Symbole* Automate::getNext()
 {
-    return this->lexer.getNext(this->buffer);
+    return lexer.getNext(this->buffer);
 }
 
 void Automate::displayBuffer()
 {
     cout << this->buffer << endl;
-}
-
-
-
-
-//  _                                 
-// | |       ___  __  __   ___   _ __ 
-// | |      / _ \ \ \/ /  / _ \ | '__|
-// | |___  |  __/  >  <  |  __/ | |   
-// |_____|  \___| /_/\_\  \___| |_|   
-
-Lexer::Lexer()
-{
-
-}
-
-Lexer::~Lexer()
-{
-
-}
-
-string Lexer::regex[] = {"^const$", "^var$", "^lire$", "^ecrire$", ";", "\\(", "\\)", ":=", "=", "\\+", "\\-", "\\*", "\\/", "\\,", "^\\d*$","(?!(^var$|^const$|^ecrire$|^lire$))^[a-zA-Z][a-zA-Z0-9]*$"};
-
-Symbole* Lexer::getNext(string& buff)
-{
-    
-    if (buff.empty())
-    {
-        return new Symbole(ID_SYMBOLE::dollar); // symbole DOLLAR / EOF
-    }
-
-    stringstream flux(buff);
-    string buffer = "";
-    bool match_flag = false;
-    bool error = false;
-    bool last_was_no_pattern = false;
-    int no_pattern_sequence = 0;
-    int id = -1;
-
-    while (!flux.fail())
-    {
-        char character = (char)flux.peek(); // prochain caractère
-        bool stoping_char = false;
-        //cout << "BUFFER : " << buffer << " (next character : " << character << ") / no pattern sequence : " << no_pattern_sequence << " !" << endl; // état du buffer
-
-        // TODO : gérer le :=
-
-        // caractère arrêt ?
-        switch (character)
-        {
-            case ' ':
-            case ';':
-            case '+':
-            case '-':
-            case '/':
-            case '*':
-            case ',':
-            case '(':
-            case ')':
-                stoping_char = true;
-            break;
-
-            default:
-
-            break;
-        }
-
-        if (stoping_char)
-        {
-            // * si tout seul dans le buffer [buffer vide] (buffer == caractère arrêt)
-            if (buffer.empty())
-            {
-                flux.get();
-                // -> si espace
-                if (character == ' ')
-                {
-                    continue;
-                }
-                // -> sinon
-                buffer = character;
-                break; // return buffer;
-            }
-
-            // * sinon
-            // -> si espace
-            if (character == ' ')
-            {
-                flux.get();
-            }
-            // -> sinon
-            break; // return buffer;
-        }
-
-        // - si pas caractère arrêt
-        string new_buff = buffer + character;
-
-        // test des regex
-        bool matched = false;
-        for (unsigned int i = 0; i < NB_REGEX; ++i)
-        {
-            boost::regex re(Lexer::regex[i].c_str());
-            boost::cmatch matches;
-            bool match = boost::regex_match(new_buff.c_str(), matches, re);
-            if (match)
-            {
-		id = i;
-                matched = true;
-                break;
-            }
-        }
-
-        //cout << "NEW BUFF : " << new_buff << " / matched ? " << ((matched) ? "yes" : "no") << endl;
-        if (matched)
-        {
-            flux.get();
-            match_flag = true;
-            buffer = new_buff;
-            last_was_no_pattern = false;
-            continue;
-        }
-        else
-        {
-            if (match_flag)
-            {
-                break; // return buffer;
-            }
-
-            // Aucun pattern trouvé, on continue pour voir si un pattern va apparaître
-            if (last_was_no_pattern)
-            {
-                no_pattern_sequence++;
-            }
-            else
-            {
-                last_was_no_pattern = true;
-                no_pattern_sequence = 1;
-            }
-
-            if (no_pattern_sequence >= MAX_NO_PATTERN_SEQUENCE)
-            {
-                error = true;
-                break;
-            }
-
-            buffer = new_buff;
-            flux.get();
-        }
-    } // fin du while
-
-    // mise à jour du buffer dans l'automate
-    getline(flux, buff);
-
-    if (error)
-    {
-        //return "Erreur - aucun pattern trouvé dans les " + std::to_string(MAX_NO_PATTERN_SEQUENCE) + " derniers caractères.";
-	   return NULL;
-    }
-
-    Symbole* retour = NULL;
-
-    //cout << "Valeur du symbole lu : " << buffer << "(ID : " << id << ")" << endl;
-
-    switch(id)
-    {
-    	case -1:
-            if (buffer == ";")
-            {
-                retour = new Symbole(ID_SYMBOLE::pv);
-            }
-            else if (buffer == "+")
-            {
-                retour = new Symbole(ID_SYMBOLE::add); 
-            }
-            else if (buffer == "-")
-            {
-                retour = new Symbole(ID_SYMBOLE::moins);
-            }
-            else if (buffer == "/")
-            {
-                retour = new Symbole(ID_SYMBOLE::divise);
-            }
-            else if (buffer == "*")
-            {
-                retour = new Symbole(ID_SYMBOLE::fois);
-            }
-            else if (buffer == ",")
-            {
-                retour = new Symbole(ID_SYMBOLE::v);
-            }
-            else if (buffer == "(")
-            {
-                retour = new Symbole(ID_SYMBOLE::po);
-            }
-            else if (buffer == ")")
-            {
-                retour = new Symbole(ID_SYMBOLE::pf);
-            }
-            else
-            {
-                // error
-            }
-    	break;
-    	case 0:
-    	    retour = new Symbole(ID_SYMBOLE::ct);
-    	break;
-    	case 1:
-    	    retour = new Symbole(ID_SYMBOLE::va);
-    	break;
-    	case 2:
-    	    retour = new Symbole(ID_SYMBOLE::r);
-    	break;
-    	case 3:
-    	    retour = new Symbole(ID_SYMBOLE::w);
-    	break;
-    	case 4:
-    	    retour = new Symbole(ID_SYMBOLE::pv);
-    	break;
-    	case 5:
-    	    retour = new Symbole(ID_SYMBOLE::po);
-    	break;
-    	case 6:
-    	    retour = new Symbole(ID_SYMBOLE::pf);
-    	break;
-    	case 7:
-    	    retour = new Symbole(ID_SYMBOLE::af);
-    	break;
-    	case 8:
-    	    retour = new Symbole(ID_SYMBOLE::eg);
-    	break;
-    	case 9:
-    	    retour = new Symbole(ID_SYMBOLE::add);
-    	break;
-    	case 10:
-    	    retour = new Symbole(ID_SYMBOLE::moins);
-    	break;
-    	case 11:
-    	    retour = new Symbole(ID_SYMBOLE::fois);
-    	break;
-    	case 12:
-    	    retour = new Symbole(ID_SYMBOLE::divise);
-    	break;
-    	case 13:
-    	    retour = new Symbole(ID_SYMBOLE::v);
-    	break;
-    	case 14:
-    	{
-    		// convertir buffer -> int
-    		int num;
-    		istringstream iss(buffer);
-    		iss >> num;
-    		retour = new Num(num);
-    	}
-    	break;
-    	case 15:
-        {
-            /*
-            retour = NULL;
-            for (auto const& it : this->idents)
-            {
-                if ((string)*it == buffer)
-                {
-                    retour = (Identificateur*)it;
-                    break;
-                }
-            }
-
-            if (retour == NULL)
-            {
-                retour = new Identificateur(buffer);
-                this->idents.insert((Identificateur*)retour);
-            }*/
-            retour = new Identificateur(buffer);
-        }
-    	break;
-    	default:
-            // error
-    	break;
-    }
-
-    //cout << " --> Lecture d'un symbole : " << *retour << endl;
-
-    return retour;
-
-
-        /**
-         * /!\ Implémentation légèrement différente de l'algo décrit ci-dessous avec l'intégration du ":=" qui a nécessité d'ajouter un compteur "no_pattern_sequence" pour tolérer le fait qu'on ne rencontre aucun pattern par moment (e.g quand on reçoit ":")
-         * TODO :
-         *      - si caractère arrêt
-         *          * si tout seul dans le buffer [buffer vide] (buffer == caractère arrêt)
-         *              -> si pas espace => flux.get() && retourner le symbole
-         *              -> si espace => flux.get() et continuer
-         *          * si pas tout seul dans le buffer (c'est le symbole d'encore après, [opti : on pourrait le save])
-         *              -> si carac_arret == espace => flux.get() et retour du buffer
-         *              -> si carac_arret == pas espace => retour du buffer
-         *      - si pas caractère arrêt => ajouter caractère au buffer [new_buff]
-         *          * tester new_buff sur chaque regex
-         *              -> si match => flux.get() mettre un flag à match et continue
-         *              -> si non match
-                            ** si flag à match => retourner buffer (/!\ pas new_buff)
-         *                  ** si flag à non match => retourner erreur (aucun pattern trouvé)
-         *
-         */
-       
 }

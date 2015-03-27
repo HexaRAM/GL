@@ -18,6 +18,17 @@ Semantique::~Semantique()
     
 }
 
+
+/**
+ * Analyse sémantique
+ * Pseudo algorithme :
+ * Avec `programme`, faire l'analyse sémantique !
+ *      -> Faire toutes les déclarations (utiliser les méthodes déjà codées)
+ *      -> Faire toutes les instructions :
+ *              ** read : s'assurer que la variable a bien été déclarée
+ *              ** write : s'assurer que l'expression a bien été déclarée (& instanciée dans le cas d'une variable)
+ *              ** opération = : s'assurer que le membre de gauche est bien une variable DECLAREE / s'assurer que tous les membres de droites sont soit des constantes, soit des variables déclarées et instanciées !!
+ */
 bool Semantique::execute(Memory& mem)
 {
     #ifdef DEBUG
@@ -54,7 +65,7 @@ bool Semantique::execute(Memory& mem)
                     #ifdef DEBUG
                         cout << "# La variable " << ident << " a déjà été déclarée." << endl;
                     #endif
-                    exit(1);
+                    return false;
                 }
             }
 
@@ -74,7 +85,7 @@ bool Semantique::execute(Memory& mem)
                     #ifdef DEBUG
                         cout << "# La constante " << ident << " (value=" << value << ") a déjà été déclarée." << endl;
                     #endif
-                    exit(1);
+                    return false;
                 }
             }
         }
@@ -131,7 +142,7 @@ bool Semantique::execute(Memory& mem)
                         #ifdef DEBUG
                             cout << "# La variable `" << name << "` au sein de l'expression `" << *expr << "` n'a pas été instanciée." << endl;
                         #endif
-                        exit(1);
+                        return false;
                     }
                 }
                 else
@@ -142,7 +153,7 @@ bool Semantique::execute(Memory& mem)
                         #ifdef DEBUG
                             cout << "# L'identificateur `" << name << "` au sein de l'expression `" << *expr << "` n'a pas été déclarée." << endl;
                         #endif
-                        exit(1);
+                        return false;
                     }
                 }
             }
@@ -158,7 +169,7 @@ bool Semantique::execute(Memory& mem)
                 #ifdef DEBUG
                     cout << "# La partie gauche `" << name << "` au sein de l'instruction `" << *affectation << "` n'a pas été déclarée comme variable." << endl;
                 #endif
-                exit(1);
+                return false;
             }
 
             // on n'attribue pas la valeur à l'expression, par contre on check le bool comme quoi elle a été affectée
@@ -183,7 +194,7 @@ bool Semantique::execute(Memory& mem)
                 #ifdef DEBUG
                     cout << "# Le paramètre `" << name << "` au sein de l'instruction `" << *lecture << "` n'a pas été déclaré comme variable." << endl;
                 #endif
-                exit(1);
+                return false;
             }
 
         }
@@ -218,7 +229,7 @@ bool Semantique::execute(Memory& mem)
                         #ifdef DEBUG
                             cout << "# La variable `" << name << "` n'a pas été instanciée." << endl;
                         #endif
-                        exit(1);
+                        return false;
                     }
                 }
                 else
@@ -229,7 +240,7 @@ bool Semantique::execute(Memory& mem)
                         #ifdef DEBUG
                             cout << "# L'identificateur `" << name << "` au sein de l'expression `" << *expr << "` n'a pas été déclarée." << endl;
                         #endif
-                        exit(1);
+                        return false;
                     }
                 }
             }
@@ -239,4 +250,6 @@ bool Semantique::execute(Memory& mem)
             // ???
         }
     }
+
+    return true;
 }

@@ -2,9 +2,11 @@
 #define AUTOMATE_H
 
 #include "../config.h"
+#include "lexer.h"
 #include "../symbole/symbole.h"
 #include "../symbole/programme.h"
 #include "../etat/etat.h"
+#include "memory.h"
 #include <string>
 #include <map>
 #include <deque>
@@ -16,18 +18,18 @@ using namespace std;
 #define NB_REGEX 16
 #define MAX_NO_PATTERN_SEQUENCE 10
 
-struct variable_s {
-    int value;
-    bool instanciated;
-    bool isSemanticInstanciated;
-};
+// struct variable_s {
+//     int value;
+//     bool instanciated;
+//     bool isSemanticInstanciated;
+// };
 
-struct constante_s {
-    int value;
-};
+// struct constante_s {
+//     int value;
+// };
 
-typedef map<const string, variable_s> map_var;
-typedef map<const string, constante_s> map_const;
+// typedef map<const string, variable_s> map_var;
+// typedef map<const string, constante_s> map_const;
 
 // enum INSTRUCTION_TYPES {
 //     READ, WRITE, INSTANCIATE, DECLARE_CONST, DECLARE_VAR, OPERATION
@@ -38,18 +40,6 @@ typedef map<const string, constante_s> map_const;
 //     vector<Symbole> symboles;
 // };
 
-class Lexer
-{
-    public:
-        Lexer();
-        ~Lexer();
-        Symbole* getNext(string& buff);
-        static string regex[];
-    private:
-        set<Identificateur*> idents;
-};
-
-
 class Automate
 {
     public:
@@ -58,19 +48,21 @@ class Automate
         ~Automate();
         void displayBuffer();
         void execute(OPTIONS option = CHECKED);
+
+        // semantic à retirer
         bool addVariable(Identificateur* const id);
         bool addConstante(const string& name, int value);
         void semanticInstanciation(const string& name);
         bool instanciateVariable(const string& name, int value);
         void displayMemory();
+
+        // syntaxic
         void decalage(Symbole* s, Etat* e);
         void reduction(Symbole* s);
         void reduction(int nbSymboles, Symbole* s); 
-        Symbole* getNext();
 	    Symbole* getNthSymbole(int n);
 
         // manage deque
-        void updateState(Etat* e);
         void popSymbole();
         void popState();
         void popAndDeleteState();
@@ -86,7 +78,7 @@ class Automate
         bool optimisation;
         bool execution;
 
-        // structure de données
+        // structure de données à retirer
         map_var variables;
         map_const constantes;
         set<string> idents;
@@ -96,8 +88,10 @@ class Automate
         Symbole* current_symbole;
         deque<Symbole*> symboles;
         deque<Etat*> states;
+        void updateState(Etat* e);
+        Symbole* getNext();
 
-        // semantic
+        // semantic à retirer
         bool isVariableSemanticInstanciated(const string& name);
         bool isVariableDeclared(const string& name);
         bool isIdentificateurDeclared(const string& name);
@@ -111,7 +105,8 @@ class Automate
         // check
         bool syntaxeChecked;
 
-        Programme* programme;
+        Programme* programme; // à retirer
+        Memory* memory;
 
         void executeAll();
         void executeAffichage();
