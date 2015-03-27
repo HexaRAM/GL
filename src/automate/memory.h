@@ -7,6 +7,7 @@
 
 #include "../symbole/programme.h"
 #include "../symbole/declaration/identificateur.h"
+#include "../symbole/instruction.h"
 
 struct variable_s {
     int value;
@@ -41,10 +42,12 @@ class Memory
 
         void displayMemory();
         map<string, double> buildEvalMap();
+        map<string, double>  getMapConst();
 
         // methods related to programme
         inline vector<Declaration*> getDeclarations() { return programme->getBlocDeclaration()->getListeDeclaration(); }
         inline vector<Instruction*> getInstructions() { return programme->getBlocInstruction()->getListeInstruction(); }
+        
 
 
     private:

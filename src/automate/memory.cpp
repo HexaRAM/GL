@@ -214,3 +214,15 @@ map<string, double> Memory::buildEvalMap()
     
     return map_val;
 }
+
+map<string, double> Memory::getMapConst()
+{
+
+    map<string, double> map_val;
+
+    for (auto it : constantes)
+    {
+        map_val[it.first] = it.second.value;
+    }
+    return map_val;
+}
