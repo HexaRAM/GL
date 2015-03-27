@@ -11,7 +11,6 @@ class CommandLineReader
     public:
         CommandLineReader(int, char**);
         virtual ~CommandLineReader();
-        bool hasOptionUp(OPTIONS option);
         void displayMode();
         Automate* createAutomate();
 

@@ -11,6 +11,8 @@
 #include <vector>
 
 #include "semantique.h"
+#include "execution.h"
+#include "optimisation.h"
 #include "affichage.h"
 
 #include <iostream>
@@ -66,17 +68,15 @@ Automate::~Automate()
     // si les piles symboles ou states ne sont pas vides
     // les vider à coup de delete pour ne pas causer de memory leaks
 
-    /*for (auto *it : states) // contient current_state
+    for (auto *it : states) // contient current_state
     {
         delete it;
     }
 
-    delete current_symbole;
+    delete current_symbole; // le symbole $ est resté en mémoire
 
-    for (auto *it : symboles)
-    {
-        delete it;
-    }*/
+    // les symboles restants sont dans Memory
+    delete memory; // todo : destruction dans les classes symboles
 }
 
 /**
@@ -354,11 +354,17 @@ void Automate::reduction(int nbSymboles, Symbole* newSymbole)
     this->reduction(newSymbole);
 }
 
+/**
+ * Obtenir un symbole de la pile (utilisée lors des réductions)
+ */
 Symbole* Automate::getNthSymbole(int n)
 {
 	return symboles[n];
 }
 
+/**
+ * Valider la syntaxe - Cette fonction évite de devoir remonter tous les bool pour savoir si la syntaxe du fichier est bonne ou non
+ */
 void Automate::validateSyntaxe()
 {
     syntaxeChecked = true;
@@ -499,43 +505,19 @@ void Automate::executeAnalyse()
 }
 
 /**
- * A faire après l'analyse sémantique
+ * Execution du programme. Celui-ci doit d'abord avoir été validé syntaxiquement et sémantiquement
  */
 void Automate::executeExecution()
 {
-    if (!this->execution)
+    Execution e;
+    bool ok = e.execute(*memory);
+
+    if (!ok)
     {
-        cout << "# Warning : l'exécution n'a pas été demandé par l'utilisateur." << endl;
+        cerr << "Une erreur s'est produite pendant l'exécution. Fermeture du programme." << endl;
+        exit(1);
     }
-
-    BlocInstruction* blocInstruction = (this->programme)->getBlocInstruction() ;
-    vector<Instruction*> liste_instruction = blocInstruction->getListeInstruction();
-
-    for(auto const &it:liste_instruction){
-       Affectation *aff = dynamic_cast<Affectation*> (it);
-       Lecture *lec = dynamic_cast<Lecture*> (it);
-       Ecriture *ecr = dynamic_cast<Ecriture*> (it);
-       if(aff != NULL){
-            cout<<"Affectation ";
-            cout<<"exp = " << *(aff->getExpression());
-            cout<<" id = " << *(aff->getIdentificateur());
-            cout<<endl;
-
-       }else if(lec != NULL){
-            cout<<"Lecture ";
-            cout<<"id = " << *(lec->getIdentificateur());
-            cout<<endl;
-       }else if(ecr != NULL){
-            cout<<"Ecriture ";
-            cout<<"exp = " << *(ecr->getExpression());
-            cout<<endl;
-       }
-    }
-
-   
-
-    cout<<"Nombre d'instructions = "<< liste_instruction.size() << endl;
-        
+    cout << "L'EXECUTION EST TIP TOP <3" << endl;        
 }
 
 /**
@@ -543,15 +525,21 @@ void Automate::executeExecution()
  */
 void Automate::executeOptimisation()
 {
-    if (!this->optimisation)
-    {
-        cout << "# Warning : l'optimisation n'a pas été demandé par l'utilisateur." << endl;
-    }
+    Optimisation o;
+    bool ok = o.execute(*memory);
 
-    // TODO
-    // construire la map (ident, val) avant de l'envoyer à eval
-    cout<<"Ziiiiiziiiiiiiiiiiiiii"<<endl;
-    programme->getAffectationsConstants();
+    if (!ok)
+    {
+        cerr << "Une erreur s'est produite pendant l'optimisation. Fermeture du programme." << endl;
+        exit(1);
+    }
+    cout << "L'OPTIMISATION EST TIP TOP <3" << endl;
+
+    /**
+     * TODO :
+     * - Refactor complet des classes, plus besoin de faire un getAffectationsConstants() ici, tout se passe dans la classe Memory (pour la gestion du programme)
+     * - Votre portion de code se trouve dans la classe "Optimisation", fichier "optimisation.h/cpp"
+     */
 }
 
 Symbole* Automate::getNext()

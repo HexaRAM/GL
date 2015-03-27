@@ -36,6 +36,7 @@ CommandLineReader::CommandLineReader(int argc, char** argv)
 
             for (unsigned int i=1; i<(unsigned int)argc-1;i++)
             {
+                // si l'argument i match une option, on la rajoute
                 if (syntaxe_options(argv[i]))
                 {
                  switch(argv[i][1])
@@ -63,20 +64,16 @@ CommandLineReader::CommandLineReader(int argc, char** argv)
                 }
                 else
                 {
-                    #ifdef DEBUG
-                        cout << "# Option incorrecte : " << argv[i] << endl;
-                    #endif
+                    
+                    cerr << "# Option incorrecte : " << argv[i] << endl;
+                    exit(1);
                 }
             }
 
             this->enableCreationOfAutomate = true;
         }
         else
-        {
-            #ifdef DEBUG
-                cout << "# Nom fichier incorrecte : " << argv[1] << endl;
-            #endif
-            
+        {   
             string str(argv[argc-1]);
             cerr << "Erreur a l'ouverture du fichier " << str << endl;
             exit(1);
@@ -113,43 +110,6 @@ Automate* CommandLineReader::createAutomate()
         return automate;
     }
     return NULL;
-}
-
-/**
- * @unused
- */
-bool CommandLineReader::hasOptionUp(OPTIONS option)
-{
-    switch (option)
-    {
-        case ALL:
-            return this->affichage && this->analyse && this->optimisation && this->execution;
-        break;
-
-        case AFFICHAGE:
-            return this->affichage;
-        break;
-
-        case ANALYSE:
-            return this->analyse;
-        break;
-
-        case OPTIMISATION:
-            return this->optimisation;
-        break;
-
-        case EXECUTION:
-            return this->execution;
-        break;
-
-        default:
-            #ifdef DEBUG
-                cout << "# Error : option inconnue demandée." << endl;
-            #endif
-            return false;
-        break;
-    }
-    return false;
 }
 
 void CommandLineReader::displayMode()
