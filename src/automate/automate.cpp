@@ -208,11 +208,15 @@ void Automate::execute(OPTIONS option)
 
     if (!ok)
     {
-        cerr << "# Erreur pendant l'analyse syntaxique !" << endl;
-        cerr << "Il restait `" << buffer << "` à analyser" << endl;
+        #ifdef DEBUG
+            cout << "# Erreur pendant l'analyse syntaxique !" << endl;
+            cout << "Il restait `" << buffer << "` à analyser" << endl;
+        #endif
         exit(1);
     }
-    cout << "LA SYNTAXE EST TIP TOP <3" << endl;
+    #ifdef DEBUG
+        cout << "LA SYNTAXE EST TIP TOP <3" << endl;
+    #endif
 
     switch (option)
     {
@@ -312,10 +316,12 @@ void Automate::executeAffichage()
 
     if (!ok)
     {
-        cerr << "Une erreur s'est produite pendant l'affichage de la mémoire. Fermeture du programme." << endl;
+        //cerr << "Une erreur s'est produite pendant l'affichage de la mémoire. Fermeture du programme." << endl;
         exit(1);
     }
-    cout << "L'AFFICHAGE EST TIP TOP <3" << endl;
+    #ifdef DEBUG
+        cout << "L'AFFICHAGE EST TIP TOP <3" << endl;
+    #endif
 }
 
 void Automate::executeAnalyse()
@@ -325,10 +331,12 @@ void Automate::executeAnalyse()
 
     if (!ok)
     {
-        cerr << "Une erreur s'est produite pendant l'analyse sémantique. Fermeture du programme." << endl;
+        //cerr << "Une erreur s'est produite pendant l'analyse sémantique. Fermeture du programme." << endl;
         exit(1);
     }
-    cout << "LA SEMANTIQUE EST TIP TOP <3" << endl;
+    #ifdef DEBUG
+        cout << "LA SEMANTIQUE EST TIP TOP <3" << endl;
+    #endif
 }
 
 /**
@@ -341,10 +349,12 @@ void Automate::executeExecution()
 
     if (!ok)
     {
-        cerr << "Une erreur s'est produite pendant l'exécution. Fermeture du programme." << endl;
+        //cerr << "Une erreur s'est produite pendant l'exécution. Fermeture du programme." << endl;
         exit(1);
     }
-    cout << "L'EXECUTION EST TIP TOP <3" << endl;        
+    #ifdef DEBUG
+        cout << "L'EXECUTION EST TIP TOP <3" << endl; 
+    #endif       
 }
 
 /**
@@ -357,10 +367,12 @@ void Automate::executeOptimisation()
 
     if (!ok)
     {
-        cerr << "Une erreur s'est produite pendant l'optimisation. Fermeture du programme." << endl;
+        //cerr << "Une erreur s'est produite pendant l'optimisation. Fermeture du programme." << endl;
         exit(1);
     }
-    cout << "L'OPTIMISATION EST TIP TOP <3" << endl;
+    #ifdef DEBUG
+        cout << "L'OPTIMISATION EST TIP TOP <3" << endl;
+    #endif
 
     /**
      * TODO :

@@ -13,10 +13,12 @@ struct variable_s {
     int value;
     bool instanciated;
     bool isSemanticInstanciated;
+    bool isUsed;
 };
 
 struct constante_s {
     int value;
+    bool isUsed;
 };
 
 typedef map<const string, variable_s> map_var;
@@ -39,6 +41,9 @@ class Memory
         bool isVariableDeclared(const string& name);
         bool isIdentificateurDeclared(const string& name);
         bool isVariable(const string & name);
+        bool areVariablesAllInstanciated();
+        bool areIdentificateursAllUsed();
+        void setUsed(const string& name);
 
         void displayMemory();
         map<string, double> buildEvalMap();

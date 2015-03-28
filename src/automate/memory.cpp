@@ -20,12 +20,15 @@ bool Memory::addVariable(Identificateur* const id)
     if (this->idents.find(name) != this->idents.end())
     {
         // var already exists
-        cerr << "# L'identificateur `" << name << "` a déjà été utilisé par une autre variable/constante." << endl;
+        #ifdef DEBUG
+            cout << "# L'identificateur `" << name << "` a déjà été utilisé par une autre variable/constante." << endl;
+        #endif
+        cerr << "la variable " << name << " est deja declaree" << endl;
         return false;
     }
 
     // var doesn't exist
-    this->variables[name] = {-1, false, false};
+    this->variables[name] = {-1, false, false, false};
     this->idents.insert(name);
     return true;
 }
@@ -40,12 +43,16 @@ bool Memory::addConstante(const string& name, int value)
     if (this->idents.find(name) != this->idents.end())
     {
         // const already exists
-        cerr << "# L'identificateur `" << name << "` (" << value << ") a déjà été utilisé par une autre variable/constante." << endl;
+        #ifdef DEBUG
+            cout << "# L'identificateur `" << name << "` a déjà été utilisé par une autre variable/constante." << endl;
+        #endif
+        cerr << "la variable " << name << " est deja declaree" << endl;
+
         return false;
     }
 
     // const doesn't exist
-    this->constantes[name] = {value};
+    this->constantes[name] = {value, false};
     this->idents.insert(name);
     return true;
 }
@@ -162,6 +169,68 @@ bool Memory::isVariable(const string& name)
 }
 
 /**
+ * Tester si toutes les variables de la map ont été instanciées (au niveau sémantique)
+ */
+ bool Memory::areVariablesAllInstanciated()
+ {
+    bool all = true;
+    for (auto const& it : this->variables)
+    {
+        if (!it.second.isSemanticInstanciated)
+        {
+            all = false;
+            cerr << "variable non affectee : " << it.first << endl;
+        }
+    }
+    return all;
+ }
+
+ bool Memory::areIdentificateursAllUsed()
+ {
+    bool all = true;
+    for (auto const& it : this->variables)
+    {
+        if (!it.second.isUsed)
+        {
+            all = false;
+            cerr << "variable non utilisee : " << it.first << endl;
+        }
+    }
+
+    for (auto const& it : this->constantes)
+    {
+        if (!it.second.isUsed)
+        {
+            all = false;
+            cerr << "variable non utilisee : " << it.first << endl;
+        }
+    }
+    return all;
+ }
+
+/**
+ * Dire si une variable a été utilisée par le programme
+ */
+ void Memory::setUsed(const string& name)
+ {
+    map_var::iterator itvar = variables.find(name);
+    map_const::iterator itconst = constantes.find(name);
+
+    if (itvar != variables.end())
+    {
+        itvar->second.isUsed = true;
+    }
+    else if (itconst != constantes.end())
+    {
+        itconst->second.isUsed = true;
+    }
+    else
+    {
+        // not found
+    }
+ }
+
+/**
  * Afficher l'état de la mémoire sur la sortie standard
  */
  void Memory::displayMemory()
@@ -170,7 +239,14 @@ bool Memory::isVariable(const string& name)
         cout << "# Constantes :" << endl;
         for (auto const& it : this->constantes)
         {
-            cout << "\tconst " << it.first << " = " << it.second.value << ";" << endl;
+            cout << "\tconst " << it.first << " = " << it.second.value << ";";
+
+            if (it.second.isUsed)
+            {
+                cout << " [USED]";
+            }
+
+            cout << endl;
         }
         cout << endl << "# Variables : "<< endl;
         for (auto const &it : this->variables)
@@ -190,6 +266,11 @@ bool Memory::isVariable(const string& name)
             if (it.second.isSemanticInstanciated)
             {
                 cout << " but semantic instanciated !";
+            }
+
+            if (it.second.isUsed)
+            {
+                cout << " [USED]";
             }
             cout << endl;
         }

@@ -32,9 +32,7 @@ PHONY: clean test
 
 test:
 	@echo "Execution des tests"
-	# pwd
 	./test.sh
-	# pwd
 
 clean:
 	rm -rf $(BUILD_DIR)/*.o $(EXEC)

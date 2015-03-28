@@ -118,47 +118,11 @@ bool Semantique::execute(Memory& mem)
 
             // get expression -> récupérer tous les identificateurs (get idents) de l'expression et checker s'ils existent (déclarées) et si pour les variables ils ont bien été instanciés
             Expression* expr = affectation->getExpression();
-            set<Identificateur*> idents = expr->getIdents();
-
-            // #ifdef DEBUG
-            //     cout << "Les identificateurs de l'affectation `" << *affectation << "` sont (taille=" << idents.size() << ") : ";
-            //     for (auto const& ident : idents)
-            //     {
-            //         cout << *ident << " ";
-            //     }
-            //     cout << endl;
-            // #endif
-
-            for (auto const& ident : idents)
+            
+            if (!this->checkExpression(mem, expr))
             {
-                string name = (string)*ident;
-
-                if (mem.isVariable(name))
-                {
-                    // référence une variable
-                    if (!mem.isVariableSemanticInstanciated(name))
-                    {
-                        // variable non instanciée (voire non déclarée)
-                        #ifdef DEBUG
-                            cout << "# La variable `" << name << "` au sein de l'expression `" << *expr << "` n'a pas été instanciée." << endl;
-                        #endif
-                        return false;
-                    }
-                }
-                else
-                {
-                    // référence autre chose : une constante ou rien du tout
-                    if (!mem.isIdentificateurDeclared(name))
-                    {
-                        #ifdef DEBUG
-                            cout << "# L'identificateur `" << name << "` au sein de l'expression `" << *expr << "` n'a pas été déclarée." << endl;
-                        #endif
-                        return false;
-                    }
-                }
+                return false;
             }
-
-            // Si on a survécu jusqu'ici, c'est que l'expression est correcte sémantiquement
 
             // get identificateur -> checker que c'est bien une variable et qu'elle a été déclarée
             Identificateur* id = affectation->getIdentificateur();
@@ -169,6 +133,7 @@ bool Semantique::execute(Memory& mem)
                 #ifdef DEBUG
                     cout << "# La partie gauche `" << name << "` au sein de l'instruction `" << *affectation << "` n'a pas été déclarée comme variable." << endl;
                 #endif
+                cerr << "la variable " << name << " n'a pas ete declaree." << endl;
                 return false;
             }
 
@@ -194,8 +159,14 @@ bool Semantique::execute(Memory& mem)
                 #ifdef DEBUG
                     cout << "# Le paramètre `" << name << "` au sein de l'instruction `" << *lecture << "` n'a pas été déclaré comme variable." << endl;
                 #endif
+
+                cerr << "la variable " << name << " n'a pas ete declaree." << endl;
                 return false;
             }
+
+            // la variable a été utilisée et instanciée avec la lecture, on le sauvegarde
+            mem.semanticInstanciation(name);
+            mem.setUsed(name);
 
         }
         else if (ecriture != NULL)
@@ -204,51 +175,84 @@ bool Semantique::execute(Memory& mem)
 
             // get expression -> récupérer tous les identificateurs de l'expression et checker s'ils existent et si pour les variables ils ont bien été instanciés
             Expression* expr = ecriture->getExpression();
-            set<Identificateur*> idents = expr->getIdents();
-
-            // #ifdef DEBUG
-            //     cout << "Les identificateurs de l'écriture `" << *ecriture << "` sont (taille=" << idents.size() << ") : ";
-            //     for (auto const& ident : idents)
-            //     {
-            //         cout << *ident << " ";
-            //     }
-            //     cout << endl;
-            // #endif
-
-            for (auto const& ident : idents)
+            if (!this->checkExpression(mem, expr))
             {
-
-                string name = (string)*ident;
-
-                if (mem.isVariable(name))
-                {
-                    // référence une variable
-                    if (!mem.isVariableSemanticInstanciated(name))
-                    {
-                        // variable non instanciée (voire non déclarée)
-                        #ifdef DEBUG
-                            cout << "# La variable `" << name << "` n'a pas été instanciée." << endl;
-                        #endif
-                        return false;
-                    }
-                }
-                else
-                {
-                    // référence autre chose : une constante ou rien du tout
-                    if (!mem.isIdentificateurDeclared(name))
-                    {
-                        #ifdef DEBUG
-                            cout << "# L'identificateur `" << name << "` au sein de l'expression `" << *expr << "` n'a pas été déclarée." << endl;
-                        #endif
-                        return false;
-                    }
-                }
+                return false;
             }
         }
         else
         {
             // ???
         }
+    }
+
+    // checker que toutes les variables sont bien utilisées
+    if (!mem.areVariablesAllInstanciated())
+    {
+        #ifdef DEBUG
+            cout << "# Certaines variables déclarées n'ont pas été instanciées." << endl;
+        #endif
+    }
+
+    if (!mem.areIdentificateursAllUsed())
+    {
+        #ifdef DEBUG
+            cout << "# Certaines variables déclarées sont inutilisées." << endl;
+        #endif
+    }
+
+    return true;
+}
+
+/**
+ * Vérifie si tous les identificateurs d'une expression ont bien été instanciés (pour les variables) et déclarés (pour les constantes) 
+ */
+bool Semantique::checkExpression(Memory& mem, Expression* expr)
+{
+    set<Identificateur*> idents = expr->getIdents();
+
+    // #ifdef DEBUG
+    //     cout << "Les identificateurs de l'expression `" << *expr << "` sont (taille=" << idents.size() << ") : ";
+    //     for (auto const& ident : idents)
+    //     {
+    //         cout << *ident << " ";
+    //     }
+    //     cout << endl;
+    // #endif
+
+    for (auto const& ident : idents)
+    {
+
+        string name = (string)*ident;
+
+        if (mem.isVariable(name))
+        {
+            // référence une variable
+            if (!mem.isVariableSemanticInstanciated(name))
+            {
+                // variable non instanciée (voire non déclarée)
+                #ifdef DEBUG
+                    cout << "# La variable `" << name << "` n'a pas été instanciée au sein de l'expression `" << *expr << "`." << endl;
+                #endif
+                cerr << "une valeur dans l'expression " << *expr << " n'est pas connue." << endl;
+                return false;
+            }
+        }
+        else
+        {
+            // référence autre chose : une constante ou rien du tout
+            if (!mem.isIdentificateurDeclared(name))
+            {
+                #ifdef DEBUG
+                    cout << "# L'identificateur `" << name << "` au sein de l'expression `" << *expr << "` n'a pas été déclarée." << endl;
+                #endif
+                cerr << "une valeur dans l'expression " << *expr << " n'est pas connue." << endl;
+                return false;
+            }
+        }
+
+        // la variable a été utilisée pour faire l'écriture ou la partie droite d'une affectation, on le sauvegarde
+        mem.setUsed(name);
     }
 
     return true;
