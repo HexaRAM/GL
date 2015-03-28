@@ -1,6 +1,6 @@
-const b=3;
-var z;
-const n=3, u=12222;
+var a;
+var b;
 a := (3+4)*5;
 lire b;
 ecrire b;
+ecrire a;
