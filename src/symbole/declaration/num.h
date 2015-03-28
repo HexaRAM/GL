@@ -10,6 +10,7 @@
 			Num() : Expression(106) {}
 			Num(int val) : Expression(106), valeur(val) {}
 			double eval(const map<string, double> &valeurs);
+			Expression* neutralOpti();
 			virtual ~Num() {}
 			virtual void print(ostream& os) const;
 			operator int() const { return valeur; }

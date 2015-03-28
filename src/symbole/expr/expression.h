@@ -19,6 +19,7 @@ using namespace std;
             virtual void setF() { ident = 9; }
             virtual void setT() { ident = 8; }
 			virtual double eval(const map<string, double> &valeurs);
+			virtual Expression * neutralOpti();
 			virtual void print(ostream& os) const;
             virtual set<Identificateur*>  getIdents() const;
 	};

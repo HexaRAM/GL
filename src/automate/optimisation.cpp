@@ -31,6 +31,7 @@ bool Optimisation::execute(Memory& mem)
 
     	if(affectation != NULL)
     	{
+    		//propagation des constantes
     		identificateurs = affectation->getExpression()->getIdents();
     		bool isConst = true;
     		for(auto const &j : identificateurs)
@@ -71,7 +72,15 @@ bool Optimisation::execute(Memory& mem)
                         }
                     }
                 }                   
-            }			
+            }
+
+            //gestion des éléments neutres
+            Expression* expressionAff = affectation->getExpression();
+            Expression* neutralFreeAff = expressionAff->neutralOpti();
+            if(neutralFreeAff != NULL)
+            	affectation->setExpression(neutralFreeAff);
+
+
     	}
 
     	else if(ecriture != NULL)
@@ -114,7 +123,13 @@ bool Optimisation::execute(Memory& mem)
                         }
                     }
                 }
-            }         			
+            } 
+
+            //gestion des éléments neutres
+            Expression* expressionEc = ecriture->getExpression();
+            Expression* neutralFreeEc = expressionEc->neutralOpti();
+            if(neutralFreeEc != NULL)
+            	ecriture->setExpression(neutralFreeEc);        			
     	}  		
   	}
     return true;

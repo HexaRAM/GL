@@ -5,12 +5,19 @@ OpParenthese::OpParenthese(Expression* expression) {
 	expr = expression;
     ident = 9;
 }
-double OpParenthese::eval(const map<string, double> &valeurs){
+double OpParenthese::eval(const map<string, double> &valeurs)
+{
 	return expr->eval(valeurs);
 }
 
-void OpParenthese::print(ostream& os) const {
+void OpParenthese::print(ostream& os) const 
+{
 	os << "(" << *expr << ")";
+}
+
+Expression * OpParenthese::neutralOpti()
+{
+	return expr->neutralOpti();
 }
 
 set<Identificateur*> OpParenthese::getIdents() const

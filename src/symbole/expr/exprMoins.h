@@ -8,6 +8,7 @@
 			ExprMoins(): ExprBin() {}
 			ExprMoins(Expression* gauche, Expression* droite): ExprBin(gauche, droite) {}
 			double eval(const map<string, double> &valeurs);
+			Expression * neutralOpti();
 			virtual ~ExprMoins() {}
 			void print(ostream& os) const;
 	};

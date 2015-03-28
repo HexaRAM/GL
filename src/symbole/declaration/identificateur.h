@@ -17,6 +17,7 @@ using namespace std;
 			Identificateur(): Expression(104) {}
 			Identificateur(string str) : Expression(104), nom(str) {} 
 			double eval(const map<string, double> &valeurs);
+			Expression* neutralOpti();
 			virtual ~Identificateur() {}
 			void print(ostream& os) const;
 			operator string() const { return nom; }

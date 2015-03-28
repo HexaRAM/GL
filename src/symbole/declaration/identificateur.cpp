@@ -11,6 +11,12 @@ double Identificateur::eval(const map<string, double> &valeurs)
   	return it->second;
 }
 
+Expression * Identificateur::neutralOpti()
+{
+    //pas d'optimisation à faire
+    return NULL;
+}
+
 void Identificateur::print(ostream& os) const 
 {
 	os<<nom;

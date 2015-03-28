@@ -11,6 +11,7 @@
 			ExprBin(): Expression() {}
 			ExprBin(Expression* gauche, Expression* droite);
 			virtual double eval(const map<string, double> &valeurs)=0;
+			virtual Expression * neutralOpti()=0;
 			virtual ~ExprBin() {}
 			virtual void print(ostream& os) const;
 			Expression* getExprGauche();
