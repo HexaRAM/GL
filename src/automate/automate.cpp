@@ -236,6 +236,11 @@ void Automate::execute(OPTIONS option)
             {
                 // optimisation (-o)
                 // modifier directement les instructions
+                if (!this->analyse)
+                {
+                    // inutile d'optimiser le programme si la sémantique n'est pas bonne
+                    executeAnalyse();
+                }
                 executeOptimisation();
             }
 

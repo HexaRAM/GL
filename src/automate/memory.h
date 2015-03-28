@@ -47,7 +47,7 @@ class Memory
 
         void displayMemory();
         map<string, double> buildEvalMap();
-        map<string, double>  getMapConst();
+        map<string, double> buildEvalMapConst();
 
         // methods related to programme
         inline vector<Declaration*> getDeclarations() { return programme->getBlocDeclaration()->getListeDeclaration(); }

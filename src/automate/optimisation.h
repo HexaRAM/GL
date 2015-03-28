@@ -11,7 +11,7 @@ class Optimisation : public Action
         ~Optimisation();
         bool execute(Memory& mem);
     protected:
-    	bool isConst(Identificateur* id, Memory& mem);
+    	bool isConst(Identificateur* id, map<string, double>& value_map);
 };
 
 #endif

@@ -296,7 +296,7 @@ map<string, double> Memory::buildEvalMap()
     return map_val;
 }
 
-map<string, double> Memory::getMapConst()
+map<string, double> Memory::buildEvalMapConst()
 {
 
     map<string, double> map_val;
