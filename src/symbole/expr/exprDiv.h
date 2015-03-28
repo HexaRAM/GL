@@ -8,7 +8,7 @@
 			ExprDiv(): ExprBin() {}
 			ExprDiv(Expression* gauche, Expression* droite): ExprBin(gauche, droite) { ident = 8; }
 			double eval(const map<string, double> &valeurs);
-			Expression * neutralOpti();
+			Expression* neutralOpti();
 			virtual ~ExprDiv() {}
 			void print(ostream& os) const;
 	};

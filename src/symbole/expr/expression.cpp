@@ -4,9 +4,9 @@ double Expression::eval(const map<string, double> &valeurs) {
 	return 0;
 }
 
-Expression * Expression::neutralOpti()
+Expression* Expression::neutralOpti()
 {
-	return 0;
+	return NULL;
 }
 
 void Expression::print(ostream& os) const {

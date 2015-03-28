@@ -6,16 +6,25 @@ double ExprMoins::eval(const map<string, double> &valeurs) {
 	
 }
 
-Expression * ExprMoins::neutralOpti(){
+Expression* ExprMoins::neutralOpti(){
 	Num* numGauche = dynamic_cast<Num*>(expr_gauche);
 	Num* numDroite = dynamic_cast<Num*>(expr_droite);
-	if (numGauche!=NULL && (int)numGauche == 0)
-		return expr_droite;
-	else if(numDroite != NULL && (int)numDroite == 0)
-		return expr_gauche;
+
+	if (numGauche != NULL && (int)(*numGauche) == 0)
+	{
+		return expr_droite->neutralOpti();
+	}
+	else if(numDroite != NULL && (int)(*numDroite) == 0)
+	{
+		return expr_gauche->neutralOpti();
+	}
 	else
-		//pas d'optimisation à faire
-		return NULL;
+	{
+		Expression* expr_gaucheOpti = expr_gauche->neutralOpti();
+		Expression* expr_droiteOpti = expr_droite->neutralOpti();
+
+		return new ExprMoins(expr_gaucheOpti, expr_droiteOpti);
+	}
 }
 
 void ExprMoins::print(ostream& os) const {

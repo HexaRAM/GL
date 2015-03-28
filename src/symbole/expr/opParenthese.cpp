@@ -1,10 +1,12 @@
 #include "opParenthese.h"
 
-OpParenthese::OpParenthese(Expression* expression) {
+OpParenthese::OpParenthese(Expression* expression)
+{
 	Expression();
 	expr = expression;
     ident = 9;
 }
+
 double OpParenthese::eval(const map<string, double> &valeurs)
 {
 	return expr->eval(valeurs);
@@ -15,9 +17,10 @@ void OpParenthese::print(ostream& os) const
 	os << "(" << *expr << ")";
 }
 
-Expression * OpParenthese::neutralOpti()
+Expression* OpParenthese::neutralOpti()
 {
-	return expr->neutralOpti();
+    Expression* exprOpti = expr->neutralOpti();
+    return new OpParenthese(exprOpti);
 }
 
 set<Identificateur*> OpParenthese::getIdents() const

@@ -3,6 +3,8 @@
 #include "../symbole/ecriture.h"
 #include "../symbole/declaration/num.h"
 
+#include "../config.h"
+
 #include <iostream>
 #include <string>
 using namespace std;
@@ -46,7 +48,7 @@ bool Optimisation::execute(Memory& mem)
             // on remplace toute l'expression par un NUM si l'expression est entièrement constante
     		if(isConst)
     		{
-    			//tous les membres de l'affectation sont constants, il faut l'évaluer, et remplacer l'expression dedans
+    			// tous les membres de l'affectation sont constants, il faut l'évaluer, et remplacer l'expression dedans
     			double value = (affectation->getExpression())->eval(value_map);
     			Num* newExpression = new Num((int)value);
                 value_map[(string)*(affectation->getIdentificateur())] = value;
@@ -78,7 +80,12 @@ bool Optimisation::execute(Memory& mem)
             Expression* expressionAff = affectation->getExpression();
             Expression* neutralFreeAff = expressionAff->neutralOpti();
             if(neutralFreeAff != NULL)
+            {
+                #ifdef DEBUG
+                    cout << "Optimisation neutre de l'expression de : `" << *affectation << "` --> `" << *expressionAff << "`" << endl;
+                #endif
             	affectation->setExpression(neutralFreeAff);
+            }
 
 
     	}
@@ -123,13 +130,19 @@ bool Optimisation::execute(Memory& mem)
                         }
                     }
                 }
-            } 
+            }
 
             //gestion des éléments neutres
             Expression* expressionEc = ecriture->getExpression();
             Expression* neutralFreeEc = expressionEc->neutralOpti();
             if(neutralFreeEc != NULL)
+            {
+                #ifdef DEBUG
+                    cout << "Optimisation neutre de l'expression de : `" << *ecriture << "` --> `" << *expressionEc << "`" << endl;
+                    cout.flush();
+                #endif
             	ecriture->setExpression(neutralFreeEc);        			
+            }
     	}  		
   	}
     return true;

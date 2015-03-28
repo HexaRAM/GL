@@ -8,16 +8,19 @@ double ExprDiv::eval(const map<string, double> &valeurs){
 	return 0;
 }
 
-Expression * ExprDiv::neutralOpti(){
-	Num* numGauche = dynamic_cast<Num*>(expr_gauche);
+Expression* ExprDiv::neutralOpti(){
 	Num* numDroite = dynamic_cast<Num*>(expr_droite);
-	if (numGauche!=NULL && (int)numGauche == 1)
-		return expr_droite;
-	else if(numDroite != NULL && (int)numDroite == 1)
-		return expr_gauche;
+	if (numDroite != NULL && (int)(*numDroite) == 1)
+	{
+		return expr_gauche->neutralOpti();
+	}
 	else
-		//pas d'optimisation à faire
-		return NULL;
+	{
+		Expression* expr_gaucheOpti = expr_gauche->neutralOpti();
+		Expression* expr_droiteOpti = expr_droite->neutralOpti();
+
+		return new ExprDiv(expr_gaucheOpti, expr_droiteOpti);
+	}
 }
 
 void ExprDiv::print(ostream& os) const {

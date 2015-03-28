@@ -14,16 +14,25 @@ double ExprMult::eval(const map<string, double> &valeurs){
 	return ( expr_gauche->eval(valeurs) * expr_droite->eval(valeurs));
 }
 
-Expression * ExprMult::neutralOpti(){
+Expression* ExprMult::neutralOpti(){
 	Num* numGauche = dynamic_cast<Num*>(expr_gauche);
 	Num* numDroite = dynamic_cast<Num*>(expr_droite);
-	if (numGauche!=NULL && (int)numGauche == 1)
-		return expr_droite;
-	else if(numDroite != NULL && (int)numDroite == 1)
-		return expr_gauche;
+
+	if (numGauche != NULL && (int)(*numGauche) == 1)
+	{
+		return expr_droite->neutralOpti();
+	}
+	else if(numDroite != NULL && (int)(*numDroite) == 1)
+	{
+		return expr_gauche->neutralOpti();
+	}
 	else
-		//pas d'optimisation à faire
-		return NULL;
+	{
+		Expression* expr_gaucheOpti = expr_gauche->neutralOpti();
+		Expression* expr_droiteOpti = expr_droite->neutralOpti();
+
+		return new ExprMult(expr_gaucheOpti, expr_droiteOpti);
+	}
 }
 
 
