@@ -134,6 +134,14 @@ void Automate::decalage(Symbole* s, Etat* e)
     this->updateState(e);
     current_symbole = getNext();
 
+    if (current_symbole == NULL)
+    {
+        #ifdef DEBUG
+            cout << "Symbole inconnu sous la tête de lecture !" << endl;
+        #endif
+        exit(1);
+    }
+
     this->displayState();
 
     this->current_state->transition(*this, current_symbole);
@@ -294,6 +302,14 @@ bool Automate::executeSyntaxicalAnalyse()
     states.push_front(current_state);
     current_symbole = getNext();
 
+    if (current_symbole == NULL)
+    {
+        #ifdef DEBUG
+            cout << "Symbole inconnu sous la tête de lecture !" << endl;
+        #endif
+        exit(1);
+    }
+
     current_state->transition(*this, current_symbole);
 
     if (syntaxeChecked)
@@ -378,12 +394,6 @@ void Automate::executeOptimisation()
     #ifdef DEBUG
         cout << "L'OPTIMISATION EST TIP TOP <3" << endl;
     #endif
-
-    /**
-     * TODO :
-     * - Refactor complet des classes, plus besoin de faire un getAffectationsConstants() ici, tout se passe dans la classe Memory (pour la gestion du programme)
-     * - Votre portion de code se trouve dans la classe "Optimisation", fichier "optimisation.h/cpp"
-     */
 }
 
 /**

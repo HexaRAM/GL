@@ -4,6 +4,7 @@
 #include "../symbole/symbole.h"
 #include "../symbole/declaration/num.h"
 #include "../symbole/declaration/identificateur.h"
+#include "../symbole/unknown.h"
 #include <boost/regex.hpp>
 
 Lexer::Lexer()
@@ -212,6 +213,15 @@ Symbole* Lexer::getNext(string& buff)
             else
             {
                 // error
+                cout << buffer << endl;
+                if (buffer.size() > 0)
+                {
+                    retour = new Unknown(buffer.at(0));
+                }
+                else
+                {
+                    retour = new Unknown();
+                }
             }
         break;
         case 0:
@@ -271,7 +281,15 @@ Symbole* Lexer::getNext(string& buff)
         }
         break;
         default:
-            // error
+            cout << buffer << endl;
+            if (buffer.size() > 0)
+            {
+                retour = new Unknown(buffer.at(0));
+            }
+            else
+            {
+                retour = new Unknown();
+            }
         break;
     }
 

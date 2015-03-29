@@ -37,6 +37,7 @@ enum ID_SYMBOLE{
 	moins = 113,		//symbole -
 	fois = 114,			//symbole *
 	divise = 115,		//symbole /
-	dollar = 116		//symbole $
+	dollar = 116,		//symbole $
+	unknown = 1000
 };
 #endif
