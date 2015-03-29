@@ -7,7 +7,8 @@ void BlocInstruction::addInstruction(Instruction* inst){
 
 
 void BlocInstruction::print(ostream& os) const {
-	for(auto const &it:liste_instruction){
+	for (auto const &it:liste_instruction)
+	{
 		os << *it << endl;
 	}
 }
@@ -16,17 +17,18 @@ vector<Instruction*> BlocInstruction::getListeInstruction() {
 	return liste_instruction;
 }
 
-void BlocInstruction::getAffectationConstants(){
-	//cout<<liste_instruction.size()<<endl;
-	for(auto const &it:liste_instruction){
+void BlocInstruction::getAffectationConstants()
+{
+	for(auto const &it:liste_instruction)
+	{
 		Affectation* aff = dynamic_cast<Affectation*> (it);
-		if(aff != NULL){
+		if (aff != NULL)
+		{
 			ExprBin * rht = dynamic_cast<ExprBin*> (aff->getExpression());
-			if (rht != NULL){
+			if (rht != NULL)
+			{
 				rht->getExprGauche()->print(cout);
 			}
-
-		} 
+		}
 	}
-
 }

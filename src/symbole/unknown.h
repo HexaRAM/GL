@@ -7,7 +7,7 @@
         private:
             char valeur;
         public:
-            Unknown() : Symbole(1000) {}
+            Unknown() : Symbole(1000), valeur(' ') {}
             Unknown(char val) : Symbole(1000), valeur(val) {}
             
             char getValeur() { return valeur; }

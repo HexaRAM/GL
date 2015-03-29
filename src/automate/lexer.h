@@ -3,6 +3,7 @@
 
 #include <string>
 #include <set>
+#include <vector>
 
 #include "../symbole/symbole.h"
 #include "../symbole/declaration/identificateur.h"
@@ -15,7 +16,7 @@ class Lexer
     public:
         Lexer();
         ~Lexer();
-        Symbole* getNext(string& buff);
+        Symbole* getNext(string& buff, vector<int> linesBreak);
         static string regex[];
     private:
         set<Identificateur*> idents;

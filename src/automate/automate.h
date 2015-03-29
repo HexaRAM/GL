@@ -22,7 +22,7 @@ class Automate
 {
     public:
         Automate();
-        Automate(bool aff, bool ana, bool opti, bool exec, string code);
+        Automate(bool aff, bool ana, bool opti, bool exec, string code, vector<int> linesBreaks);
         ~Automate();
 
         // syntaxic
@@ -68,6 +68,9 @@ class Automate
 
         // memory manager
         Memory* memory;
+
+        // line management
+        vector<int> linesBreaks;
 
         // execute functions
         bool executeSyntaxicalAnalyse();

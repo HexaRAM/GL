@@ -46,7 +46,7 @@ Automate::Automate()
     this->memory = NULL;
 }
 
-Automate::Automate(bool affichage, bool analyse, bool optimisation, bool execution, string code)
+Automate::Automate(bool affichage, bool analyse, bool optimisation, bool execution, string code, vector<int> linesBreaks)
 {
     this->affichage = affichage;
     this->analyse = analyse;
@@ -62,6 +62,7 @@ Automate::Automate(bool affichage, bool analyse, bool optimisation, bool executi
 
     this->syntaxeChecked = false;
     this->memory = NULL;
+    this->linesBreaks = linesBreaks;
 }
 
 Automate::~Automate()
@@ -123,7 +124,7 @@ void Automate::popAndDeleteState()
  */
 Symbole* Automate::getNext()
 {
-    return lexer.getNext(this->buffer);
+    return lexer.getNext(this->buffer, this->linesBreaks);
 }
 void Automate::decalage(Symbole* s, Etat* e)
 {

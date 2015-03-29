@@ -98,15 +98,17 @@ Automate* CommandLineReader::createAutomate()
     {
         ifstream fichier(this->nomFichier.c_str());
         string code = "";
+        vector<int> linesBreaks;
         while (!fichier.fail())
         {
             string tmp;
-            getline(fichier, tmp);
+            getline(fichier, tmp); // lire une ligne
+            linesBreaks.push_back(tmp.size());
             code += tmp;
         }
         fichier.close();
 
-        Automate* automate = new Automate(this->affichage, this->analyse, this->optimisation, this->execution, code);
+        Automate* automate = new Automate(this->affichage, this->analyse, this->optimisation, this->execution, code, linesBreaks);
         return automate;
     }
     return NULL;

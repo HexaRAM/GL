@@ -37,7 +37,7 @@ string Lexer::regex[] = {"^const$", "^var$", "^lire$", "^ecrire$", ";", "\\(", "
  *                  ** si flag à non match => retourner erreur (aucun pattern trouvé)
  *
  */
-Symbole* Lexer::getNext(string& buff)
+Symbole* Lexer::getNext(string& buff, vector<int> linesBreaks)
 {
     if (buff.empty())
     {
