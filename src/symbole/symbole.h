@@ -14,5 +14,6 @@ using namespace std;
             virtual void print(ostream& os) const;
             operator int() const { return ident; }
             friend ostream& operator<<(ostream& os, const Symbole& dt);
+            static bool isOperator(Symbole*);
     };
 #endif

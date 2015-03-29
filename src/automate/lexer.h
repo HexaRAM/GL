@@ -18,8 +18,12 @@ class Lexer
         Lexer(vector<int> linesBreaks);
         ~Lexer();
         Symbole* getNext(string& buff);
+        int getLine() { return line; }
+        int getColumn() { return column; }
         static string regex[];
     private:
+        int line;
+        int column;
         int charRead;
         set<Identificateur*> idents;
         vector<int> linesBreaks;

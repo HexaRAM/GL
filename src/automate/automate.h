@@ -28,7 +28,8 @@ class Automate
         // syntaxic
         void decalage(Symbole* s, Etat* e);
         void reduction(Symbole* s);
-        void reduction(int nbSymboles, Symbole* s); 
+        void reduction(int nbSymboles, Symbole* s);
+        void recuperation(Symbole* symboleToRecup, bool sureSymboleToRecupIsTheOneExpected);
 	    Symbole* getNthSymbole(int n);
 
         // manage deque
@@ -65,6 +66,8 @@ class Automate
 
         // check
         bool syntaxeChecked;
+        bool isInRecuperation; // savoir si on est en train de faire une récupération ou pas
+        Symbole* nextSymboleRecup; // on sauvegarde le symbole qui se trouve après le symbole de récupération
 
         // memory manager
         Memory* memory;

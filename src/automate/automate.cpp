@@ -43,7 +43,9 @@ Automate::Automate()
     this->current_symbole = NULL;
 
     this->syntaxeChecked = false;
+    this->isInRecuperation = false;
     this->memory = NULL;
+    this->nextSymboleRecup = NULL;
 }
 
 Automate::Automate(bool affichage, bool analyse, bool optimisation, bool execution, string code, vector<int> linesBreaks)
@@ -60,8 +62,10 @@ Automate::Automate(bool affichage, bool analyse, bool optimisation, bool executi
     this->current_state = new Etat0("0");
     this->current_symbole = NULL;
 
+    this->isInRecuperation = false;
     this->syntaxeChecked = false;
     this->memory = NULL;
+    this->nextSymboleRecup = NULL;
 }
 
 Automate::~Automate()
@@ -123,6 +127,11 @@ void Automate::popAndDeleteState()
  */
 Symbole* Automate::getNext()
 {
+    if (this->isInRecuperation)
+    {
+        this->isInRecuperation = false;
+        return nextSymboleRecup;
+    }
     return lexer.getNext(this->buffer);
 }
 void Automate::decalage(Symbole* s, Etat* e)
@@ -132,6 +141,7 @@ void Automate::decalage(Symbole* s, Etat* e)
     #endif
     symboles.push_front(s);
     this->updateState(e);
+
     current_symbole = getNext();
 
     if (current_symbole == NULL)
@@ -186,6 +196,35 @@ void Automate::reduction(int nbSymboles, Symbole* newSymbole)
     }
 
     this->reduction(newSymbole);
+}
+
+/**
+ * TODO
+ * Récupérer un symbole non lu par un symbole "attendu". Quand plusieurs symboles peuvent être présent. On fait une hypothèse sur le symbole le plus probable.
+ * OPTI : vector<Symbole*> symbolesToRecup et boucler tant qu'on ne trouve pas de symbole qui va bien
+ */
+
+void Automate::recuperation(Symbole* symboleToRecup, bool sureSymboleToRecupIsTheOneExpected)
+{
+    // current_symbole contient le prochain symbole (on doit le conserver)
+    // symboleToRecup est le symbole à mettre à la place du symbole manquant
+    // todo : changer l'affichage des symboles(N) avec un switch case dans la classe Symbole
+
+    string symboleOrOperator = "symbole";
+    if (Symbole::isOperator(symboleToRecup))
+    {
+        symboleOrOperator = "operateur";
+    }
+
+    cerr << "Erreur syntaxique (" << lexer.getLine() << ":" << lexer.getColumn() << ") " << symboleOrOperator << " " << *symboleToRecup << " " << ((sureSymboleToRecupIsTheOneExpected) ? "" : "probablement ")<< "attendu" << endl;
+
+    this->isInRecuperation = true;
+    this->nextSymboleRecup = this->current_symbole; // sauvegarde du current symbole
+    this->current_symbole = symboleToRecup; // on insère le symbole de récupération
+
+    // OPTI : en théorie, boucler tant que c'est pas ok sur l'ensemble des symboles possibles pour la récupération
+
+    bool ok = current_state->transition(*this, current_symbole);
 }
 
 /**

@@ -12,8 +12,10 @@ bool Etat8::transition(Automate & automate, Symbole * s ){
 	switch (idSym) {
 		case af :
 			automate.decalage(s, new Etat17("17"));
-			break;
-		default : break;
+		break;
+		default :
+            automate.recuperation(new Symbole(107), true); // on est sûr qu'il manque un :=
+        break;
 	}
 	return false;
 }

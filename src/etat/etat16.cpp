@@ -31,8 +31,6 @@ bool Etat16::transition(Automate & automate, Symbole * s ){
 			automate.popSymbole(); // on le pop sans le supprimer car il s'agit de blocDec
 
 			automate.reduction(blocInst); // réduction manuelle
-
-
 			break;
 		}
 		default : break;

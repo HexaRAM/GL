@@ -14,6 +14,8 @@ Lexer::Lexer()
 
 Lexer::Lexer(vector<int> linesBreaks)
 {
+    this->line = 1;
+    this->column = 1;
     this->linesBreaks = linesBreaks;
     this->charRead = 0;
 }
@@ -46,8 +48,6 @@ string Lexer::regex[] = {"^const$", "^var$", "^lire$", "^ecrire$", ";", "\\(", "
 Symbole* Lexer::getNext(string& buff)
 {
     // on récupère les core informations
-    int line;
-    int column;
     this->getCurrentLineAndColumn(line, column);
 
     if (buff.empty())
@@ -101,6 +101,7 @@ Symbole* Lexer::getNext(string& buff)
                 // -> si espace
                 if (character == ' ')
                 {
+                    this->getCurrentLineAndColumn(line, column);
                     continue;
                 }
                 // -> sinon
@@ -338,10 +339,12 @@ void Lexer::getCurrentLineAndColumn(int& line, int& column)
     line = 1;
     column = 1;
 
+    // 9 12 11 6 15 7 11 7 9 0
+
     for (auto const& it : linesBreaks)
     {
         charFile += it;
-        if (charRead <= charFile)
+        if (charRead < charFile)
         {
             // on est dans la bonne ligne
             // on récupère la colonne :

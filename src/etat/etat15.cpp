@@ -32,7 +32,10 @@ bool Etat15::transition(Automate & automate, Symbole * s ){
 			automate.reduction(s);
 			break;
 		}
-		default : break;
+		default : 
+			// récupération ici -> on suppose que ça sera une virgule plutôt qu'un point virgule
+			automate.recuperation(new Symbole(103), false); // false pour dire "not sure virgule is expected"
+		break;
 	}
 	return false;
 }

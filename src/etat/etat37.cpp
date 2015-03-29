@@ -39,7 +39,10 @@ bool Etat37::transition(Automate& automate, Symbole* s ){
 			automate.reduction(newConst);
 			break;
 		}
-		default : break;
+		default :
+			// récupération ici -> on suppose que ça sera un point-virgule plutôt qu'une virgule (on n'est pas sûr)
+			automate.recuperation(new Symbole(100), true);
+		break;
 	}
 	return false;
 }
