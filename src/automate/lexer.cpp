@@ -9,7 +9,13 @@
 
 Lexer::Lexer()
 {
-    
+    this->charRead = 0;
+}
+
+Lexer::Lexer(vector<int> linesBreaks)
+{
+    this->linesBreaks = linesBreaks;
+    this->charRead = 0;
 }
 
 Lexer::~Lexer()
@@ -37,8 +43,13 @@ string Lexer::regex[] = {"^const$", "^var$", "^lire$", "^ecrire$", ";", "\\(", "
  *                  ** si flag à non match => retourner erreur (aucun pattern trouvé)
  *
  */
-Symbole* Lexer::getNext(string& buff, vector<int> linesBreaks)
+Symbole* Lexer::getNext(string& buff)
 {
+    // on récupère les core informations
+    int line;
+    int column;
+    this->getCurrentLineAndColumn(line, column);
+
     if (buff.empty())
     {
         return new Symbole(ID_SYMBOLE::dollar); // symbole DOLLAR / EOF
@@ -86,6 +97,7 @@ Symbole* Lexer::getNext(string& buff, vector<int> linesBreaks)
             if (buffer.empty())
             {
                 flux.get();
+                charRead++;
                 // -> si espace
                 if (character == ' ')
                 {
@@ -101,6 +113,7 @@ Symbole* Lexer::getNext(string& buff, vector<int> linesBreaks)
             if (character == ' ')
             {
                 flux.get();
+                charRead++;
             }
             // -> sinon
             break; // return buffer;
@@ -128,6 +141,7 @@ Symbole* Lexer::getNext(string& buff, vector<int> linesBreaks)
         if (matched)
         {
             flux.get();
+            charRead++;
             match_flag = true;
             buffer = new_buff;
             last_was_no_pattern = false;
@@ -159,6 +173,7 @@ Symbole* Lexer::getNext(string& buff, vector<int> linesBreaks)
 
             buffer = new_buff;
             flux.get();
+            charRead++;
         }
     } // fin du while
 
@@ -167,7 +182,9 @@ Symbole* Lexer::getNext(string& buff, vector<int> linesBreaks)
 
     if (error)
     {
-        //return "Erreur - aucun pattern trouvé dans les " + std::to_string(MAX_NO_PATTERN_SEQUENCE) + " derniers caractères.";
+        #ifdef DEBUG
+            cout << "Erreur - aucun pattern trouvé dans les " + std::to_string(MAX_NO_PATTERN_SEQUENCE) + " derniers caractères." << endl;
+        #endif
        return NULL;
     }
 
@@ -213,14 +230,21 @@ Symbole* Lexer::getNext(string& buff, vector<int> linesBreaks)
             else
             {
                 // error
-                cout << buffer << endl;
                 if (buffer.size() > 0)
                 {
                     retour = new Unknown(buffer.at(0));
+                    cerr << "Erreur lexicale (" << line << ":" << column << ") caractere " << buffer.at(0) << endl;
+                    // on ignore le caractère
+                    delete retour;
+                    retour = getNext(buff);
                 }
                 else
                 {
-                    retour = new Unknown();
+                    // error, on ignore le caractère
+                    #ifdef DEBUG
+                        cout << "Erreur : le buffer est vide et on est sorti de la boucle de lecture ..." << endl;
+                    #endif
+                    retour = getNext(buff);
                 }
             }
         break;
@@ -281,18 +305,51 @@ Symbole* Lexer::getNext(string& buff, vector<int> linesBreaks)
         }
         break;
         default:
-            cout << buffer << endl;
+            // error
             if (buffer.size() > 0)
             {
                 retour = new Unknown(buffer.at(0));
+                cerr << "Erreur lexicale (" << line << ":" << column << ") caractere " << buffer.at(0) << endl;
+                // on ignore le caractère
+                delete retour;
+                retour = getNext(buff);
             }
             else
             {
-                retour = new Unknown();
+                // error, on ignore le caractère
+                #ifdef DEBUG
+                    cout << "Erreur : le buffer est vide et on est sorti de la boucle de lecture ..." << endl;
+                #endif
+                retour = getNext(buff);
             }
         break;
     }
 
     //cout << " --> Lecture d'un symbole : " << *retour << endl;
     return retour;
+}
+
+void Lexer::getCurrentLineAndColumn(int& line, int& column)
+{
+    // charRead --> nombre de caractères lues
+    // linesBreaks --> nombre de caractères par ligne
+
+    int charFile = 0;
+    line = 1;
+    column = 1;
+
+    for (auto const& it : linesBreaks)
+    {
+        charFile += it;
+        if (charRead <= charFile)
+        {
+            // on est dans la bonne ligne
+            // on récupère la colonne :
+            // it --> nombre de caractères sur la ligne
+            // charFile-charRead-1 --> nombre de caractères à droite du caractère que l'on souhaite cibler
+            column = it-(charFile-charRead-1);
+            break;
+        }
+        line++;
+    }
 }

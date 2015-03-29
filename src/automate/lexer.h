@@ -15,11 +15,16 @@ class Lexer
 {
     public:
         Lexer();
+        Lexer(vector<int> linesBreaks);
         ~Lexer();
-        Symbole* getNext(string& buff, vector<int> linesBreak);
+        Symbole* getNext(string& buff);
         static string regex[];
     private:
+        int charRead;
         set<Identificateur*> idents;
+        vector<int> linesBreaks;
+
+        void getCurrentLineAndColumn(int& line, int& column);
 };
 
 #endif

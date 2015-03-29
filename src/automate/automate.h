@@ -69,9 +69,6 @@ class Automate
         // memory manager
         Memory* memory;
 
-        // line management
-        vector<int> linesBreaks;
-
         // execute functions
         bool executeSyntaxicalAnalyse();
         void executeAll();
