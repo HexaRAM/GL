@@ -133,7 +133,7 @@ bool Semantique::execute(Memory& mem)
                 #ifdef DEBUG
                     cout << "# La partie gauche `" << name << "` au sein de l'instruction `" << *affectation << "` n'a pas été déclarée comme variable." << endl;
                 #endif
-                cerr << "la variable " << name << " n'a pas ete declaree." << endl;
+                cerr << "l'identificateur " << name << " n'a pas ete declaree (comme variable)." << endl;
                 return false;
             }
 

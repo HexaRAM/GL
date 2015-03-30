@@ -208,7 +208,6 @@ void Automate::recuperation(Symbole* symboleToRecup, bool sureSymboleToRecupIsTh
 {
     // current_symbole contient le prochain symbole (on doit le conserver)
     // symboleToRecup est le symbole à mettre à la place du symbole manquant
-    // todo : changer l'affichage des symboles(N) avec un switch case dans la classe Symbole
 
     string symboleOrOperator = "symbole";
     if (Symbole::isOperator(symboleToRecup))
