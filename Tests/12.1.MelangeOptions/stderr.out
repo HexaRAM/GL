@@ -1,0 +1,5 @@
+variable non affectee : c
+variable non affectee : d
+variable non utilisee : c
+variable non utilisee : d
+variable non utilisee : z

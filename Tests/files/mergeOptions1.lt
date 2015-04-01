@@ -1,0 +1,6 @@
+var a,b,c,d;
+const z = 3;
+a := (3+4)*3;
+ecrire a;
+b := (a*4)-7;
+ecrire b;
