@@ -22,7 +22,7 @@ Lexer::Lexer(vector<int> linesBreaks)
 
 Lexer::~Lexer()
 {
-
+    // rien à détruire
 }
 
 string Lexer::regex[] = {"^const$", "^var$", "^lire$", "^ecrire$", ";", "\\(", "\\)", ":=", "=", "\\+", "\\-", "\\*", "\\/", "\\,", "^\\d*$","(?!(^var$|^const$|^ecrire$|^lire$))^[a-zA-Z][a-zA-Z0-9]*$"};
@@ -165,7 +165,7 @@ Symbole* Lexer::getNext(string& buff)
                 last_was_no_pattern = true;
                 no_pattern_sequence = 1;
             }
-
+ 
             if (no_pattern_sequence >= MAX_NO_PATTERN_SEQUENCE)
             {
                 error = true;

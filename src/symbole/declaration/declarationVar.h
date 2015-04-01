@@ -14,7 +14,7 @@ using namespace std;
 		DeclarationVar(): Declaration(4) {}
 		void addIdentificateur(Identificateur* ident);
 		void declarationFinie() { ident = 2; }
-		virtual ~DeclarationVar() {}
+		virtual ~DeclarationVar();
 		void print(ostream& os) const;
 		vector<Identificateur*> getIdents() { return liste_identif; }
 	};

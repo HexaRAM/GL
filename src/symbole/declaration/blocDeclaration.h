@@ -15,7 +15,7 @@ using namespace std;
 	public:
 		BlocDeclaration(): Symbole(1) {}
 		void addDeclaration(Declaration* d);
-		virtual ~BlocDeclaration() {}
+		virtual ~BlocDeclaration();
 		void print(ostream& os) const;
 		vector<Declaration*> getListeDeclaration() { return liste_declaration; }
 	};

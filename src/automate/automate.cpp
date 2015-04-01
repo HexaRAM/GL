@@ -81,7 +81,7 @@ Automate::~Automate()
     delete current_symbole; // le symbole $ est resté en mémoire
 
     // les symboles restants sont dans Memory
-    delete memory; // todo : destruction dans les classes symboles
+    delete memory;
 }
 
 

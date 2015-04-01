@@ -25,7 +25,6 @@ class Lexer
         int line;
         int column;
         int charRead;
-        set<Identificateur*> idents;
         vector<int> linesBreaks;
 
         void getCurrentLineAndColumn(int& line, int& column);

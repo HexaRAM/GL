@@ -19,7 +19,7 @@
 		DeclarationConst(): Declaration(3) {}
 		void addConst(Identificateur* ident, Num* num);
         void declarationFinie() { ident = 2; }
-		virtual ~DeclarationConst() {}
+		virtual ~DeclarationConst();
 		void print(ostream& os) const;
 		vector<constante> getConstantes() { return constantes; }
 	};

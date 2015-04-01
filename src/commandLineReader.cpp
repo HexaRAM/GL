@@ -86,7 +86,7 @@ CommandLineReader::CommandLineReader(int argc, char** argv)
  */
 CommandLineReader::~CommandLineReader()
 {
-
+    // rien à détruire
 }
 
 /**
