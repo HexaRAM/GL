@@ -1,5 +1,6 @@
 COMP=g++
-CFLAGS=-W -Wall -ansi -pedantic -lboost_regex -std=c++11 
+CFLAGS=-std=c++11
+CFLAGS_BOOST=-lboost_regex $(CFLAGS)
 #CFLAGS=
 LDFLAGS=-lboost_regex 
 EXEC=analyseur
@@ -18,6 +19,9 @@ all: $(EXEC)
 
 analyseur: $(OBJ)
 	$(COMP) -o $@ $^ $(LDFLAGS) 
+
+$(BUILD_DIR)/lexer.o : src/automate/lexer.cpp src/automate/lexer.h src/config.h
+	$(COMP) $(CFLAGS_BOOST) -c -o $@ $<
 
 $(BUILD_DIR)/%.o: src/%.cpp
 	$(COMP) $(CFLAGS) -c -o $@ $<

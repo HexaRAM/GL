@@ -285,6 +285,7 @@ void Automate::execute(OPTIONS option)
                 if (!this->analyse)
                 {
                     // inutile d'optimiser le programme si la sémantique n'est pas bonne
+                    this->analyse = true;
                     executeAnalyse();
                 }
                 executeOptimisation();
@@ -302,6 +303,7 @@ void Automate::execute(OPTIONS option)
                 if (!this->analyse)
                 {
                     // inutile d'exécuter le programme si la sémantique n'est pas bonne
+                    this->analyse = true;
                     executeAnalyse();
                 }
                 executeExecution();
