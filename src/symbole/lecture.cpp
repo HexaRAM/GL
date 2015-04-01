@@ -1,14 +1,21 @@
 #include "lecture.h"
 
-Lecture::Lecture(Identificateur* ident) {
+Lecture::Lecture(Identificateur* ident)
+{
 	Instruction();
 	id = ident;
 }
 
-
-void Lecture::print(ostream& os) const {
-	os<<"lire " << *id << ";";
+Lecture::~Lecture()
+{
+    delete id;
 }
-Identificateur* Lecture::getIdentificateur(){
+
+void Lecture::print(ostream& os) const
+{
+	os << "lire " << *id << ";";
+}
+Identificateur* Lecture::getIdentificateur()
+{
 	return id;
 }

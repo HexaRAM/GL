@@ -16,8 +16,7 @@ using namespace std;
 			BlocInstruction(): Symbole(5) {}
 			void addInstruction(Instruction* inst);
 			vector<Instruction*> getListeInstruction();
-			virtual ~BlocInstruction() {}
+			virtual ~BlocInstruction();
 			void print(ostream& os) const;
-			void getAffectationConstants();
 	};
 #endif

@@ -12,7 +12,7 @@
 		public:
 			Affectation():Instruction(107) {}
 			Affectation(Expression* expression,	Identificateur* ident);
-			virtual ~Affectation() {}
+			virtual ~Affectation();
 			void print(ostream& os) const;
 			Expression* getExpression();
 			Identificateur* getIdentificateur();

@@ -7,19 +7,27 @@ ExprBin::ExprBin(Expression* gauche, Expression* droite)
 	expr_droite = droite;
 }
 
+ExprBin::~ExprBin()
+{
+    delete expr_gauche;
+    delete expr_droite;
+}
+
 void ExprBin::print(ostream& os) const 
 {
 	// expression binaire inconnue
 }
 
-Expression* ExprBin::getExprGauche(){
+Expression* ExprBin::getExprGauche()
+{
 	return expr_gauche;
 }
-Expression* ExprBin::getExprDroite(){
+Expression* ExprBin::getExprDroite()
+{
 	return expr_droite;
 }
 
-set<Identificateur*>  ExprBin::getIdents() const
+set<Identificateur*> ExprBin::getIdents() const
 {
     set<Identificateur*> idents1 = expr_gauche->getIdents();
     set<Identificateur*> idents2 = expr_droite->getIdents();

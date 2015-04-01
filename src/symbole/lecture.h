@@ -8,9 +8,9 @@
 		protected:
 			Identificateur* id;
 		public:
-			Lecture(): Instruction(){}
+			Lecture(): Instruction() {}
 			Lecture(Identificateur* ident);
-			virtual ~Lecture() {}
+			virtual ~Lecture();
 			void print(ostream& os) const;
 			Identificateur* getIdentificateur();
 	};

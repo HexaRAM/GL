@@ -14,7 +14,7 @@
 			Programme(): Symbole(0) {}
 			Programme(BlocDeclaration* blocDecl, BlocInstruction* blocInstr);
 			BlocInstruction* getBlocInstruction();
-			virtual ~Programme() {}
+			virtual ~Programme();
 			void print(ostream& os) const;
 			BlocDeclaration* getBlocDeclaration() { return bloc_declaration; }
 

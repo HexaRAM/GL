@@ -1,34 +1,30 @@
 #include "blocInstruction.h"
 
-void BlocInstruction::addInstruction(Instruction* inst){
+BlocInstruction::~BlocInstruction()
+{
+	// destruction des instructions
+	for (auto const &it : liste_instruction)
+	{
+		delete it;
+	}
+}
+
+void BlocInstruction::addInstruction(Instruction* inst)
+{
 	liste_instruction.push_back(inst);
 }
 
 
 
-void BlocInstruction::print(ostream& os) const {
-	for (auto const &it:liste_instruction)
+void BlocInstruction::print(ostream& os) const
+{
+	for (auto const &it : liste_instruction)
 	{
 		os << *it << endl;
 	}
 }
 
-vector<Instruction*> BlocInstruction::getListeInstruction() {
-	return liste_instruction;
-}
-
-void BlocInstruction::getAffectationConstants()
+vector<Instruction*> BlocInstruction::getListeInstruction()
 {
-	for(auto const &it:liste_instruction)
-	{
-		Affectation* aff = dynamic_cast<Affectation*> (it);
-		if (aff != NULL)
-		{
-			ExprBin * rht = dynamic_cast<ExprBin*> (aff->getExpression());
-			if (rht != NULL)
-			{
-				rht->getExprGauche()->print(cout);
-			}
-		}
-	}
+	return liste_instruction;
 }

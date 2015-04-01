@@ -12,7 +12,7 @@ using namespace std;
 	{
 		protected:
 			string nom;
-			static set<string> idents;
+			static set<string> idents; // gestion des doublons
 		public:
 			Identificateur(): Expression(104) {}
 			Identificateur(string str) : Expression(104), nom(str) {} 

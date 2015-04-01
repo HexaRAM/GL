@@ -7,6 +7,11 @@ OpParenthese::OpParenthese(Expression* expression)
     ident = 9;
 }
 
+OpParenthese::~OpParenthese()
+{
+    delete expr;
+}
+
 double OpParenthese::eval(const map<string, double> &valeurs)
 {
 	return expr->eval(valeurs);

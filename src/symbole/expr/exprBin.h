@@ -5,14 +5,14 @@
 
 	class ExprBin : public Expression {
 		protected:
-			Expression * expr_gauche;
-			Expression * expr_droite;
+			Expression* expr_gauche;
+			Expression* expr_droite;
 		public:
 			ExprBin(): Expression() {}
 			ExprBin(Expression* gauche, Expression* droite);
 			virtual double eval(const map<string, double> &valeurs)=0;
-			virtual Expression * neutralOpti()=0;
-			virtual ~ExprBin() {}
+			virtual Expression* neutralOpti()=0;
+			virtual ~ExprBin();
 			virtual void print(ostream& os) const;
 			Expression* getExprGauche();
 			Expression* getExprDroite();

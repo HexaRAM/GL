@@ -4,7 +4,8 @@ double Identificateur::eval(const map<string, double> &valeurs)
 {
 	auto it = valeurs.find(nom);
 
-	if ( it == valeurs.end() ) {
+	if (it == valeurs.end())
+    {
   		// not found
   		return 0;
 	} 

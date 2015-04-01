@@ -1,14 +1,17 @@
 #include "exprDiv.h"
 #include "../declaration/num.h"
 
-double ExprDiv::eval(const map<string, double> &valeurs){
-	if(expr_droite->eval(valeurs) != 0) {
-		return ( expr_gauche->eval(valeurs) / expr_droite->eval(valeurs));
+double ExprDiv::eval(const map<string, double> &valeurs)
+{
+	if (expr_droite->eval(valeurs) != 0)
+	{
+		return ( expr_gauche->eval(valeurs) / expr_droite->eval(valeurs) );
 	}
 	return 0;
 }
 
-Expression* ExprDiv::neutralOpti(){
+Expression* ExprDiv::neutralOpti()
+{
 	Num* numDroite = dynamic_cast<Num*>(expr_droite);
 	if (numDroite != NULL && (int)(*numDroite) == 1)
 	{

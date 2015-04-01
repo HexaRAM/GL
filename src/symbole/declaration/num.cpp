@@ -1,6 +1,7 @@
 #include "num.h"
 
-double Num::eval(const map<string, double> &valeurs){
+double Num::eval(const map<string, double> &valeurs)
+{
 	return valeur;
 }
 

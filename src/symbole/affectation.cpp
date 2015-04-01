@@ -6,7 +6,15 @@ Affectation::Affectation(Expression* expression, Identificateur* ident) {
 	id = ident;
 }
 
-void Affectation::print(ostream& os) const {
+Affectation::~Affectation()
+{
+    // on supprime les éléments de l'affection : identificateur & expression
+    delete expr;
+    delete id;
+}
+
+void Affectation::print(ostream& os) const
+{
 	os << *id << " := " << *expr << ";";
 }
 
@@ -23,7 +31,8 @@ Identificateur* Affectation::getIdentificateur()
 void Affectation::setExpression(Expression* expression)
 {
 	if(expr != NULL)
+    {
 		delete expr;
+    }
 	expr = expression;
-
 }
