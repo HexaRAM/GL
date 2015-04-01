@@ -1,0 +1,7 @@
+var a;
+var b;
+const c = 3;
+a := 21;
+ecrire 21;
+b := 77;
+ecrire 77;
