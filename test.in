@@ -1,4 +1,4 @@
-var a;
+var a, d; 
 var b;
 a := (3+4)*5;
 lire b;
