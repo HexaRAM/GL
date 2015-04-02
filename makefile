@@ -1,7 +1,6 @@
 COMP=g++
 CFLAGS=-std=c++11
 CFLAGS_BOOST=-lboost_regex $(CFLAGS)
-#CFLAGS=
 LDFLAGS=-lboost_regex 
 EXEC=analyseur
 SRC= $(wildcard src/*.cpp src/*/*.cpp src/*/*/*.cpp)

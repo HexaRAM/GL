@@ -13,11 +13,11 @@ bool Etat20::transition(Automate & automate, Symbole * s ){
 	int idSym = *s ; 
 	switch (idSym) {
 		case fois :
-			automate.decalage(s, new Etat33);
-			break;
+			automate.decalage(s, new Etat33("33"));
+		break;
 		case divise :
-			automate.decalage(s, new Etat34);
-			break;
+			automate.decalage(s, new Etat34("34"));
+		break;
 		case pf :
 		case add :
 		case moins :
@@ -35,8 +35,9 @@ bool Etat20::transition(Automate & automate, Symbole * s ){
 		}
 		case OM : 
 			automate.decalage(s, new Etat32("32"));
-			break;
-		default : break;
+		break;
+		default:
+		break;
 	}
 	return false;
 }

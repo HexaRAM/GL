@@ -62,9 +62,10 @@ bool Etat39::transition(Automate & automate, Symbole * s ){
 
 		case fois :
 			automate.decalage(s, new Etat33("33"));
+		break;
 		case divise :
 			automate.decalage(s, new Etat34("34"));
-		
+		break;
 		case OM :
 			automate.decalage(s, new Etat32("32"));
 			break;
