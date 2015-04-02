@@ -38,4 +38,4 @@ test:
 	./test.sh
 
 clean:
-	rm -rf $(BUILD_DIR)/*.o $(EXEC)
+	rm -rf $(BUILD_DIR)/*.o $(EXEC) $(EXEC_TEST)
