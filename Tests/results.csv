@@ -22,3 +22,5 @@ Test ID;Return code validation;Out result;StdErr result;File creation result;Glo
 12.2.MelangeOptions;Ok;Ok;Ok;Non testé;Ok
 12.3.MelangeOptions;Ok;Ok;Ok;Non testé;Ok
 12.4.AllOptions;Ok;Ok;Ok;Non testé;Ok
+13.1.NomVarErr;Ok;Non testé;Non testé;Non testé;Ok
+13.2.NomVarErr;Ok;Non testé;Non testé;Non testé;Ok

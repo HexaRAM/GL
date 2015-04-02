@@ -1,0 +1,4 @@
+var ecrire;
+lire ecrire ;
+ecrire (ecrire+5);  
+
