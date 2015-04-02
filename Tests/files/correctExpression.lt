@@ -1,0 +1,4 @@
+var a;
+lire a;
+a:=456258;
+ecrire a;

@@ -8,8 +8,17 @@ Test ID;Return code validation;Out result;StdErr result;File creation result;Glo
 06.2.AnalyseStatique;Ok;Non testé;Ok;Non testé;Ok
 06.3.AnalyseStatique;Ok;Non testé;Ok;Non testé;Ok
 06.4.AnalyseStatique;Ok;Non testé;Ok;Non testé;Ok
-07.Execution;Ok;Echec;Non testé;Non testé;Echec
-08.1.Optimisation;Ok;Echec;Non testé;Non testé;Echec
-08.2.Optimisation;Ok;Echec;Non testé;Non testé;Echec
-09.ErreurLexicale;Echec;Non testé;Echec;Non testé;Echec
-10.ErreurSyntaxique;Echec;Non testé;Echec;Non testé;Echec
+06.5.AnalyseStatique;Ok;Non testé;Ok;Non testé;Ok
+07.1.Execution;Ok;Ok;Non testé;Non testé;Ok
+07.2.Execution;Ok;Ok;Non testé;Non testé;Ok
+07.3.Execution;Ok;Ok;Non testé;Non testé;Ok
+07.Execution;Ok;Ok;Non testé;Non testé;Ok
+08.1.Optimisation;Ok;Ok;Non testé;Non testé;Ok
+08.2.Optimisation;Ok;Ok;Non testé;Non testé;Ok
+09.ErreurLexicale;Ok;Non testé;Ok;Non testé;Ok
+10.ErreurSyntaxique;Ok;Non testé;Ok;Non testé;Ok
+11.ErreurExecution;Ok;Non testé;Non testé;Non testé;Ok
+12.1.MelangeOptions;Ok;Ok;Ok;Non testé;Ok
+12.2.MelangeOptions;Ok;Ok;Ok;Non testé;Ok
+12.3.MelangeOptions;Ok;Ok;Ok;Non testé;Ok
+12.4.AllOptions;Ok;Ok;Ok;Non testé;Ok

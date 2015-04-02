@@ -1,0 +1,7 @@
+var a,b; 
+const c = 4;
+const d = 6;
+var e;
+lire e;
+a := ((c+d)*3)-5+(7*(1-1))+e;
+ecrire a;
